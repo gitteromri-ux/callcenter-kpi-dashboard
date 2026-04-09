@@ -51,6 +51,8 @@ body{background:var(--bg-deep);color:var(--text-1);font-family:'Inter',-apple-sy
 .tb-num.green{background:var(--green-dim);color:var(--green);border-color:rgba(48,209,88,.25)}
 .tb-num.purple{background:var(--purple-dim);color:var(--purple);border-color:rgba(191,90,242,.25)}
 .tb-num.teal{background:var(--teal-dim);color:var(--teal);border-color:rgba(90,200,250,.25)}
+.tb-num.orange{background:var(--orange-dim);color:var(--orange);border-color:rgba(255,159,10,.25)}
+.badge.orange{background:var(--orange-dim);color:var(--orange);border-color:rgba(255,159,10,.3)}
 
 /* ─── PANELS ────────────────────────────────────────── */
 .pnl{display:none;padding:28px 36px 60px}
@@ -277,6 +279,7 @@ tbody tr:last-child td{border-bottom:none}
   <button class="tb" onclick="switchTab(2)">🎯 Lead Quality Matrix <span class="tb-num teal">New</span></button>
   <button class="tb" onclick="switchTab(3)">◈ Optimal Zone <span class="tb-num purple">4-Way</span></button>
   <button class="tb" onclick="switchTab(4)">◷ Weekday vs Weekend <span class="tb-num green">Calendar</span></button>
+  <button class="tb" onclick="switchTab(5)">💲 ROI &amp; Media Cost <span class="tb-num orange">New</span></button>
 </nav>
 
 <!-- ══════════════════════════════════════════════════════
@@ -598,6 +601,124 @@ tbody tr:last-child td{border-bottom:none}
         <div class="kc"><div class="kc-lbl">Weekday Hit Rate</div><div class="kc-val" style="color:var(--blue)">5.6%</div><div class="kc-sub">33/594 weekdays qualify</div><div class="kc-bar bc-blue" style="width:5.6%"></div></div>
         <div class="kc"><div class="kc-lbl">Weekend Hit Rate</div><div class="kc-val" style="color:var(--gold)">0%</div><div class="kc-sub">0/236 weekends qualify</div><div class="kc-bar bc-gold" style="width:0%"></div></div>
       </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════ TAB 5 — ROI & MEDIA COST ═══════════════════════ -->
+<section class="pnl" id="tab-5">
+
+  <div class="sh" style="margin-bottom:22px">
+    <div class="sh-left">
+      <div class="title" style="font-size:17px">ROI &amp; Media Cost Analysis</div>
+      <div class="sub">Revenue = ActualStatCRMCourseSOV + UpsalesAmount · Cost = paid media spend (PPC + Affiliates) · Email &amp; Organic treated as $0 cost</div>
+    </div>
+    <span class="badge orange">Budget Intelligence</span>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="kpi-grid g6" style="margin-bottom:18px">
+    <div class="kc card-accent blue"><div class="kc-lbl">Total Media Cost</div><div class="kc-val" id="roi-cost" style="color:var(--blue)">—</div><div class="kc-sub">PPC + Affiliates spend</div></div>
+    <div class="kc card-accent green"><div class="kc-lbl">Total Revenue</div><div class="kc-val" id="roi-rev" style="color:var(--green)">—</div><div class="kc-sub">SOV + Upsales</div></div>
+    <div class="kc card-accent gold"><div class="kc-lbl">Overall ROI</div><div class="kc-val" id="roi-pct" style="color:var(--gold)">—</div><div class="kc-sub">(Revenue − Cost) / Cost</div></div>
+    <div class="kc card-accent teal"><div class="kc-lbl">ROAS</div><div class="kc-val" id="roi-roas" style="color:var(--teal)">—</div><div class="kc-sub">Revenue per $1 spent</div></div>
+    <div class="kc"><div class="kc-lbl">Cost per Lead (CPL)</div><div class="kc-val" id="roi-cpl">—</div><div class="kc-sub">Paid channels only</div></div>
+    <div class="kc"><div class="kc-lbl">Cost per Acq. (CPA)</div><div class="kc-val" id="roi-cpa">—</div><div class="kc-sub">Paid channels only</div></div>
+  </div>
+
+  <!-- Hebrew vs Biblical Comparison -->
+  <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Hebrew vs Biblical — Budget Efficiency Breakdown</div><div class="sub">Despite Hebrew leads costing 2.1× more, Hebrew delivers superior ROI, ROAS, and lower CPA</div></div></div>
+
+  <div class="row r2" style="margin-bottom:18px">
+    <!-- Biblical card -->
+    <div class="card card-accent blue">
+      <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Biblical Related</div><div class="sub">High volume, lower CPL, lower CVR</div></div><span class="badge blue">177K leads</span></div>
+      <div class="kpi-grid g3">
+        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" style="color:var(--blue)">$24.29</div><div class="kc-sub">Cost per lead</div></div>
+        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val" style="color:var(--blue)">3.89%</div><div class="kc-sub">Lead→Acquisition</div></div>
+        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" style="color:var(--orange)">$624</div><div class="kc-sub">Cost per acquisition</div></div>
+        <div class="kc"><div class="kc-lbl">Revenue/Lead</div><div class="kc-val">$38.68</div><div class="kc-sub">Revenue generated</div></div>
+        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" style="color:var(--gold)">59.3%</div><div class="kc-sub">(Rev−Cost)/Cost</div></div>
+        <div class="kc"><div class="kc-lbl">ROAS</div><div class="kc-val" style="color:var(--gold)">1.59×</div><div class="kc-sub">Revenue per $1 spent</div></div>
+      </div>
+    </div>
+    <!-- Hebrew card -->
+    <div class="card card-accent green">
+      <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Hebrew Related</div><div class="sub">Higher CPL but 2.3× better conversion — net ROI winner</div></div><span class="badge green">61K leads</span></div>
+      <div class="kpi-grid g3">
+        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" style="color:var(--orange)">$51.64</div><div class="kc-sub">2.1× more than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val" style="color:var(--green)">9.00%</div><div class="kc-sub">2.3× higher than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" style="color:var(--green)">$574</div><div class="kc-sub">$50 cheaper than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">Revenue/Lead</div><div class="kc-val" style="color:var(--green)">$92.44</div><div class="kc-sub">2.4× more than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" style="color:var(--green)">79.0%</div><div class="kc-sub">+19.7pp vs Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">ROAS</div><div class="kc-val" style="color:var(--green)">1.79×</div><div class="kc-sub">+0.20× vs Biblical</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Strategic Verdict -->
+  <div class="narrative card-accent green" style="margin-bottom:18px">
+    <h3>Budget Allocation Verdict: Increase Hebrew Investment</h3>
+    <p>The higher CPL of Hebrew (<span class="tag r">$51.64 vs $24.29</span>) is a surface-level signal that can be misleading. When accounting for conversion rates, Hebrew leads convert at <span class="tag gr">9.0%</span> vs Biblical's <span class="tag r">3.89%</span> — a <span class="hl-green">2.3× efficiency advantage</span>. This collapses the CPA gap entirely: Hebrew CPA is <span class="tag gr">$574</span> vs Biblical's <span class="tag r">$624</span>. Each Hebrew dollar spent returns <span class="hl-green">$1.79 in revenue (ROAS 1.79×)</span> vs Biblical's $1.59 — a <strong>+12.6% revenue-per-dollar advantage</strong>. Revenue per lead reinforces this: Hebrew generates <span class="hl">$92.44/lead</span> vs Biblical's <span class="tag r">$38.68</span> — 2.4× more value from each lead acquired.</p>
+    <p><strong>Recommendation:</strong> <span class="hl-gold">Reallocate 15–25% of Biblical PPC budget to Hebrew PPC.</span> Hebrew PPC currently runs at ROI −4.3% (marginal loss), while Biblical PPC runs at <span class="tag r">−15% ROI</span> — a larger structural drag. Increasing Hebrew share leverages its superior conversion engine. Additionally, both categories show strong Affiliate ROI (316–378%) — <strong>scaling Affiliate volume is the highest-priority channel opportunity regardless of category.</strong></p>
+  </div>
+
+  <!-- Charts row -->
+  <div class="row r2" style="margin-bottom:18px">
+    <div class="card card-accent blue">
+      <div class="sh"><div class="sh-left"><div class="title">ROI by Channel × Category</div><div class="sub">Blue = Biblical · Green = Hebrew · Red zone = negative ROI</div></div></div>
+      <div style="height:300px"><canvas id="roiChannelChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">CPL Comparison: Hebrew vs Biblical by Channel</div><div class="sub">Higher CPL ≠ worse investment — CVR and ROAS tell the full story</div></div></div>
+      <div style="height:300px"><canvas id="cplCompChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Monthly ROI trend -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="sh"><div class="sh-left"><div class="title">Monthly ROI Trend — Hebrew vs Biblical (2024–2026)</div><div class="sub">Hebrew (green) vs Biblical (blue) · ROI = (Revenue − Media Cost) / Media Cost × 100</div></div><span class="badge teal">28 months</span></div>
+    <div style="height:300px"><canvas id="monthlyRoiChart"></canvas></div>
+  </div>
+
+  <!-- ROAS trend -->
+  <div class="row r2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">Monthly ROAS Trend</div><div class="sub">Revenue per $1 of media spend · Hebrew vs Biblical</div></div></div>
+      <div style="height:270px"><canvas id="monthlyRoasChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">CPL Trend Over Time</div><div class="sub">Cost per lead monthly · Hebrew lead costs consistently higher but stable</div></div></div>
+      <div style="height:270px"><canvas id="monthlyCplChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Channel efficiency table -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Channel × Category — Full Efficiency Matrix</div><div class="sub">Email Marketing &amp; Organic have $0 cost (free traffic) · ROI shown for paid channels only</div></div></div>
+    <div style="overflow-x:auto">
+      <table class="tbl" id="costSegTable">
+        <thead><tr>
+          <th>Channel</th><th>Category</th><th>Leads</th><th>Acquisitions</th><th>CVR</th>
+          <th>Media Cost</th><th>CPL</th><th>CPA</th><th>Revenue</th><th>ROI</th><th>ROAS</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Top ROI days -->
+  <div class="card">
+    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Top 29 Days by ROI</div><div class="sub">Days with highest return on media spend · excludes days with no media cost</div></div><span class="badge green">Best Days</span></div>
+    <div style="overflow-x:auto">
+      <table class="tbl" id="topRoiTable">
+        <thead><tr>
+          <th>#</th><th>Date</th><th>Total Leads</th><th>Acquisitions</th>
+          <th>Media Cost</th><th>Revenue</th><th>ROI</th><th>ROAS</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
   </div>
 
@@ -1114,6 +1235,177 @@ new Chart(document.getElementById('optPieChart'),{
   options:{responsive:true,maintainAspectRatio:false,cutout:'72%',
     plugins:{legend:{position:'bottom',labels:{boxWidth:9,padding:12,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.label.replace(/\(.*\)/,'')}${Math.round(i.raw)} days (${i.dataIndex===0?'100%':'0%'})`}}}}
 });
+
+// ═══════════════════════════════════════════════════════════
+// TAB 5 — ROI & Media Cost
+// ═══════════════════════════════════════════════════════════
+
+const RK = D.roiKpis;
+const CD = D.catData;    // [{category:'Biblical',...},{category:'Hebrew',...}]
+const CS = D.costSegData;
+const MR = D.monthlyRoi;
+const TR = D.topRoiDays;
+
+// ── KPI cards ──────────────────────────────────────────────
+document.getElementById('roi-cost').textContent = fmt$k(RK.totalCost);
+document.getElementById('roi-rev').textContent  = fmt$k(RK.totalRevenue);
+document.getElementById('roi-pct').textContent  = RK.overallROI.toFixed(1)+'%';
+document.getElementById('roi-roas').textContent = RK.overallROAS.toFixed(2)+'×';
+document.getElementById('roi-cpl').textContent  = '$'+RK.overallCPL.toFixed(2);
+document.getElementById('roi-cpa').textContent  = '$'+RK.overallCPA.toFixed(0);
+
+// ── ROI by Channel × Category ──────────────────────────────
+// Only include paid channels
+const paidSeg = CS.filter(s => s.roi !== null);
+const channelLabels = [...new Set(paidSeg.map(s=>s.media))];
+const bibROI  = channelLabels.map(ch=>{ const r=paidSeg.find(s=>s.media===ch&&s.category==='Biblical'); return r?r.roi:null; });
+const hebROI  = channelLabels.map(ch=>{ const r=paidSeg.find(s=>s.media===ch&&s.category==='Hebrew');   return r?r.roi:null; });
+
+new Chart(document.getElementById('roiChannelChart'),{
+  type:'bar',
+  data:{labels:channelLabels,datasets:[
+    {label:'Biblical ROI %',data:bibROI,backgroundColor:'rgba(10,132,255,.65)',borderColor:'#0a84ff',borderWidth:1,borderRadius:4},
+    {label:'Hebrew ROI %',  data:hebROI, backgroundColor:'rgba(52,199,89,.65)', borderColor:'#34c759',borderWidth:1,borderRadius:4}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,
+        callbacks:{label:i=>`${i.dataset.label}: ${i.raw!==null?i.raw.toFixed(1)+'%':'N/A'}`}},
+      annotation:{annotations:{
+        zeroLine:{type:'line',yMin:0,yMax:0,borderColor:'rgba(255,80,80,.6)',borderWidth:1.5,borderDash:[4,3]}
+      }}
+    },
+    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'},title:{display:true,text:'ROI %',font:{size:10}}}}
+  }
+});
+
+// ── CPL Comparison by Channel ───────────────────────────────
+const bibCPL = channelLabels.map(ch=>{ const r=CS.find(s=>s.media===ch&&s.category==='Biblical'); return r?r.cpl:null; });
+const hebCPL = channelLabels.map(ch=>{ const r=CS.find(s=>s.media===ch&&s.category==='Hebrew');   return r?r.cpl:null; });
+
+new Chart(document.getElementById('cplCompChart'),{
+  type:'bar',
+  data:{labels:channelLabels,datasets:[
+    {label:'Biblical CPL $',data:bibCPL,backgroundColor:'rgba(10,132,255,.65)',borderColor:'#0a84ff',borderWidth:1,borderRadius:4},
+    {label:'Hebrew CPL $',  data:hebCPL, backgroundColor:'rgba(52,199,89,.65)', borderColor:'#34c759',borderWidth:1,borderRadius:4}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,
+        callbacks:{label:i=>`${i.dataset.label}: ${i.raw!==null?'$'+i.raw.toFixed(2):'$0'}`}}},
+    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>'$'+v},title:{display:true,text:'CPL ($)',font:{size:10}}}}
+  }
+});
+
+// ── Monthly ROI trend ───────────────────────────────────────
+const mLabels = MR.map(m=>m.month);
+new Chart(document.getElementById('monthlyRoiChart'),{
+  type:'line',
+  data:{labels:mLabels,datasets:[
+    {label:'Biblical ROI %',data:MR.map(m=>m.biblicalROI),borderColor:'#0a84ff',backgroundColor:'rgba(10,132,255,.08)',borderWidth:2,tension:.35,fill:true,pointRadius:3,pointHoverRadius:5,spanGaps:true},
+    {label:'Hebrew ROI %',  data:MR.map(m=>m.hebrewROI),  borderColor:'#34c759',backgroundColor:'rgba(52,199,89,.08)', borderWidth:2,tension:.35,fill:true,pointRadius:3,pointHoverRadius:5,spanGaps:true}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
+        callbacks:{label:i=>i.raw!==null?`${i.dataset.label}: ${i.raw.toFixed(1)}%`:'N/A'}},
+      annotation:{annotations:{
+        zLine:{type:'line',yMin:0,yMax:0,borderColor:'rgba(255,80,80,.5)',borderWidth:1.2,borderDash:[4,3]}
+      }}
+    },
+    scales:{x:{grid:{color:GC},ticks:{font:{size:9},maxRotation:45}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'}}}
+  }
+});
+
+// ── Monthly ROAS trend ──────────────────────────────────────
+new Chart(document.getElementById('monthlyRoasChart'),{
+  type:'line',
+  data:{labels:mLabels,datasets:[
+    {label:'Biblical ROAS',data:MR.map(m=>m.biblicalROAS),borderColor:'#0a84ff',backgroundColor:'rgba(10,132,255,.06)',borderWidth:2,tension:.35,fill:true,pointRadius:2,spanGaps:true},
+    {label:'Hebrew ROAS',  data:MR.map(m=>m.hebrewROAS),  borderColor:'#34c759',backgroundColor:'rgba(52,199,89,.06)', borderWidth:2,tension:.35,fill:true,pointRadius:2,spanGaps:true}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
+        callbacks:{label:i=>i.raw!==null?`${i.dataset.label}: ${i.raw.toFixed(2)}×`:'N/A'}},
+      annotation:{annotations:{
+        breakeven:{type:'line',yMin:1,yMax:1,borderColor:'rgba(255,214,10,.4)',borderWidth:1,borderDash:[4,3],
+          label:{display:true,content:'Break-even 1×',position:'start',font:{size:9},color:'rgba(255,214,10,.7)',backgroundColor:'transparent',yAdjust:-12}}
+      }}
+    },
+    scales:{x:{grid:{color:GC},ticks:{font:{size:9},maxRotation:45}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'×'}}}
+  }
+});
+
+// ── Monthly CPL trend ───────────────────────────────────────
+new Chart(document.getElementById('monthlyCplChart'),{
+  type:'line',
+  data:{labels:mLabels,datasets:[
+    {label:'Biblical CPL $',data:MR.map(m=>m.biblicalCPL),borderColor:'#0a84ff',borderWidth:2,tension:.35,pointRadius:2,spanGaps:true},
+    {label:'Hebrew CPL $',  data:MR.map(m=>m.hebrewCPL),  borderColor:'#34c759',borderWidth:2,tension:.35,pointRadius:2,spanGaps:true}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
+        callbacks:{label:i=>i.raw!==null?`${i.dataset.label}: $${i.raw.toFixed(2)}`:'N/A'}}},
+    scales:{x:{grid:{color:GC},ticks:{font:{size:9},maxRotation:45}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>'$'+v}}}
+  }
+});
+
+// ── Channel efficiency table ────────────────────────────────
+(()=>{
+  const tbody = document.querySelector('#costSegTable tbody');
+  const sorted = [...CS].sort((a,b)=>{
+    const ra = a.roi!==null?a.roi:-9999;
+    const rb = b.roi!==null?b.roi:-9999;
+    return rb-ra;
+  });
+  sorted.forEach(r=>{
+    const isPaid = r.totalCost > 0;
+    const roiVal = r.roi!==null ? r.roi : null;
+    const roiColor = roiVal===null ? 'var(--green)' : roiVal>=100?'var(--green)':roiVal>=0?'var(--teal)':'var(--red)';
+    const roiWeight = roiVal===null||roiVal>=100 ? '700' : '400';
+    const tr = document.createElement('tr');
+    tr.innerHTML = [
+      `<td>${r.media}</td>`,
+      `<td><span class="badge ${r.category==='Hebrew'?'green':'blue'}">${r.category}</span></td>`,
+      `<td>${r.totalLeads.toLocaleString()}</td>`,
+      `<td>${r.totalAcq.toLocaleString()}</td>`,
+      `<td>${r.cvr.toFixed(2)}%</td>`,
+      `<td>${isPaid?'$'+r.totalCost.toLocaleString():'<span style="color:var(--green)">Free</span>'}</td>`,
+      `<td>${isPaid?'$'+r.cpl.toFixed(2):'—'}</td>`,
+      `<td>${r.cpa?'$'+r.cpa.toLocaleString():'—'}</td>`,
+      `<td style="font-weight:600;color:var(--gold)">$${r.totalRevenue.toLocaleString()}</td>`,
+      `<td style="color:${roiColor};font-weight:${roiWeight}">${roiVal!==null?roiVal.toFixed(1)+'%':'∞ (free)'}</td>`,
+      `<td style="color:var(--teal)">${r.roas!==null?r.roas.toFixed(2)+'×':'∞'}</td>`,
+    ].join('');
+    tbody.appendChild(tr);
+  });
+})();
+
+// ── Top ROI days table ──────────────────────────────────────
+(()=>{
+  const tbody = document.querySelector('#topRoiTable tbody');
+  TR.forEach((r,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = [
+      `<td>${i+1}</td>`,
+      `<td>${r.date}</td>`,
+      `<td>${r.totalLeads.toLocaleString()}</td>`,
+      `<td>${r.totalAcq.toLocaleString()}</td>`,
+      `<td>$${r.totalCost.toLocaleString()}</td>`,
+      `<td>$${r.totalRevenue.toLocaleString()}</td>`,
+      `<td style="color:var(--green);font-weight:700">${r.roi.toFixed(1)}%</td>`,
+      `<td>${r.roas.toFixed(2)}×</td>`,
+    ].join('');
+    tbody.appendChild(tr);
+  });
+})();
 
 </script>
 </body>
