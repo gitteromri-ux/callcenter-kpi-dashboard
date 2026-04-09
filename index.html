@@ -11,1507 +11,1110 @@
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <script src="data.js"></script>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-deep:#07070e;--bg-base:#0c0c17;--bg-card:#111122;--bg-card-alt:#141428;--bg-hover:#1a1a30;
+  --border:rgba(255,255,255,0.07);--border-mid:rgba(255,255,255,0.12);--border-hi:rgba(255,255,255,0.18);
+  --blue:#0a84ff;--blue-dim:rgba(10,132,255,0.15);--blue-glow:rgba(10,132,255,0.4);
+  --gold:#ffd60a;--gold-dim:rgba(255,214,10,0.13);
+  --green:#30d158;--green-dim:rgba(48,209,88,0.13);
+  --red:#ff453a;--red-dim:rgba(255,69,58,0.13);
+  --purple:#bf5af2;--purple-dim:rgba(191,90,242,0.13);
+  --orange:#ff9f0a;--orange-dim:rgba(255,159,10,0.13);
+  --teal:#5ac8fa;--teal-dim:rgba(90,200,250,0.13);
+  --text-1:#f5f5f7;--text-2:rgba(245,245,247,0.55);--text-3:rgba(245,245,247,0.35);
+  --r-sm:10px;--r-md:14px;--r-lg:20px;--r-xl:28px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg-deep);color:var(--text-1);font-family:'Inter',-apple-system,sans-serif;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden}
 
-  :root {
-    --bg-deep:     #07070e;
-    --bg-base:     #0c0c17;
-    --bg-card:     #111122;
-    --bg-card-alt: #141428;
-    --bg-hover:    #1a1a30;
-    --border:      rgba(255,255,255,0.07);
-    --border-mid:  rgba(255,255,255,0.12);
+/* ─── HEADER ─────────────────────────────────────────── */
+.hdr{padding:22px 36px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(10,132,255,0.04) 0%,transparent 100%)}
+.hdr-left{display:flex;align-items:center;gap:14px;padding-bottom:20px}
+.hdr-logo rect{fill:rgba(10,132,255,0.12)}
+.logo-text .t1{font-size:16px;font-weight:700;letter-spacing:-0.3px}
+.logo-text .t2{font-size:10.5px;color:var(--text-2);font-weight:500;letter-spacing:.5px;text-transform:uppercase;margin-top:2px}
+.hdr-right{display:flex;align-items:center;gap:12px;padding-bottom:20px}
+.pill{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:100px;background:var(--bg-card);border:1px solid var(--border-mid);font-size:11.5px;font-weight:500;color:var(--text-2)}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-    --blue:        #0a84ff;
-    --blue-dim:    rgba(10,132,255,0.18);
-    --blue-glow:   rgba(10,132,255,0.35);
-    --gold:        #ffd60a;
-    --gold-dim:    rgba(255,214,10,0.15);
-    --green:       #30d158;
-    --green-dim:   rgba(48,209,88,0.15);
-    --red:         #ff453a;
-    --red-dim:     rgba(255,69,58,0.15);
-    --purple:      #bf5af2;
-    --purple-dim:  rgba(191,90,242,0.15);
-    --orange:      #ff9f0a;
+/* ─── TAB NAV ─────────────────────────────────────────── */
+.tab-nav{display:flex;gap:2px;padding:0 36px;border-bottom:1px solid var(--border);background:rgba(7,7,14,0.92);position:sticky;top:0;z-index:50;backdrop-filter:blur(20px)}
+.tb{position:relative;padding:11px 18px 13px;background:none;border:none;color:var(--text-2);font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer;transition:color .2s;letter-spacing:-0.1px;border-radius:6px 6px 0 0;display:flex;align-items:center;gap:7px;white-space:nowrap}
+.tb:hover{color:var(--text-1);background:rgba(255,255,255,.03)}
+.tb.active{color:var(--text-1)}
+.tb.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--blue);border-radius:2px 2px 0 0;box-shadow:0 0 10px var(--blue)}
+.tb-num{padding:1px 6px;border-radius:100px;font-size:9.5px;font-weight:700;border:1px solid}
+.tb-num.blue{background:var(--blue-dim);color:var(--blue);border-color:rgba(10,132,255,.25)}
+.tb-num.gold{background:var(--gold-dim);color:var(--gold);border-color:rgba(255,214,10,.25)}
+.tb-num.green{background:var(--green-dim);color:var(--green);border-color:rgba(48,209,88,.25)}
+.tb-num.purple{background:var(--purple-dim);color:var(--purple);border-color:rgba(191,90,242,.25)}
+.tb-num.teal{background:var(--teal-dim);color:var(--teal);border-color:rgba(90,200,250,.25)}
 
-    --text-primary:   #f5f5f7;
-    --text-secondary: rgba(245,245,247,0.55);
-    --text-tertiary:  rgba(245,245,247,0.35);
+/* ─── PANELS ────────────────────────────────────────── */
+.pnl{display:none;padding:28px 36px 60px}
+.pnl.active{display:block}
 
-    --radius-sm: 10px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --radius-xl: 28px;
-  }
+/* ─── CARDS ─────────────────────────────────────────── */
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px;position:relative;overflow:hidden;transition:border-color .2s}
+.card:hover{border-color:var(--border-mid)}
+.card-accent::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;opacity:.5}
+.card-accent.blue::before{background:linear-gradient(90deg,transparent,var(--blue),transparent)}
+.card-accent.gold::before{background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.card-accent.green::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.card-accent.purple::before{background:linear-gradient(90deg,transparent,var(--purple),transparent)}
+.card-accent.teal::before{background:linear-gradient(90deg,transparent,var(--teal),transparent)}
+.card-accent.orange::before{background:linear-gradient(90deg,transparent,var(--orange),transparent)}
 
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg-deep);
-    color: var(--text-primary);
-    font-family: 'Inter', -apple-system, system-ui, sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+/* ─── KPI CARDS ─────────────────────────────────────── */
+.kpi-grid{display:grid;gap:12px;margin-bottom:24px}
+.g6{grid-template-columns:repeat(6,1fr)}
+.g5{grid-template-columns:repeat(5,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.kc{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 18px 20px;position:relative;overflow:hidden;transition:all .2s}
+.kc:hover{border-color:var(--border-mid);transform:translateY(-1px)}
+.kc-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--text-3);margin-bottom:7px}
+.kc-val{font-size:24px;font-weight:700;letter-spacing:-.8px;line-height:1;margin-bottom:3px}
+.kc-sub{font-size:11px;color:var(--text-2)}
+.kc-bar{position:absolute;bottom:0;left:0;height:2px;border-radius:0 2px 0 0}
+.bc-blue{background:var(--blue)}
+.bc-gold{background:var(--gold)}
+.bc-green{background:var(--green)}
+.bc-purple{background:var(--purple)}
+.bc-orange{background:var(--orange)}
+.bc-teal{background:var(--teal)}
 
-  /* ── Header ────────────────────────────────── */
-  .app-header {
-    padding: 28px 40px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(10,132,255,0.04) 0%, transparent 100%);
-  }
-  .logo-block {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding-bottom: 24px;
-  }
-  .logo-svg { flex-shrink: 0; }
-  .logo-text { line-height: 1.1; }
-  .logo-text .title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
-  .logo-text .subtitle { font-size: 11px; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px; }
-  .header-meta {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding-bottom: 24px;
-  }
-  .meta-pill {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 5px 12px;
-    border-radius: 100px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-mid);
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
-  .meta-pill .dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 6px var(--green);
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+/* ─── GRIDS ─────────────────────────────────────────── */
+.row{display:grid;gap:18px;margin-bottom:22px}
+.r2{grid-template-columns:1fr 1fr}
+.r3{grid-template-columns:1fr 1fr 1fr}
+.r65{grid-template-columns:1.55fr 1fr}
+.r56{grid-template-columns:1fr 1.4fr}
 
-  /* ── Tabs ────────────────────────────────────── */
-  .tab-nav {
-    display: flex;
-    gap: 4px;
-    padding: 20px 40px 0;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-deep);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    backdrop-filter: blur(20px);
-  }
-  .tab-btn {
-    position: relative;
-    padding: 10px 20px 12px;
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: color 0.2s;
-    letter-spacing: -0.1px;
-    border-radius: 8px 8px 0 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .tab-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
-  .tab-btn.active { color: var(--text-primary); }
-  .tab-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -1px; left: 0; right: 0;
-    height: 2px;
-    background: var(--blue);
-    border-radius: 2px 2px 0 0;
-    box-shadow: 0 0 12px var(--blue);
-  }
-  .tab-icon { font-size: 15px; }
-  .tab-badge {
-    padding: 1px 7px;
-    border-radius: 100px;
-    background: var(--blue-dim);
-    color: var(--blue);
-    font-size: 10px;
-    font-weight: 600;
-    border: 1px solid rgba(10,132,255,0.25);
-  }
+/* ─── HEADERS ───────────────────────────────────────── */
+.sh{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:14px}
+.sh-left .title{font-size:13.5px;font-weight:700;letter-spacing:-.2px}
+.sh-left .sub{font-size:11.5px;color:var(--text-2);margin-top:3px;line-height:1.5;max-width:560px}
+.badge{padding:4px 11px;border-radius:100px;font-size:10.5px;font-weight:600;border:1px solid;flex-shrink:0}
+.badge.blue{background:var(--blue-dim);color:var(--blue);border-color:rgba(10,132,255,.3)}
+.badge.gold{background:var(--gold-dim);color:var(--gold);border-color:rgba(255,214,10,.3)}
+.badge.green{background:var(--green-dim);color:var(--green);border-color:rgba(48,209,88,.3)}
+.badge.red{background:var(--red-dim);color:var(--red);border-color:rgba(255,69,58,.3)}
+.badge.purple{background:var(--purple-dim);color:var(--purple);border-color:rgba(191,90,242,.3)}
+.badge.teal{background:var(--teal-dim);color:var(--teal);border-color:rgba(90,200,250,.3)}
 
-  /* ── Tab Panels ─────────────────────────────── */
-  .tab-panel { display: none; padding: 32px 40px 60px; }
-  .tab-panel.active { display: block; }
+/* ─── ZONE BLOCK ────────────────────────────────────── */
+.zone{border-radius:var(--r-lg);padding:22px;margin-bottom:22px;border:1px solid}
+.zone.blue{background:linear-gradient(135deg,rgba(10,132,255,.08),rgba(191,90,242,.05));border-color:rgba(10,132,255,.25)}
+.zone.gold{background:linear-gradient(135deg,rgba(255,214,10,.07),rgba(255,159,10,.04));border-color:rgba(255,214,10,.25)}
+.zone.green{background:linear-gradient(135deg,rgba(48,209,88,.07),rgba(90,200,250,.04));border-color:rgba(48,209,88,.25)}
+.zone-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.zone-title::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;box-shadow:0 0 8px currentColor}
+.zone-title.blue{color:var(--blue)}
+.zone-title.blue::before{background:var(--blue)}
+.zone-title.gold{color:var(--gold)}
+.zone-title.gold::before{background:var(--gold)}
+.zone-title.green{color:var(--green)}
+.zone-title.green::before{background:var(--green)}
+.zone-params{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.zp{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px}
+.zp-lbl{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-bottom:5px}
+.zp-val{font-size:17px;font-weight:700;letter-spacing:-.2px;line-height:1}
+.zp-range{font-size:10px;color:var(--text-2);margin-top:3px;font-family:'JetBrains Mono',monospace}
 
-  /* ── Grid Layouts ────────────────────────────── */
-  .kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 14px;
-    margin-bottom: 28px;
-  }
-  .kpi-grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-    margin-bottom: 28px;
-  }
-  .chart-row {
-    display: grid;
-    gap: 20px;
-    margin-bottom: 28px;
-  }
-  .chart-row-2 { grid-template-columns: 1fr 1fr; }
-  .chart-row-3 { grid-template-columns: 1fr 1fr 1fr; }
-  .chart-row-65 { grid-template-columns: 1.5fr 1fr; }
+/* ─── NARRATIVE ─────────────────────────────────────── */
+.narrative{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;margin-bottom:22px}
+.narrative h3{font-size:13.5px;font-weight:700;margin-bottom:11px;letter-spacing:-.2px}
+.narrative p{font-size:12.5px;color:var(--text-2);line-height:1.75;margin-bottom:9px}
+.narrative p:last-child{margin-bottom:0}
+.narrative strong{color:var(--text-1);font-weight:600}
+.hl{color:var(--blue);font-weight:600}
+.hl-gold{color:var(--gold);font-weight:600}
+.hl-green{color:var(--green);font-weight:600}
+.hl-red{color:var(--red);font-weight:600}
+.hl-purple{color:var(--purple);font-weight:600}
+.tag{display:inline-block;padding:1px 7px;border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500}
+.tag.b{background:var(--blue-dim);border:1px solid rgba(10,132,255,.2);color:var(--blue)}
+.tag.g{background:var(--gold-dim);border:1px solid rgba(255,214,10,.2);color:var(--gold)}
+.tag.gr{background:var(--green-dim);border:1px solid rgba(48,209,88,.2);color:var(--green)}
+.tag.r{background:var(--red-dim);border:1px solid rgba(255,69,58,.2);color:var(--red)}
+.tag.p{background:var(--purple-dim);border:1px solid rgba(191,90,242,.2);color:var(--purple)}
 
-  /* ── Cards ─────────────────────────────────── */
-  .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
-  .card:hover { border-color: var(--border-mid); }
-  .card-glow::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--blue), transparent);
-    opacity: 0.5;
-  }
-  .card-gold::before {
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  }
-  .card-green::before {
-    background: linear-gradient(90deg, transparent, var(--green), transparent);
-  }
-  .card-purple::before {
-    background: linear-gradient(90deg, transparent, var(--purple), transparent);
-  }
+/* ─── TABLES ─────────────────────────────────────────── */
+.tbl-wrap{border-radius:var(--r-md);border:1px solid var(--border);overflow:auto;max-height:400px}
+.tbl-wrap::-webkit-scrollbar{width:4px;height:4px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px}
+thead th{padding:10px 13px;text-align:left;font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);border-bottom:1px solid var(--border);background:var(--bg-card-alt);position:sticky;top:0}
+tbody td{padding:9px 13px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text-2);transition:background .1s}
+tbody td:first-child{color:var(--text-1);font-weight:500}
+tbody tr:hover td{background:var(--bg-hover)}
+tbody tr:last-child td{border-bottom:none}
+.num{font-family:'JetBrains Mono',monospace;font-size:11.5px}
 
-  /* ── KPI Cards ──────────────────────────────── */
-  .kpi-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 18px 20px 22px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.2s;
-  }
-  .kpi-card:hover {
-    border-color: var(--border-mid);
-    transform: translateY(-1px);
-  }
-  .kpi-label {
-    font-size: 10.5px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    color: var(--text-tertiary);
-    margin-bottom: 8px;
-  }
-  .kpi-value {
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: -0.8px;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .kpi-sub {
-    font-size: 11px;
-    color: var(--text-secondary);
-    font-weight: 400;
-  }
-  .kpi-accent-bar {
-    position: absolute;
-    bottom: 0; left: 0;
-    height: 2px;
-    border-radius: 0 2px 0 0;
-    width: 40%;
-  }
-  .accent-blue { background: var(--blue); box-shadow: 0 0 10px var(--blue-glow); }
-  .accent-gold { background: var(--gold); box-shadow: 0 0 10px var(--gold-dim); }
-  .accent-green { background: var(--green); }
-  .accent-purple { background: var(--purple); }
-  .accent-orange { background: var(--orange); }
+/* ─── MANAGER SCORECARD ─────────────────────────────── */
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+.score-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px}
+.score-card .sc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text-3);margin-bottom:14px}
+.score-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
+.score-row:last-child{border-bottom:none}
+.score-label{font-size:12px;color:var(--text-2)}
+.score-value{font-size:13px;font-weight:600}
+.score-bar-wrap{display:flex;align-items:center;gap:10px}
+.score-bar-bg{width:80px;height:5px;background:rgba(255,255,255,.07);border-radius:3px}
+.score-bar-fill{height:5px;border-radius:3px}
 
-  /* ── Section Headers ───────────────────────── */
-  .section-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    gap: 16px;
-  }
-  .section-title {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-  }
-  .section-sub {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-top: 3px;
-    font-weight: 400;
-    line-height: 1.5;
-    max-width: 600px;
-  }
-  .section-badge {
-    flex-shrink: 0;
-    padding: 5px 12px;
-    border-radius: 100px;
-    font-size: 11px;
-    font-weight: 600;
-    border: 1px solid;
-  }
-  .badge-blue { background: var(--blue-dim); color: var(--blue); border-color: rgba(10,132,255,0.3); }
-  .badge-gold { background: var(--gold-dim); color: var(--gold); border-color: rgba(255,214,10,0.3); }
-  .badge-green { background: var(--green-dim); color: var(--green); border-color: rgba(48,209,88,0.3); }
+/* ─── LEAD QUALITY MATRIX ───────────────────────────── */
+.matrix-wrap{overflow-x:auto}
+.matrix{width:100%;border-collapse:separate;border-spacing:6px}
+.matrix th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;padding:10px 14px;border-radius:var(--r-sm);background:var(--bg-card-alt);border:1px solid var(--border);color:var(--text-3);white-space:nowrap}
+.matrix td{padding:0;border-radius:var(--r-sm);overflow:hidden;border:1px solid transparent;transition:border-color .2s}
+.matrix td:hover{border-color:rgba(255,255,255,.2)}
+.matrix-cell{padding:14px;position:relative}
+.mc-media{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);margin-bottom:6px}
+.mc-cvr{font-size:20px;font-weight:700;letter-spacing:-.5px;line-height:1;margin-bottom:3px}
+.mc-rpl{font-size:13px;font-weight:600}
+.mc-leads{font-size:10px;color:var(--text-2);margin-top:4px}
+.mc-bar{position:absolute;bottom:0;left:0;right:0;height:3px;border-radius:0 0 var(--r-sm) var(--r-sm)}
 
-  /* ── Chart Containers ───────────────────────── */
-  .chart-container { position: relative; }
-  .chart-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 4px;
-  }
-  .chart-desc {
-    font-size: 11px;
-    color: var(--text-secondary);
-    margin-bottom: 16px;
-    line-height: 1.5;
-  }
+/* ─── CORR BADGES ───────────────────────────────────── */
+.corr-flex{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.corr-b{display:flex;align-items:center;gap:7px;padding:7px 12px;background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--r-sm);font-size:12px}
+.corr-b .cn{color:var(--text-2);font-weight:500}
+.corr-b .cv{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12.5px}
 
-  /* ── Insight Boxes ─────────────────────────── */
-  .insight-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-top: 20px;
-  }
-  .insight-box {
-    padding: 16px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    background: var(--bg-card-alt);
-  }
-  .insight-box .label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-    margin-bottom: 6px;
-  }
-  .insight-box .value {
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .insight-box .desc {
-    font-size: 11px;
-    color: var(--text-secondary);
-    line-height: 1.4;
-  }
+/* ─── LEGEND ────────────────────────────────────────── */
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
+.li{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2)}
+.ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.ll{width:14px;height:2px;border-radius:2px;flex-shrink:0}
 
-  /* ── Zone Analysis Block ─────────────────────── */
-  .zone-block {
-    background: linear-gradient(135deg, rgba(10,132,255,0.08) 0%, rgba(191,90,242,0.05) 100%);
-    border: 1px solid rgba(10,132,255,0.25);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    margin-bottom: 24px;
-  }
-  .zone-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--blue);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .zone-title::before {
-    content: '';
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--blue);
-    box-shadow: 0 0 8px var(--blue);
-  }
-  .zone-params {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-  }
-  .zone-param {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 14px;
-  }
-  .zone-param-label {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--text-tertiary);
-    margin-bottom: 6px;
-  }
-  .zone-param-val {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    color: var(--text-primary);
-  }
-  .zone-param-range {
-    font-size: 10px;
-    color: var(--text-secondary);
-    margin-top: 3px;
-    font-family: 'JetBrains Mono', monospace;
-  }
+/* ─── WKD PANELS ────────────────────────────────────── */
+.wkd-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+.wkd-pnl{border-radius:var(--r-lg);padding:22px;border:1px solid}
+.wkd-pnl.wd{background:linear-gradient(135deg,rgba(10,132,255,.07),rgba(10,132,255,.02));border-color:rgba(10,132,255,.2)}
+.wkd-pnl.we{background:linear-gradient(135deg,rgba(255,214,10,.06),rgba(255,214,10,.01));border-color:rgba(255,214,10,.2)}
+.wkd-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.wkd-title{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.wkd-tag{padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600}
+.wd .wkd-tag{background:var(--blue-dim);color:var(--blue)}
+.we .wkd-tag{background:var(--gold-dim);color:var(--gold)}
+.wkd-mets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.wkd-met{background:rgba(255,255,255,.04);border-radius:var(--r-sm);padding:11px;border:1px solid var(--border)}
+.wkd-met-lbl{font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);margin-bottom:4px}
+.wkd-met-val{font-size:17px;font-weight:700;letter-spacing:-.3px;line-height:1}
+.wkd-met-diff{font-size:10px;margin-top:3px;font-weight:500}
+.up{color:var(--green)}.down{color:var(--red)}
 
-  /* ── Analysis Narrative ─────────────────────── */
-  .narrative {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    margin-bottom: 24px;
-  }
-  .narrative h3 {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    letter-spacing: -0.2px;
-  }
-  .narrative p {
-    font-size: 13px;
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 10px;
-  }
-  .narrative p:last-child { margin-bottom: 0; }
-  .narrative strong { color: var(--text-primary); font-weight: 600; }
-  .narrative .highlight { color: var(--blue); font-weight: 600; }
-  .narrative .highlight-gold { color: var(--gold); font-weight: 600; }
-  .narrative .highlight-green { color: var(--green); font-weight: 600; }
-  .narrative .stat-tag {
-    display: inline-block;
-    padding: 2px 8px;
-    background: var(--blue-dim);
-    border: 1px solid rgba(10,132,255,0.2);
-    border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--blue);
-    font-weight: 500;
-  }
-  .narrative .stat-tag-gold {
-    background: var(--gold-dim);
-    border-color: rgba(255,214,10,0.2);
-    color: var(--gold);
-  }
-  .narrative .stat-tag-green {
-    background: var(--green-dim);
-    border-color: rgba(48,209,88,0.2);
-    color: var(--green);
-  }
+/* ─── DIVIDER ───────────────────────────────────────── */
+.divider{height:1px;background:var(--border);margin:18px 0}
 
-  /* ── Top Days Table ─────────────────────────── */
-  .data-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    font-size: 12px;
-  }
-  .data-table th {
-    padding: 10px 14px;
-    text-align: left;
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: var(--text-tertiary);
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-card-alt);
-    position: sticky;
-    top: 0;
-  }
-  .data-table th:first-child { border-radius: 8px 0 0 0; }
-  .data-table th:last-child { border-radius: 0 8px 0 0; }
-  .data-table td {
-    padding: 10px 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-weight: 400;
-    color: var(--text-secondary);
-    transition: background 0.1s;
-  }
-  .data-table td:first-child { font-weight: 500; color: var(--text-primary); }
-  .data-table tr:hover td { background: var(--bg-hover); }
-  .data-table tr:last-child td { border-bottom: none; }
-  .table-scroll { max-height: 380px; overflow-y: auto; border-radius: var(--radius-md); border: 1px solid var(--border); }
-  .table-scroll::-webkit-scrollbar { width: 4px; }
-  .table-scroll::-webkit-scrollbar-track { background: transparent; }
-  .table-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-  .weekend-row td { color: rgba(245,245,247,0.4); }
-  .optimal-row td:first-child::after {
-    content: ' ●';
-    color: var(--blue);
-    font-size: 8px;
-    vertical-align: super;
-  }
+/* ─── RECOMMENDATION CARDS ──────────────────────────── */
+.rec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.rec{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-md);padding:16px;position:relative;overflow:hidden}
+.rec-icon{font-size:20px;margin-bottom:10px}
+.rec-title{font-size:12.5px;font-weight:700;margin-bottom:6px;letter-spacing:-.1px}
+.rec-body{font-size:11.5px;color:var(--text-2);line-height:1.6}
+.rec-priority{position:absolute;top:12px;right:12px;padding:2px 8px;border-radius:100px;font-size:9.5px;font-weight:700;border:1px solid}
+.pri-hi{background:var(--red-dim);color:var(--red);border-color:rgba(255,69,58,.3)}
+.pri-med{background:var(--orange-dim);color:var(--orange);border-color:rgba(255,159,10,.3)}
+.pri-lo{background:var(--blue-dim);color:var(--blue);border-color:rgba(10,132,255,.3)}
 
-  /* ── Weekend vs Weekday ─────────────────────── */
-  .wkd-compare-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 24px;
-  }
-  .wkd-panel {
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    border: 1px solid;
-  }
-  .wkd-panel.weekday {
-    background: linear-gradient(135deg, rgba(10,132,255,0.07) 0%, rgba(10,132,255,0.02) 100%);
-    border-color: rgba(10,132,255,0.2);
-  }
-  .wkd-panel.weekend {
-    background: linear-gradient(135deg, rgba(255,214,10,0.06) 0%, rgba(255,214,10,0.01) 100%);
-    border-color: rgba(255,214,10,0.2);
-  }
-  .wkd-panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  .wkd-panel-title { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
-  .wkd-panel-tag {
-    padding: 4px 10px;
-    border-radius: 100px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-  .weekday .wkd-panel-tag { background: var(--blue-dim); color: var(--blue); }
-  .weekend .wkd-panel-tag { background: var(--gold-dim); color: var(--gold); }
-  .wkd-metrics {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-  .wkd-metric {
-    background: rgba(255,255,255,0.04);
-    border-radius: var(--radius-sm);
-    padding: 12px;
-    border: 1px solid var(--border);
-  }
-  .wkd-metric-label {
-    font-size: 9.5px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-tertiary);
-    margin-bottom: 5px;
-  }
-  .wkd-metric-val {
-    font-size: 19px;
-    font-weight: 700;
-    letter-spacing: -0.4px;
-    line-height: 1;
-  }
-  .wkd-metric-diff {
-    font-size: 10px;
-    margin-top: 3px;
-    font-weight: 500;
-  }
-  .diff-up { color: var(--green); }
-  .diff-down { color: var(--red); }
+/* ─── SCROLLBAR ─────────────────────────────────────── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg-deep)}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
 
-  /* ── Divider ─────────────────────────────── */
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 24px 0;
-  }
-
-  /* ── Legend ─────────────────────────────── */
-  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px; }
-  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--text-secondary); }
-  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .legend-line { width: 16px; height: 2px; border-radius: 2px; flex-shrink: 0; }
-
-  /* ── Scrollable ─────────────────────────── */
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg-deep); }
-  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
-
-  /* ── Responsive ─────────────────────────── */
-  @media (max-width: 1100px) {
-    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
-    .zone-params { grid-template-columns: repeat(2, 1fr); }
-    .chart-row-65 { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 768px) {
-    .app-header, .tab-nav, .tab-panel { padding-left: 20px; padding-right: 20px; }
-    .kpi-grid, .kpi-grid-4 { grid-template-columns: repeat(2, 1fr); }
-    .chart-row-2, .chart-row-3 { grid-template-columns: 1fr; }
-    .wkd-compare-grid { grid-template-columns: 1fr; }
-    .insight-grid { grid-template-columns: 1fr; }
-    .wkd-metrics { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  /* ── Animation ───────────────────────────── */
-  .fade-in { animation: fadeIn 0.4s ease forwards; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* ── Correlation badges ─────────────────── */
-  .corr-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
-  .corr-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    background: var(--bg-card-alt);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-  }
-  .corr-badge .corr-name { color: var(--text-secondary); font-weight: 500; }
-  .corr-badge .corr-val { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 13px; }
-  .corr-strong { color: var(--green); }
-  .corr-mod { color: var(--blue); }
-  .corr-weak { color: var(--orange); }
-  .corr-neg { color: var(--red); }
+@media(max-width:1100px){
+  .g6{grid-template-columns:repeat(3,1fr)}
+  .g5{grid-template-columns:repeat(3,1fr)}
+  .zone-params,.wkd-mets{grid-template-columns:repeat(2,1fr)}
+  .r65,.r56{grid-template-columns:1fr}
+  .rec-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .hdr,.tab-nav,.pnl{padding-left:16px;padding-right:16px}
+  .g6,.g5,.g4{grid-template-columns:repeat(2,1fr)}
+  .r2,.r3,.r65,.r56{grid-template-columns:1fr}
+  .wkd-grid,.score-grid{grid-template-columns:1fr}
+  .rec-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
-<!-- ═══════ HEADER ═══════ -->
-<header class="app-header">
-  <div class="logo-block">
-    <svg class="logo-svg" aria-label="Dashboard logo" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!-- ════════════ HEADER ════════════ -->
+<header class="hdr">
+  <div class="hdr-left">
+    <svg class="hdr-logo" width="36" height="36" viewBox="0 0 36 36" fill="none">
       <rect width="36" height="36" rx="10" fill="rgba(10,132,255,0.12)"/>
-      <rect x="7" y="20" width="5" height="9" rx="1.5" fill="#0a84ff" opacity="0.5"/>
-      <rect x="14" y="14" width="5" height="15" rx="1.5" fill="#0a84ff" opacity="0.75"/>
-      <rect x="21" y="9" width="5" height="20" rx="1.5" fill="#0a84ff"/>
-      <path d="M8 13 L14 9 L21 11 L29 7" stroke="#ffd60a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="8" cy="13" r="2" fill="#ffd60a"/>
-      <circle cx="29" cy="7" r="2" fill="#ffd60a"/>
+      <rect x="7" y="21" width="4.5" height="8" rx="1.5" fill="#0a84ff" opacity=".45"/>
+      <rect x="13.5" y="15" width="4.5" height="14" rx="1.5" fill="#0a84ff" opacity=".7"/>
+      <rect x="20" y="9" width="4.5" height="20" rx="1.5" fill="#0a84ff"/>
+      <path d="M8.25 14 L15.75 9.5 L22.25 11.5 L28.5 7.5" stroke="#ffd60a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="8.25" cy="14" r="2" fill="#ffd60a"/>
+      <circle cx="28.5" cy="7.5" r="2" fill="#ffd60a"/>
     </svg>
     <div class="logo-text">
-      <div class="title">Call Center Intelligence</div>
-      <div class="subtitle">KPI Performance Analytics · Jan 2024 – Apr 2026</div>
+      <div class="t1">Call Center Intelligence</div>
+      <div class="t2">KPI Performance Analytics · Jan 2024 – Apr 2026</div>
     </div>
   </div>
-  <div class="header-meta">
-    <div class="meta-pill"><span class="dot"></span>830 Daily Observations</div>
-    <div class="meta-pill" style="color:var(--gold);">101 Optimal Zone Days</div>
+  <div class="hdr-right">
+    <div class="pill"><span class="dot"></span>830 Days · Live Data</div>
+    <div class="pill" style="color:var(--gold)">$12.5M Total Revenue</div>
+    <div class="pill" style="color:var(--green)">12,414 Acquisitions</div>
   </div>
 </header>
 
-<!-- ═══════ TABS ═══════ -->
+<!-- ════════════ TAB NAV ════════════ -->
 <nav class="tab-nav">
-  <button class="tab-btn active" onclick="switchTab(0)">
-    <span class="tab-icon">◈</span> Optimal Zone Analysis
-    <span class="tab-badge">4-Way</span>
-  </button>
-  <button class="tab-btn" onclick="switchTab(1)">
-    <span class="tab-icon">◷</span> Weekday vs Weekend
-    <span class="tab-badge">Calendar</span>
-  </button>
+  <button class="tb active" onclick="switchTab(0)">📊 Executive Summary <span class="tb-num blue">Manager</span></button>
+  <button class="tb" onclick="switchTab(1)">💰 Revenue Intelligence <span class="tb-num gold">New</span></button>
+  <button class="tb" onclick="switchTab(2)">🎯 Lead Quality Matrix <span class="tb-num teal">New</span></button>
+  <button class="tb" onclick="switchTab(3)">◈ Optimal Zone <span class="tb-num purple">4-Way</span></button>
+  <button class="tb" onclick="switchTab(4)">◷ Weekday vs Weekend <span class="tb-num green">Calendar</span></button>
 </nav>
 
-<!-- ═══════════════════════════════════════════════
-     TAB 1: OPTIMAL ZONE ANALYSIS
-═══════════════════════════════════════════════ -->
-<section class="tab-panel active" id="tab-0">
+<!-- ══════════════════════════════════════════════════════
+     TAB 0 — EXECUTIVE SUMMARY
+══════════════════════════════════════════════════════ -->
+<section class="pnl active" id="tab-0">
 
-  <!-- KPI Row -->
-  <div class="kpi-grid">
-    <div class="kpi-card card-glow">
-      <div class="kpi-label">Total Days Analyzed</div>
-      <div class="kpi-value">830</div>
-      <div class="kpi-sub">Jan 2024 – Apr 2026</div>
-      <div class="kpi-accent-bar accent-blue" style="width:100%"></div>
+  <!-- Top KPIs -->
+  <div class="kpi-grid g6">
+    <div class="kc card-accent blue"><div class="kc-lbl">Total Revenue (2yr)</div><div class="kc-val" style="color:var(--gold)" id="e-rev">—</div><div class="kc-sub">SOV + Upsales</div><div class="kc-bar bc-gold" style="width:100%"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Daily Revenue</div><div class="kc-val" id="e-adr">—</div><div class="kc-sub">Per calendar day</div><div class="kc-bar bc-gold" style="width:65%"></div></div>
+    <div class="kc"><div class="kc-lbl">Total Acquisitions</div><div class="kc-val" style="color:var(--green)" id="e-acq">—</div><div class="kc-sub">New students enrolled</div><div class="kc-bar bc-green" style="width:78%"></div></div>
+    <div class="kc"><div class="kc-lbl">Total Orders</div><div class="kc-val" id="e-ord">—</div><div class="kc-sub">All confirmed orders</div><div class="kc-bar bc-blue" style="width:85%"></div></div>
+    <div class="kc"><div class="kc-lbl">Total Leads</div><div class="kc-val" id="e-leads">—</div><div class="kc-sub">Across all media</div><div class="kc-bar bc-purple" style="width:60%"></div></div>
+    <div class="kc card-accent gold"><div class="kc-lbl">Revenue per Lead</div><div class="kc-val" id="e-rpl">—</div><div class="kc-sub">Overall avg quality</div><div class="kc-bar bc-teal" style="width:45%"></div></div>
+  </div>
+
+  <!-- Recommendations -->
+  <div class="sh"><div class="sh-left"><div class="title">Strategic Recommendations</div><div class="sub">Based on 830-day statistical analysis · Ranked by revenue impact potential</div></div><span class="badge blue">Data-Driven</span></div>
+  <div class="rec-grid">
+    <div class="rec card-accent gold"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🔀</div><div class="rec-title">Rebalance Lead Mix Toward Hebrew Category</div><div class="rec-body">Hebrew leads convert at <strong style="color:var(--green)">9.0%</strong> vs Biblical's 3.9% — <strong>2.3× higher</strong>. Revenue per lead: <strong style="color:var(--gold)">$92.44</strong> vs $38.68. Shifting 10% of Biblical PPC budget to Hebrew campaigns adds ~$1.2M in effective annual revenue without increasing total spend.</div></div>
+    <div class="rec card-accent green"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🌿</div><div class="rec-title">Scale Organic Channel (Highest Lead Value)</div><div class="rec-body">Organic drives only 9% of leads but produces <strong style="color:var(--gold)">$123/lead</strong> vs PPC's $44.83. Organic Hebrew is the star at <strong style="color:var(--green)">$153/lead</strong>. Doubling organic investment yields 3.4× the revenue uplift of equivalent PPC spend.</div></div>
+    <div class="rec card-accent blue"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">⚡</div><div class="rec-title">Operate in the 19–28 Leads/Shift Window</div><div class="rec-body">The optimal L/S ratio of <strong style="color:var(--blue)">19.2–28.5</strong> produces 61% above-average acquisitions and 54% above-average revenue. Days above 35 ratio see revenue collapse to $11.3k vs $23.2k in the optimal zone.</div></div>
+    <div class="rec card-accent purple"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📅</div><div class="rec-title">Increase Weekend Staffing to 11–12 Shifts</div><div class="rec-body">Weekend L/S ratio is 32.1 — above the ceiling. Adding 3–4 shifts on weekends would bring it into the optimal range, potentially unlocking <strong style="color:var(--gold)">+$2.1k/day</strong> in weekend revenue (+30%).</div></div>
+    <div class="rec card-accent teal"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📧</div><div class="rec-title">Audit Email Biblical Lead Quality</div><div class="rec-body">Email Marketing drives 21% of Biblical leads but only 3.8% conversion — half the rate of Organic channels. Contact rate is acceptable at 40%. The issue is lead intent quality at the top of funnel. A/B test copy and audience targeting.</div></div>
+    <div class="rec card-accent orange"><div class="rec-priority pri-lo">LOW</div><div class="rec-icon">📈</div><div class="rec-title">Leverage Thursday–Tuesday Staffing Peak</div><div class="rec-body">Thursday leads weekday acquisitions (avg 16.9/day) while Tuesday shows highest revenue efficiency. Avoid over-scheduling Friday afternoon as the contacted ratio begins declining. Plan shift peaks for Tue–Thu.</div></div>
+  </div>
+
+  <!-- Summary Charts Row -->
+  <div class="row r2">
+    <!-- Revenue by Media Donut -->
+    <div class="card card-accent blue">
+      <div class="sh"><div class="sh-left"><div class="title">Revenue Share vs Lead Share by Media</div><div class="sub">The gap between bars reveals lead quality. Organic punches far above its lead weight.</div></div></div>
+      <div style="height:260px"><canvas id="mediaShareChart"></canvas></div>
     </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Avg Daily Leads</div>
-      <div class="kpi-value" id="kpi-leads">—</div>
-      <div class="kpi-sub">All days, all media</div>
-      <div class="kpi-accent-bar accent-blue"></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Avg Daily Shifts</div>
-      <div class="kpi-value" id="kpi-shifts">—</div>
-      <div class="kpi-sub">Rep-hours ÷ 7h shift</div>
-      <div class="kpi-accent-bar accent-purple"></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Avg Contacted Ratio</div>
-      <div class="kpi-value" id="kpi-contacted">—</div>
-      <div class="kpi-sub">Contacted / Leads per day</div>
-      <div class="kpi-accent-bar accent-orange"></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Avg Daily Acquisitions</div>
-      <div class="kpi-value" id="kpi-acq">—</div>
-      <div class="kpi-sub">New students enrolled</div>
-      <div class="kpi-accent-bar accent-green"></div>
-    </div>
-    <div class="kpi-card card-gold">
-      <div class="kpi-label">Optimal Zone Days</div>
-      <div class="kpi-value" style="color:var(--gold)">101</div>
-      <div class="kpi-sub">12.2% of all days qualify</div>
-      <div class="kpi-accent-bar accent-gold" style="width:12.2%"></div>
+    <!-- Campaign Category Comparison -->
+    <div class="card card-accent gold">
+      <div class="sh"><div class="sh-left"><div class="title">Hebrew vs Biblical — Quality Gap</div><div class="sub">Hebrew Related leads are 2.3× more likely to convert and worth 2.4× more revenue per lead.</div></div></div>
+      <div style="height:260px"><canvas id="campCompChart"></canvas></div>
     </div>
   </div>
 
-  <!-- ZONE BLOCK -->
-  <div class="zone-block">
-    <div class="zone-title">The Optimal 4-Way Zone — Performance Intersection</div>
+  <!-- Monthly Revenue Trend -->
+  <div class="card card-accent green" style="margin-bottom:22px">
+    <div class="sh"><div class="sh-left"><div class="title">Monthly Performance Trend — Revenue, Acquisitions, Orders</div><div class="sub">28-month rolling daily averages. Revenue trend is the north-star KPI.</div></div><span class="badge green">Jan 2024 – Apr 2026</span></div>
+    <div style="height:280px"><canvas id="execTrendChart"></canvas></div>
+  </div>
+
+  <!-- Performance Scorecard -->
+  <div class="score-grid">
+    <div class="score-card card-accent blue">
+      <div class="sc-title">Media Channel Scorecard</div>
+      <div id="mediaScorecardRows"></div>
+    </div>
+    <div class="score-card card-accent gold">
+      <div class="sc-title">Campaign Category Scorecard</div>
+      <div id="campScorecardRows"></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB 1 — REVENUE INTELLIGENCE
+══════════════════════════════════════════════════════ -->
+<section class="pnl" id="tab-1">
+
+  <div class="kpi-grid g5">
+    <div class="kc card-accent gold"><div class="kc-lbl">Total Revenue</div><div class="kc-val" style="color:var(--gold)" id="r-rev">—</div><div class="kc-sub">SOV + Upsales combined</div><div class="kc-bar bc-gold" style="width:100%"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Daily Revenue</div><div class="kc-val" id="r-adr">—</div><div class="kc-sub">All 830 days</div><div class="kc-bar bc-gold" style="width:65%"></div></div>
+    <div class="kc"><div class="kc-lbl">Revenue / Lead</div><div class="kc-val" id="r-rpl">—</div><div class="kc-sub">Overall blended rate</div><div class="kc-bar bc-teal" style="width:40%"></div></div>
+    <div class="kc"><div class="kc-lbl">Revenue / Acquisition</div><div class="kc-val" id="r-rpa">—</div><div class="kc-sub">Avg per enrolled student</div><div class="kc-bar bc-purple" style="width:70%"></div></div>
+    <div class="kc card-accent green"><div class="kc-lbl">Rev Optimal Zone Days</div><div class="kc-val" style="color:var(--green)" id="r-opt">134</div><div class="kc-sub">16.1% of all days qualify</div><div class="kc-bar bc-green" style="width:16.1%"></div></div>
+  </div>
+
+  <!-- Revenue Optimal Zone -->
+  <div class="zone gold">
+    <div class="zone-title gold">Revenue Optimal Zone — Best Lead/Shift Ratio for Maximum Revenue</div>
     <div class="zone-params">
-      <div class="zone-param">
-        <div class="zone-param-label">Daily Lead Volume</div>
-        <div class="zone-param-val" style="color:var(--blue)">259–392</div>
-        <div class="zone-param-range">IQR of optimal days · avg 339</div>
-      </div>
-      <div class="zone-param">
-        <div class="zone-param-label">Rep Shifts (7h equiv.)</div>
-        <div class="zone-param-val" style="color:var(--purple)">12.9–16.6</div>
-        <div class="zone-param-range">IQR of optimal days · avg 15.0</div>
-      </div>
-      <div class="zone-param">
-        <div class="zone-param-label">Leads / Shift Ratio</div>
-        <div class="zone-param-val" style="color:var(--gold)">19.2–28.5</div>
-        <div class="zone-param-range">IQR of optimal days · avg 23.4</div>
-      </div>
-      <div class="zone-param">
-        <div class="zone-param-label">Contacted Ratio</div>
-        <div class="zone-param-val" style="color:var(--green)">≥ 50%</div>
-        <div class="zone-param-range">Optimal avg 53.2% vs 44.5% overall</div>
-      </div>
+      <div class="zp"><div class="zp-lbl">Daily Leads</div><div class="zp-val" style="color:var(--blue)">247–350</div><div class="zp-range">IQR · avg 306</div></div>
+      <div class="zp"><div class="zp-lbl">Rep Shifts</div><div class="zp-val" style="color:var(--purple)">12.4–16.6</div><div class="zp-range">IQR · avg 14.5</div></div>
+      <div class="zp"><div class="zp-lbl">Leads / Shift Ratio</div><div class="zp-val" style="color:var(--gold)">16.5–25.9</div><div class="zp-range">IQR · avg 21.9</div></div>
+      <div class="zp"><div class="zp-lbl">Avg Revenue on Zone Days</div><div class="zp-val" style="color:var(--green)">$23,241</div><div class="zp-range">vs $15,082 overall (+54%)</div></div>
     </div>
   </div>
 
-  <!-- MAIN SCATTER CHART -->
-  <div class="chart-row chart-row-65" style="margin-bottom:24px">
-    <div class="card card-glow">
-      <div class="section-header">
-        <div>
-          <div class="chart-title">4-Way Intersection: Lead/Shift Ratio × Acquisitions × SOV × Contacted Rate</div>
-          <div class="chart-desc">Each point = one calendar day · X-axis: Leads per Rep Shift · Y-axis: Total Acquisitions · Bubble size: Contacted Ratio · Color gradient: SOV value (dark→light = low→high) · Gold ring = Optimal Zone day</div>
-        </div>
-        <span class="section-badge badge-blue">n = 830 days</span>
-      </div>
-      <div class="chart-container" style="height:420px">
-        <canvas id="scatterChart"></canvas>
-      </div>
-      <div class="legend" style="margin-top:14px">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--blue);border:2px solid var(--gold)"></div>Optimal Zone Day</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(10,132,255,0.5)"></div>High SOV (>15k)</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(10,132,255,0.25)"></div>Low SOV</div>
-        <div class="legend-item"><div style="width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2)"></div>Bubble size = Contacted Ratio</div>
+  <!-- Revenue Scatter + Ratio Bins -->
+  <div class="row r65">
+    <div class="card card-accent gold">
+      <div class="sh"><div class="sh-left"><div class="title">Revenue vs Leads/Shift Ratio — Daily Scatter</div><div class="sub">Each bubble = 1 day · Size = contacted ratio · Color intensity = acquisition count · Gold ring = Revenue optimal zone day</div></div><span class="badge gold">n=830</span></div>
+      <div style="height:400px"><canvas id="revScatterChart"></canvas></div>
+      <div class="legend" style="margin-top:12px">
+        <div class="li"><div class="ld" style="background:var(--gold);border:1px solid var(--gold)"></div>Revenue Optimal Day</div>
+        <div class="li"><div class="ld" style="background:rgba(255,214,10,.5)"></div>High Revenue (>$20k)</div>
+        <div class="li"><div class="ld" style="background:rgba(255,214,10,.2)"></div>Below Average</div>
       </div>
     </div>
-
-    <!-- Right: Ratio Bins Performance -->
+    <!-- Ratio Bins Revenue -->
     <div class="card">
-      <div class="section-header">
-        <div>
-          <div class="chart-title">Leads/Shift Ratio Bands</div>
-          <div class="chart-desc">Avg Acquisitions &amp; Contacted Ratio by ratio bracket. Sweet spot clearly emerges in 15–35 range.</div>
-        </div>
-      </div>
-      <div class="chart-container" style="height:200px">
-        <canvas id="ratioBinsChart"></canvas>
-      </div>
+      <div class="sh"><div class="sh-left"><div class="title">Revenue by L/S Ratio Band</div><div class="sub">Sweet spot: 15–35 · Above 35, revenue collapses to $11.3k/day average</div></div></div>
+      <div style="height:200px"><canvas id="revBinsChart"></canvas></div>
       <div class="divider"></div>
-      <div class="chart-title" style="margin-bottom:4px">Avg SOV by Ratio Band</div>
-      <div class="chart-container" style="height:160px">
-        <canvas id="ratioBinsSOVChart"></canvas>
+      <div class="title" style="font-size:13px;font-weight:600;margin-bottom:4px">Revenue per Lead by Ratio Band</div>
+      <div style="font-size:11.5px;color:var(--text-2);margin-bottom:12px">As ratio rises above 25, revenue extraction per lead falls sharply — reps have less time per contact.</div>
+      <div style="height:150px"><canvas id="revPerLeadBinsChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Revenue Narrative -->
+  <div class="narrative card-accent gold">
+    <h3>Revenue Architecture: SOV + Upsales Deep Dive</h3>
+    <p>Total 2-year revenue of <span class="tag g">$12,517,709</span> is composed of <strong>Course SOV (primary)</strong> and <strong>Upsales (secondary)</strong>. The two components are highly correlated with acquisitions (r = <span class="tag b">+0.77</span>) and even more strongly with orders (r = <span class="tag gr">+0.85</span>), confirming that <span class="hl-gold">orders are the single strongest daily revenue predictor.</span></p>
+    <p>The <span class="hl-gold">Revenue Optimal Zone (L/S ratio 16.5–25.9)</span> is slightly broader and lower than the Acquisition Optimal Zone (19.2–28.5). This means revenue maximization is somewhat less sensitive to the exact ratio — but the floor at 16.5 is hard: below 15 leads/shift, reps are over-resourced and revenue production plateaus. The ceiling at 35 is even harder: days above 35 average just <span class="tag r">$11,258/day</span> vs <span class="tag g">$23,241</span> in the optimal zone — a 51% collapse.</p>
+    <p>The lead quality decomposition reveals that <span class="hl">PPC-All generates 61.3% of total leads but only 52.4% of revenue</span> — a dilutive ratio. In contrast, <span class="hl-green">Organic generates 9.0% of leads and 21.1% of revenue</span> — a highly accretive 2.3× revenue-to-lead ratio. Strategic capital reallocation from PPC-Biblical to Organic and Hebrew channels is the highest-leverage revenue action available.</p>
+    <div class="corr-flex" id="revCorrBadges"></div>
+  </div>
+
+  <!-- Revenue by segment -->
+  <div class="row r2">
+    <div class="card card-accent teal">
+      <div class="sh"><div class="sh-left"><div class="title">Revenue per Lead by Segment</div><div class="sub">The quality gap is massive: Organic Hebrew produces 4.7× the revenue per lead of PPC Biblical</div></div></div>
+      <div style="height:280px"><canvas id="revPerLeadSegChart"></canvas></div>
+    </div>
+    <div class="card card-accent purple">
+      <div class="sh"><div class="sh-left"><div class="title">Top 30 Days by Revenue</div><div class="sub">Highest revenue days and their operational parameters</div></div><span class="badge gold">All-Time Best</span></div>
+      <div class="tbl-wrap" style="max-height:320px">
+        <table><thead><tr><th>#</th><th>Date</th><th>Day</th><th>Leads</th><th>Shift</th><th>L/S</th><th>Revenue</th><th>Acq</th><th>Orders</th></tr></thead>
+        <tbody id="topRevBody"></tbody></table>
       </div>
     </div>
   </div>
 
-  <!-- CORRELATION + INSIGHTS -->
-  <div class="chart-row chart-row-2">
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB 2 — LEAD QUALITY MATRIX
+══════════════════════════════════════════════════════ -->
+<section class="pnl" id="tab-2">
+
+  <!-- Top banner insight -->
+  <div class="zone blue" style="margin-bottom:22px">
+    <div class="zone-title blue">Core Insight: 10,000 Leads Are Not Equal</div>
+    <div class="zone-params">
+      <div class="zp"><div class="zp-lbl">Organic Hebrew (best)</div><div class="zp-val" style="color:var(--green)">14.5% CVR</div><div class="zp-range">$153.32 revenue / lead</div></div>
+      <div class="zp"><div class="zp-lbl">PPC Biblical (worst)</div><div class="zp-val" style="color:var(--red)">3.3% CVR</div><div class="zp-range">$32.40 revenue / lead</div></div>
+      <div class="zp"><div class="zp-lbl">Quality Gap</div><div class="zp-val" style="color:var(--gold)">4.73×</div><div class="zp-range">Rev/lead: best vs worst</div></div>
+      <div class="zp"><div class="zp-lbl">Conversion Gap</div><div class="zp-val" style="color:var(--blue)">4.40×</div><div class="zp-range">Organic Hebrew vs PPC Biblical CVR</div></div>
+    </div>
+  </div>
+
+  <!-- Lead Quality Matrix (heatmap table) -->
+  <div class="card card-accent teal" style="margin-bottom:22px">
+    <div class="sh">
+      <div class="sh-left"><div class="title">Lead Quality Matrix — Conversion Rate × Revenue per Lead</div><div class="sub">Each cell shows: Conversion Rate (large) · Revenue/Lead (medium) · Total lead volume (small). Color = quality score. Darker green = higher value per lead.</div></div>
+      <span class="badge teal">8 Segments</span>
+    </div>
+    <div class="matrix-wrap"><table class="matrix" id="qualityMatrix"></table></div>
+  </div>
+
+  <!-- Chart row -->
+  <div class="row r3">
+    <!-- Conversion Rate by Segment -->
+    <div class="card card-accent green">
+      <div class="sh"><div class="sh-left"><div class="title">Conversion Rate by Segment</div><div class="sub">Acquisitions ÷ Total Leads</div></div></div>
+      <div style="height:240px"><canvas id="cvrSegChart"></canvas></div>
+    </div>
+    <!-- Revenue per Lead by segment -->
+    <div class="card card-accent gold">
+      <div class="sh"><div class="sh-left"><div class="title">Revenue per Lead by Segment</div><div class="sub">True lead value in dollars</div></div></div>
+      <div style="height:240px"><canvas id="rplSegChart"></canvas></div>
+    </div>
+    <!-- Revenue per Acquisition -->
+    <div class="card card-accent purple">
+      <div class="sh"><div class="sh-left"><div class="title">Revenue per Acquisition</div><div class="sub">Avg student value per channel</div></div></div>
+      <div style="height:240px"><canvas id="rpaSegChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Lead Volume vs Revenue Volume comparison -->
+  <div class="row r2">
+    <div class="card card-accent blue">
+      <div class="sh"><div class="sh-left"><div class="title">Lead Share vs Revenue Share — By Media</div><div class="sub">The gap between the two bars reveals over/under-performance vs lead volume expectations. Organic outperforms its lead weight by 2.3×.</div></div></div>
+      <div style="height:270px"><canvas id="leadRevShareChart"></canvas></div>
+    </div>
+    <div class="card card-accent teal">
+      <div class="sh"><div class="sh-left"><div class="title">Contacted Rate by Segment</div><div class="sub">How reachable are leads from each source? High contacted rate = better lead intent or call center scheduling alignment.</div></div></div>
+      <div style="height:270px"><canvas id="contactRateSegChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Deep narrative -->
+  <div class="narrative card-accent blue">
+    <h3>Lead Efficiency Analysis: Why Volume Alone Is a Misleading KPI</h3>
+    <p>The data exposes a fundamental strategic trap: measuring success by lead count creates a <span class="hl">false sense of scale while obscuring quality erosion</span>. PPC-All Biblical delivers 112,769 leads (47.3% of total volume) at a conversion rate of <span class="tag r">3.3%</span> and <span class="tag r">$32.40/lead</span>. Meanwhile, Organic Hebrew delivers 7,871 leads (3.3% of volume) at <span class="tag gr">14.5% conversion</span> and <span class="tag gr">$153.32/lead</span>. The 4.7× revenue-per-lead gap means you need 4.7 PPC-Biblical leads to equal the value of 1 Organic-Hebrew lead.</p>
+    <p>The <span class="hl-gold">Hebrew category consistently outperforms Biblical across every media channel</span>. The Hebrew contacted rate is <span class="tag gr">54.7%</span> vs Biblical's 40.8% — suggesting Hebrew leads have stronger intent, better data quality, or better demographic fit for the call center's scheduling capabilities. This 14-point gap in reachability alone accounts for a significant portion of the conversion differential.</p>
+    <p>The Affiliates channel shows an interesting profile: <span class="hl">high revenue per acquisition ($966–971) but low daily volume</span>. Revenue per lead is strong ($87–90) because affiliate traffic tends to self-select. If affiliate relationships can be scaled without quality dilution, this channel warrants aggressive investment. Email Hebrew ($73.27/lead, 7.3% CVR) is undervalued relative to its attention in media planning — a reachable, moderate-quality pool that benefits from nurture sequences before hand-off to the call center.</p>
+    <p><strong>Key Recommendation:</strong> Replace "total monthly leads" as a primary KPI with <span class="hl-gold">Revenue-Weighted Lead Volume (RWLV)</span> = Σ(leads per segment × revenue per lead for that segment). This single metric captures both quantity and quality, and will show that shifting mix toward Hebrew and Organic channels could increase effective revenue contribution by 25–40% without requiring more total leads.</p>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB 3 — OPTIMAL ZONE (4-WAY)
+══════════════════════════════════════════════════════ -->
+<section class="pnl" id="tab-3">
+
+  <div class="kpi-grid g6">
+    <div class="kc"><div class="kc-lbl">Total Days</div><div class="kc-val">830</div><div class="kc-sub">Jan 2024 – Apr 2026</div><div class="kc-bar bc-blue" style="width:100%"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Daily Leads</div><div class="kc-val" id="o-leads">—</div><div class="kc-sub">All days combined</div><div class="kc-bar bc-blue"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Daily Shifts</div><div class="kc-val" id="o-shifts">—</div><div class="kc-sub">7h rep-equivalents</div><div class="kc-bar bc-purple"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Contacted Ratio</div><div class="kc-val" id="o-cont">—</div><div class="kc-sub">Contacted ÷ Leads</div><div class="kc-bar bc-orange"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Daily Acq</div><div class="kc-val" id="o-acq">—</div><div class="kc-sub">New students/day</div><div class="kc-bar bc-green"></div></div>
+    <div class="kc card-accent gold"><div class="kc-lbl">Optimal Zone Days</div><div class="kc-val" style="color:var(--gold)">101</div><div class="kc-sub">12.2% qualify (all 4 dims)</div><div class="kc-bar bc-gold" style="width:12.2%"></div></div>
+  </div>
+
+  <!-- 4-way zone block -->
+  <div class="zone blue">
+    <div class="zone-title blue">The Optimal 4-Way Zone — Acquisitions &amp; SOV Maximization</div>
+    <div class="zone-params">
+      <div class="zp"><div class="zp-lbl">Daily Lead Volume</div><div class="zp-val" style="color:var(--blue)">259–392</div><div class="zp-range">IQR · avg 339</div></div>
+      <div class="zp"><div class="zp-lbl">Rep Shifts (7h equiv.)</div><div class="zp-val" style="color:var(--purple)">12.9–16.6</div><div class="zp-range">IQR · avg 15.0</div></div>
+      <div class="zp"><div class="zp-lbl">Leads / Shift Ratio</div><div class="zp-val" style="color:var(--gold)">19.2–28.5</div><div class="zp-range">IQR · avg 23.4</div></div>
+      <div class="zp"><div class="zp-lbl">Contacted Ratio</div><div class="zp-val" style="color:var(--green)">≥ 50%</div><div class="zp-range">Optimal avg 53.2%</div></div>
+    </div>
+  </div>
+
+  <!-- Main scatter + bins -->
+  <div class="row r65">
+    <div class="card card-accent blue">
+      <div class="sh"><div class="sh-left"><div class="title">4-Way Intersection: L/S Ratio × Acquisitions × SOV × Contacted Rate</div><div class="sub">X = Leads/Shift · Y = Acquisitions · Bubble size = Contacted Ratio · Color = SOV (dark→bright) · Gold ring = Optimal Zone day</div></div><span class="badge blue">n=830</span></div>
+      <div style="height:420px"><canvas id="scatterChart"></canvas></div>
+      <div class="legend" style="margin-top:12px">
+        <div class="li"><div class="ld" style="background:var(--blue);border:2px solid var(--gold)"></div>Optimal Zone Day</div>
+        <div class="li"><div class="ld" style="background:rgba(10,132,255,.5)"></div>High SOV</div>
+        <div class="li"><div class="ld" style="background:rgba(255,255,255,.1)"></div>Bubble = Contacted Ratio</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">Leads/Shift Bands — Acquisitions &amp; Contacted</div></div></div>
+      <div style="height:190px"><canvas id="ratioBinsAcqChart"></canvas></div>
+      <div class="divider"></div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px">Avg SOV by Ratio Band</div>
+      <div style="height:155px"><canvas id="ratioBinsSOVChart2"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Analysis + Monthly Trend -->
+  <div class="row r2">
     <div class="narrative">
-      <h3>Harvard-Level Analysis: Optimal Lead-to-Shift Ratio</h3>
-      <p>
-        Across <strong>830 operational days</strong>, the data reveals a clear <span class="highlight">inverted-U performance curve</span> when leads are plotted against allocated rep capacity. The <span class="stat-tag">optimal Leads/Shift window of 19.2–28.5</span> consistently outperforms all other brackets. Below this range, the team is over-resourced relative to inbound volume — a capital inefficiency. Above 35, performance collapses as reps are overwhelmed, contacted ratios fall below 35%, and acquisitions drop from an optimal average of <span class="stat-tag-gold">24.1/day</span> to just <span class="stat-tag">11.8/day</span>.
-      </p>
-      <p>
-        The strongest single predictor of acquisitions is <span class="highlight">total lead volume</span> (Pearson r = <span class="stat-tag">+0.52, p&lt;0.0001</span>), confirming that volume is foundational. However, raw volume without adequate capacity destroys conversion. The <span class="highlight-green">contacted ratio carries an r = +0.35</span> correlation with acquisitions — every point of conversion efficiency translates directly to enrollment.
-      </p>
-      <p>
-        The <span class="highlight-gold">4-way optimal zone</span> requires simultaneous satisfaction of all four dimensions: <strong>259–392 daily leads, 12.9–16.6 shifts, 19.2–28.5 L/S ratio, and ≥50% contacted rate</strong>. Only <strong>101 of 830 days</strong> (12.2%) hit all four. Those days average <span class="stat-tag-gold">24.1 acquisitions and SOV 18,317</span> — <strong>61% above the dataset mean</strong>.
-      </p>
-      <div class="corr-grid" id="corrGrid"></div>
+      <h3>Optimal Zone Analysis: Acquisition & SOV Maximization</h3>
+      <p>The 4-way intersection defines the operating envelope where all outcome metrics peak simultaneously. Leads must be in the <span class="tag b">259–392</span> range — below this, there is insufficient pipeline for reps to generate volume; above 392, rep capacity is insufficient. Shifts must stay in <span class="tag p">12.9–16.6</span>: the ratio stabilizes in the accretive zone. The resulting L/S ratio of <span class="tag g">19.2–28.5</span> is the core operating target.</p>
+      <p>The <span class="hl">contacted ratio threshold of ≥50%</span> acts as a quality gate: it filters out days where operational execution was poor regardless of volumes. Only <strong>101 of 830 days</strong> (12.2%) satisfy all four conditions. Those days average <span class="tag gr">24.1 acquisitions</span> and SOV <span class="tag gr">$18,317</span> — 61% above the dataset mean.</p>
+      <div class="corr-flex" id="acqCorrBadges"></div>
     </div>
-
-    <!-- Monthly Trend -->
-    <div class="card">
-      <div class="chart-title">Monthly Trend — Avg Daily Acquisitions &amp; L/S Ratio</div>
-      <div class="chart-desc">28-month rolling view. L/S ratio (right axis) shows inverse relationship with acquisitions peaks.</div>
-      <div class="chart-container" style="height:300px">
-        <canvas id="trendChart"></canvas>
-      </div>
+    <div class="card card-accent green">
+      <div class="sh"><div class="sh-left"><div class="title">Monthly Trend — Avg Acquisitions &amp; L/S Ratio</div></div></div>
+      <div style="height:300px"><canvas id="trendAcqChart"></canvas></div>
     </div>
   </div>
 
-  <!-- TOP DAYS TABLE -->
+  <!-- Top 30 Acq Days -->
   <div class="card" style="margin-top:0">
-    <div class="section-header">
-      <div>
-        <div class="section-title">Top 30 Acquisition Days</div>
-        <div class="section-sub">Ranked by total acquisitions · Blue dot = Optimal Zone · Italic = Weekend</div>
-      </div>
-      <span class="section-badge badge-gold">All-Time Best</span>
-    </div>
-    <div class="table-scroll">
-      <table class="data-table" id="topDaysTable">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Day</th>
-            <th>Leads</th>
-            <th>Shifts</th>
-            <th>L/S Ratio</th>
-            <th>Acquisitions</th>
-            <th>SOV</th>
-            <th>Contacted %</th>
-          </tr>
-        </thead>
-        <tbody id="topDaysBody"></tbody>
-      </table>
-    </div>
+    <div class="sh"><div class="sh-left"><div class="title">Top 30 Acquisition Days</div><div class="sub">Blue dot = Optimal Zone · Red L/S = ratio exceeded ceiling · Green L/S = within optimal band</div></div><span class="badge gold">Best Ever</span></div>
+    <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Date</th><th>Day</th><th>Leads</th><th>Shifts</th><th>L/S Ratio</th><th>Acq</th><th>SOV</th><th>Contacted %</th></tr></thead><tbody id="topAcqBody"></tbody></table></div>
   </div>
 
 </section>
 
-<!-- ═══════════════════════════════════════════════
-     TAB 2: WEEKDAY vs WEEKEND
-═══════════════════════════════════════════════ -->
-<section class="tab-panel" id="tab-1">
+<!-- ══════════════════════════════════════════════════════
+     TAB 4 — WEEKDAY vs WEEKEND
+══════════════════════════════════════════════════════ -->
+<section class="pnl" id="tab-4">
 
-  <!-- Header -->
-  <div class="section-header" style="margin-bottom:24px">
-    <div>
-      <div class="section-title" style="font-size:18px">Weekday vs Weekend Performance Analysis</div>
-      <div class="section-sub">Calendar-accurate classification · Monday–Friday = Weekdays · Saturday–Sunday = Weekends · Based on actual ISO calendar dates across 830 days</div>
-    </div>
-    <span class="section-badge badge-blue">Calendar-Based</span>
+  <div class="sh" style="margin-bottom:22px"><div class="sh-left"><div class="title" style="font-size:17px">Weekday vs Weekend — Calendar-Based Analysis</div><div class="sub">ISO calendar · Monday–Friday = Weekdays · Saturday–Sunday = Weekends · 830 actual calendar days analyzed</div></div><span class="badge blue">Calendar Verified</span></div>
+
+  <div class="kpi-grid g4" style="margin-bottom:18px">
+    <div class="kc card-accent blue"><div class="kc-lbl">Weekday Days</div><div class="kc-val" style="color:var(--blue)">594</div><div class="kc-sub">71.6% of dataset · Mon–Fri</div><div class="kc-bar bc-blue" style="width:71.6%"></div></div>
+    <div class="kc card-accent gold"><div class="kc-lbl">Weekend Days</div><div class="kc-val" style="color:var(--gold)">236</div><div class="kc-sub">28.4% · Sat &amp; Sun only</div><div class="kc-bar bc-gold" style="width:28.4%"></div></div>
+    <div class="kc card-accent green"><div class="kc-lbl">Weekday Optimal Days</div><div class="kc-val" style="color:var(--green)">97</div><div class="kc-sub">96% of all optimal zone days</div><div class="kc-bar bc-green" style="width:96%"></div></div>
+    <div class="kc"><div class="kc-lbl">Weekend Optimal Days</div><div class="kc-val" style="color:var(--orange)">4</div><div class="kc-sub">Only 4% of optimal zone</div><div class="kc-bar bc-orange" style="width:4%"></div></div>
   </div>
 
-  <!-- KPI Split -->
-  <div class="kpi-grid-4" style="margin-bottom:20px">
-    <div class="kpi-card card-glow">
-      <div class="kpi-label">Weekday Days</div>
-      <div class="kpi-value" style="color:var(--blue)">594</div>
-      <div class="kpi-sub">71.6% of the dataset</div>
-      <div class="kpi-accent-bar accent-blue" style="width:71.6%"></div>
+  <!-- Side-by-side comparison panels -->
+  <div class="wkd-grid">
+    <div class="wkd-pnl wd">
+      <div class="wkd-hdr"><div class="wkd-title">Weekdays <span style="color:var(--text-2);font-weight:400;font-size:13px">Mon–Fri</span></div><span class="wkd-tag">594 days</span></div>
+      <div class="wkd-mets" id="wkdayMets"></div>
     </div>
-    <div class="kpi-card card-gold">
-      <div class="kpi-label">Weekend Days</div>
-      <div class="kpi-value" style="color:var(--gold)">236</div>
-      <div class="kpi-sub">28.4% of the dataset</div>
-      <div class="kpi-accent-bar accent-gold" style="width:28.4%"></div>
-    </div>
-    <div class="kpi-card card-green">
-      <div class="kpi-label">Weekday Optimal Days</div>
-      <div class="kpi-value" style="color:var(--green)">97</div>
-      <div class="kpi-sub">96% of all optimal zone days</div>
-      <div class="kpi-accent-bar accent-green" style="width:96%"></div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Weekend Optimal Days</div>
-      <div class="kpi-value" style="color:var(--orange)">4</div>
-      <div class="kpi-sub">Only 4% of optimal zone days</div>
-      <div class="kpi-accent-bar accent-orange" style="width:4%"></div>
+    <div class="wkd-pnl we">
+      <div class="wkd-hdr"><div class="wkd-title">Weekends <span style="color:var(--text-2);font-weight:400;font-size:13px">Sat–Sun</span></div><span class="wkd-tag">236 days</span></div>
+      <div class="wkd-mets" id="wkendMets"></div>
     </div>
   </div>
 
-  <!-- Side-by-side panels -->
-  <div class="wkd-compare-grid">
-    <div class="wkd-panel weekday">
-      <div class="wkd-panel-header">
-        <div class="wkd-panel-title">Weekdays <span style="color:var(--text-secondary);font-weight:400;font-size:13px">Mon – Fri</span></div>
-        <span class="wkd-panel-tag">594 days</span>
-      </div>
-      <div class="wkd-metrics" id="weekdayMetrics"></div>
-    </div>
-    <div class="wkd-panel weekend">
-      <div class="wkd-panel-header">
-        <div class="wkd-panel-title">Weekends <span style="color:var(--text-secondary);font-weight:400;font-size:13px">Sat – Sun</span></div>
-        <span class="wkd-panel-tag">236 days</span>
-      </div>
-      <div class="wkd-metrics" id="weekendMetrics"></div>
-    </div>
+  <!-- Charts -->
+  <div class="row r2">
+    <div class="card card-accent blue"><div class="sh"><div class="sh-left"><div class="title">Avg Daily Acquisitions by Day of Week</div><div class="sub">Blue = weekday · Gold = weekend · Dashed = overall avg</div></div></div><div style="height:280px"><canvas id="dowAcqChart"></canvas></div></div>
+    <div class="card"><div class="sh"><div class="sh-left"><div class="title">Avg Daily Revenue by Day of Week</div><div class="sub">Revenue mirrors acquisitions but Thursday shows strongest revenue efficiency</div></div></div><div style="height:280px"><canvas id="dowRevChart"></canvas></div></div>
   </div>
 
-  <!-- Charts Row -->
-  <div class="chart-row chart-row-2">
-    <!-- Day of Week Bar Chart -->
-    <div class="card card-glow">
-      <div class="chart-title">Average Daily Acquisitions by Day of Week</div>
-      <div class="chart-desc">Blue bars = weekdays · Gold bars = weekends · Dashed line = overall average (14.96/day)</div>
-      <div class="chart-container" style="height:300px">
-        <canvas id="dowAcqChart"></canvas>
-      </div>
-    </div>
+  <div class="row r2">
+    <div class="card"><div class="sh"><div class="sh-left"><div class="title">Contacted Ratio by Day of Week</div><div class="sub">Weekend drop exposes structural engagement gap</div></div></div><div style="height:260px"><canvas id="dowContChart"></canvas></div></div>
+    <div class="card"><div class="sh"><div class="sh-left"><div class="title">Leads/Shift Ratio by Day of Week</div><div class="sub">Weekend ratio (~32) exceeds the optimal ceiling — reps are over-leveraged</div></div></div><div style="height:260px"><canvas id="dowRatioChart"></canvas></div></div>
+  </div>
 
-    <!-- SOV by Day of Week -->
+  <!-- Narrative + Charts -->
+  <div class="narrative card-accent blue">
+    <h3>Weekend Structural Analysis</h3>
+    <p>Weekdays produce an average of <span class="tag gr">17.1 acquisitions/day</span> and <span class="tag gr">$17,284/day revenue</span> vs weekend's <span class="tag r">9.7 acq/day</span> and <span class="tag r">$10,281/day</span>. The weekday revenue premium is <span class="hl-gold">68.1%</span>. This is not a demand shortfall — weekend leads run at avg 218/day which is meaningful volume. The root cause is <span class="hl">staffing imbalance</span>: weekends run avg 8.6 shifts vs 14.0 weekday, pushing L/S ratio to 32.1 — above the optimal ceiling of 28.5.</p>
+    <p>Only <span class="hl-green">4 of 101 optimal zone days are weekends (4%)</span> despite weekends being 28.4% of the dataset. The weekday optimal zone hit rate is 16.3% (97/594) vs weekend's 1.7% (4/236). Sunday shows the highest weekend potential: avg acquisition rate 10.4/day (vs Saturday's 9.0) with L/S ratio of 31.9 vs Saturday's 32.4. If weekend staffing increases by 3–4 shifts, the ratio drops to ~25–27, entering the optimal window. <strong>Expected revenue gain: +$2,000–2,500/weekend day</strong> based on optimal zone benchmarks.</p>
+  </div>
+
+  <div class="row r2">
+    <div class="card card-accent gold"><div class="sh"><div class="sh-left"><div class="title">Full Metric Comparison — Indexed to Weekday Baseline</div><div class="sub">Weekday = 100 baseline. Weekend performance indexed across all metrics.</div></div></div><div style="height:280px"><canvas id="compareBarChart"></canvas></div></div>
     <div class="card">
-      <div class="chart-title">Average Daily SOV by Day of Week</div>
-      <div class="chart-desc">Significant drop on weekends confirms staffing and pipeline misalignment during non-business days.</div>
-      <div class="chart-container" style="height:300px">
-        <canvas id="dowSOVChart"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- Contacted Ratio + L/S Ratio by day -->
-  <div class="chart-row chart-row-2">
-    <div class="card">
-      <div class="chart-title">Contacted Ratio by Day of Week</div>
-      <div class="chart-desc">Contacts as % of daily leads. Weekend drop reveals structural engagement gap — fewer reps covering similar lead volumes proportionally.</div>
-      <div class="chart-container" style="height:260px">
-        <canvas id="dowContactedChart"></canvas>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="chart-title">Leads / Shift Ratio by Day of Week</div>
-      <div class="chart-desc">Weekend ratio (~32) exceeds the optimal upper bound (28.5), explaining performance degradation. Reps are structurally over-leveraged on weekends.</div>
-      <div class="chart-container" style="height:260px">
-        <canvas id="dowRatioChart"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- Weekday vs Weekend Narrative -->
-  <div class="narrative">
-    <h3>Strategic Insights: Weekday vs Weekend Dynamics</h3>
-    <p>
-      The calendar analysis reveals a <span class="highlight">structural performance bifurcation</span> between weekdays and weekends. Weekdays produce an average of <span class="stat-tag">17.07 acquisitions/day</span> versus only <span class="stat-tag">9.65/day</span> on weekends — a <span class="highlight-gold">76.8% premium</span> for Monday–Friday operations. SOV follows the same pattern: <span class="stat-tag-green">$12,920 avg weekday SOV</span> versus <span class="stat-tag">$7,091 on weekends</span> (45.3% gap).
-    </p>
-    <p>
-      The root cause is <strong>staffing imbalance under demand</strong>. Weekends see fewer rep shifts (avg <span class="stat-tag">8.6 shifts</span> vs <span class="stat-tag-green">14.0 on weekdays</span>), yet the Lead/Shift ratio explodes to <span class="stat-tag">32.1</span> — well above the optimal ceiling of 28.5. Reps are over-stretched, the contacted ratio falls to <span class="stat-tag">39.4%</span> (vs 46.5% on weekdays), and conversion collapses. This is not a demand problem — weekend lead volume is naturally lower at avg 218/day — but it <em>is</em> a staffing calibration problem.
-    </p>
-    <p>
-      Only <span class="highlight-green">4 of 101 optimal zone days</span> (4%) occur on weekends, despite weekends comprising 28.4% of the dataset. The implication is clear: <strong>the optimal zone is almost exclusively a weekday phenomenon</strong>. Strategic investment should focus on deepening weekday capacity in the 12.9–16.6 shift range while exploring whether a targeted weekend staffing increase (bringing weekend shifts from 8.6 to ~11–12) could unlock a meaningful weekend conversion bump without exceeding the ratio ceiling.
-    </p>
-    <p>
-      Among weekdays, <span class="highlight">Thursday</span> leads in avg acquisitions (16.9/day) followed by Tuesday (16.6). Friday shows the strongest Leads/Shift ratio efficiency (25.3) while maintaining solid acquisition levels, suggesting Friday reps are particularly productive. <span class="highlight">Sunday</span> shows the highest weekend acquisition rate (10.4/day) with the best weekend L/S ratio structure (31.9) — if any weekend day warrants additional staffing, it is Sunday.
-    </p>
-  </div>
-
-  <!-- Multi-metric comparison radar / bar -->
-  <div class="chart-row chart-row-2">
-    <div class="card card-glow">
-      <div class="chart-title">Full Metric Comparison — Weekday vs Weekend</div>
-      <div class="chart-desc">Normalized to weekday baseline (100%). All metrics indexed.</div>
-      <div class="chart-container" style="height:300px">
-        <canvas id="compareBarChart"></canvas>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="chart-title">Optimal Zone Distribution</div>
-      <div class="chart-desc">Of 101 optimal zone days, 97 are weekdays (96%) and only 4 are weekends — confirming the optimal zone is a fundamentally weekday structure.</div>
-      <div class="chart-container" style="height:200px">
-        <canvas id="optimalPieChart"></canvas>
-      </div>
-      <div class="insight-grid" style="grid-template-columns:1fr 1fr;margin-top:16px">
-        <div class="insight-box">
-          <div class="label" style="color:var(--blue)">Weekday Hit Rate</div>
-          <div class="value" style="color:var(--blue)">16.3%</div>
-          <div class="desc">97/594 weekdays hit the optimal zone</div>
-        </div>
-        <div class="insight-box">
-          <div class="label" style="color:var(--gold)">Weekend Hit Rate</div>
-          <div class="value" style="color:var(--gold)">1.7%</div>
-          <div class="desc">Only 4/236 weekend days qualify</div>
-        </div>
+      <div class="sh"><div class="sh-left"><div class="title">Optimal Zone Distribution</div><div class="sub">96% of optimal zone days occur on weekdays — the zone is a weekday phenomenon</div></div></div>
+      <div style="height:200px"><canvas id="optPieChart"></canvas></div>
+      <div class="kpi-grid g2" style="margin-top:14px">
+        <div class="kc"><div class="kc-lbl">Weekday Hit Rate</div><div class="kc-val" style="color:var(--blue)">16.3%</div><div class="kc-sub">97/594 weekdays qualify</div><div class="kc-bar bc-blue" style="width:16.3%"></div></div>
+        <div class="kc"><div class="kc-lbl">Weekend Hit Rate</div><div class="kc-val" style="color:var(--gold)">1.7%</div><div class="kc-sub">4/236 weekends qualify</div><div class="kc-bar bc-gold" style="width:1.7%"></div></div>
       </div>
     </div>
   </div>
 
 </section>
 
-<!-- ═══════ SCRIPTS ═══════ -->
+<!-- ════════════════════════ SCRIPTS ════════════════════════ -->
 <script>
 const D = DASHBOARD_DATA;
+const K = D.kpis;
 
-// ─── Tab switching ───────────────────────────────────────
-function switchTab(idx) {
-  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
-  document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
-}
-
-// ─── Chart.js global defaults ───────────────────────────
-Chart.defaults.color = 'rgba(245,245,247,0.45)';
-Chart.defaults.font.family = "'Inter', -apple-system, sans-serif";
+Chart.defaults.color = 'rgba(245,245,247,0.42)';
+Chart.defaults.font.family = "'Inter',-apple-system,sans-serif";
 Chart.defaults.font.size = 11;
+const GC = 'rgba(255,255,255,0.05)';
 
-const gridColor = 'rgba(255,255,255,0.05)';
-const gridColorMid = 'rgba(255,255,255,0.08)';
+function fmt$(v){return '$'+v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function fmt$k(v){return v>=1000?'$'+(v/1000).toFixed(1)+'k':fmt$(v)}
+function fmtPct(v){return (v*100).toFixed(1)+'%'}
+function fmtN(v,d=1){return v.toFixed(d)}
 
-// ─── Colour helpers ─────────────────────────────────────
-function sovToColor(sov, alpha=0.7) {
-  const min = 340, max = 28000;
-  const t = Math.min(1, Math.max(0, (sov - min) / (max - min)));
-  // blue gradient: dim → bright
-  const r = Math.round(10  + t * 30);
-  const g = Math.round(50  + t * 82);
-  const b = Math.round(120 + t * 135);
-  return `rgba(${r},${g},${b},${alpha})`;
+// ─── Tab switcher ──────────────────────────────────────────
+function switchTab(i){
+  document.querySelectorAll('.tb').forEach((b,j)=>b.classList.toggle('active',i===j));
+  document.querySelectorAll('.pnl').forEach((p,j)=>p.classList.toggle('active',i===j));
+  // Resize all Chart.js instances so hidden-tab canvases render correctly
+  requestAnimationFrame(()=>{ Object.values(Chart.instances).forEach(c=>c.resize()); });
 }
 
-// ─── Populate KPI cards ──────────────────────────────────
-document.getElementById('kpi-leads').textContent     = D.kpis.avgLeadsPerDay.toFixed(0);
-document.getElementById('kpi-shifts').textContent    = D.kpis.avgShiftPerDay.toFixed(1);
-document.getElementById('kpi-contacted').textContent = (D.kpis.avgContactedRatio * 100).toFixed(1) + '%';
-document.getElementById('kpi-acq').textContent       = D.kpis.avgAcqPerDay.toFixed(1);
+// ─── Populate KPIs ─────────────────────────────────────────
+document.getElementById('e-rev').textContent = fmt$(K.totalRevenue);
+document.getElementById('e-adr').textContent = fmt$(K.avgDailyRevenue);
+document.getElementById('e-acq').textContent = K.totalAcquisitions.toLocaleString();
+document.getElementById('e-ord').textContent = K.totalOrders.toLocaleString();
+document.getElementById('e-leads').textContent = K.totalLeads.toLocaleString();
+document.getElementById('e-rpl').textContent = fmt$(K.avgRevenuePerLead);
 
-// ─── Correlation Badges ──────────────────────────────────
-const corrs = [
-  { name: 'Leads → Acq', val: +0.5161, type: 'strong' },
-  { name: 'Contacted% → Acq', val: +0.3505, type: 'mod' },
-  { name: 'Shift → Acq', val: +0.3356, type: 'mod' },
-  { name: 'L/S Ratio → Acq', val: -0.1925, type: 'neg' },
-  { name: 'SOV → Acq', val: +0.8288, type: 'strong' },
-  { name: 'Leads → SOV', val: +0.4031, type: 'mod' },
-];
-const corrGrid = document.getElementById('corrGrid');
-corrs.forEach(c => {
-  corrGrid.innerHTML += `<div class="corr-badge">
-    <span class="corr-name">${c.name}</span>
-    <span class="corr-val corr-${c.type}">${c.val>0?'+':''}${c.val.toFixed(4)}</span>
-  </div>`;
+document.getElementById('r-rev').textContent = fmt$(K.totalRevenue);
+document.getElementById('r-adr').textContent = fmt$(K.avgDailyRevenue);
+document.getElementById('r-rpl').textContent = fmt$(K.avgRevenuePerLead);
+document.getElementById('r-rpa').textContent = fmt$(K.avgRevenuePerAcq);
+
+document.getElementById('o-leads').textContent = K.avgDailyLeads.toFixed(0);
+document.getElementById('o-shifts').textContent = K.avgDailyShift.toFixed(1);
+document.getElementById('o-cont').textContent = fmtPct(K.avgContactedRatio);
+document.getElementById('o-acq').textContent = K.avgDailyAcq.toFixed(1);
+
+// ─── Colour helpers ─────────────────────────────────────────
+const MEDIA_COLORS = {
+  'PPC - All': '#0a84ff',
+  'Email Marketing': '#ffd60a',
+  'Organic': '#30d158',
+  'Affiliates': '#bf5af2'
+};
+const CAMP_COLORS = {'Biblical Related':'#ff9f0a','Hebrew Related':'#5ac8fa'};
+const SEG_LABELS = D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0]}`);
+const SEG_COLORS = D.segmentData.map(s=>{
+  const mc = {'Affiliates':'191,90,242','Email Marketing':'255,214,10','Organic':'48,209,88','PPC - All':'10,132,255'};
+  return `rgba(${mc[s.media]},0.8)`;
 });
 
-// ─── Scatter Chart (4-way) ───────────────────────────────
-(function buildScatter() {
-  const datasets = [
-    {
-      label: 'Optimal Zone',
-      data: D.scatterData.filter(d => d.optimalZone).map(d => ({
-        x: parseFloat(d.leadsPerShift.toFixed(2)),
-        y: d.totalAcquisitions,
-        r: Math.max(4, d.contactedRatio * 22),
-        sov: d.totalSOV,
-        date: d.date,
-        dayName: d.dayName,
-        leads: d.totalLeads,
-        shift: d.totalShift,
-        cont: d.contactedRatio,
-      })),
-      backgroundColor: ctx => {
-        const pt = ctx.raw;
-        if (!pt) return 'rgba(10,132,255,0.8)';
-        return sovToColor(pt.sov, 0.85);
-      },
-      borderColor: '#ffd60a',
-      borderWidth: 1.5,
-      hoverBorderWidth: 2.5,
-    },
-    {
-      label: 'All Other Days',
-      data: D.scatterData.filter(d => !d.optimalZone).map(d => ({
-        x: parseFloat(d.leadsPerShift.toFixed(2)),
-        y: d.totalAcquisitions,
-        r: Math.max(3, d.contactedRatio * 16),
-        sov: d.totalSOV,
-        date: d.date,
-        dayName: d.dayName,
-        leads: d.totalLeads,
-        shift: d.totalShift,
-        cont: d.contactedRatio,
-      })),
-      backgroundColor: ctx => {
-        const pt = ctx.raw;
-        if (!pt) return 'rgba(255,255,255,0.12)';
-        return sovToColor(pt.sov, 0.35);
-      },
-      borderColor: 'rgba(255,255,255,0.12)',
-      borderWidth: 0.5,
-    }
-  ];
+// ═══ TAB 0: EXECUTIVE ═════════════════════════════════════
 
-  new Chart(document.getElementById('scatterChart'), {
-    type: 'bubble',
-    data: { datasets },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      layout: { padding: { top: 10, right: 16, bottom: 10, left: 20 } },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#111122',
-          borderColor: 'rgba(255,255,255,0.15)',
-          borderWidth: 1,
-          padding: 12,
-          callbacks: {
-            title: items => {
-              const d = items[0].raw;
-              return `${d.date} · ${d.dayName}`;
-            },
-            label: item => {
-              const d = item.raw;
-              return [
-                `  Acquisitions: ${d.y}`,
-                `  SOV: $${d.sov.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
-                `  Leads / Shift: ${d.x.toFixed(1)}`,
-                `  Total Leads: ${d.leads}`,
-                `  Rep Shifts: ${d.shift.toFixed(1)}`,
-                `  Contacted: ${(d.cont * 100).toFixed(1)}%`,
-              ];
-            },
-          },
-        },
-        annotation: {
-          annotations: {
-            optZoneBox: {
-              type: 'box',
-              xMin: 19.2, xMax: 28.5,
-              yMin: 0, yMax: 40,
-              backgroundColor: 'rgba(10,132,255,0.04)',
-              borderColor: 'rgba(10,132,255,0.25)',
-              borderWidth: 1,
-              borderDash: [4, 3],
-              label: {
-                display: true,
-                content: '◈ OPTIMAL ZONE',
-                position: { x: 'center', y: 'start' },
-                color: 'rgba(10,132,255,0.6)',
-                font: { size: 10, weight: '600', family: 'Inter' },
-                padding: 4,
-              }
-            },
-            ratioLine: {
-              type: 'line',
-              xMin: 35, xMax: 35,
-              borderColor: 'rgba(255,69,58,0.3)',
-              borderWidth: 1,
-              borderDash: [3, 3],
-              label: {
-                display: true,
-                content: 'Ceiling 35',
-                position: 'start',
-                color: 'rgba(255,69,58,0.6)',
-                font: { size: 9, weight: '600' },
-              }
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          title: { display: true, text: 'Leads / Rep Shift Ratio', color: 'rgba(245,245,247,0.4)', font: { size: 11, weight: '500' }, padding: { top: 6 } },
-          grid: { color: gridColor },
-          border: { color: 'transparent' },
-          min: 0, max: 60,
-          ticks: { stepSize: 5 },
-        },
-        y: {
-          title: { display: true, text: 'Daily Acquisitions', color: 'rgba(245,245,247,0.4)', font: { size: 11, weight: '500' }, padding: { bottom: 6 } },
-          grid: { color: gridColor },
-          border: { color: 'transparent' },
-          min: 0, max: 40,
-        }
-      }
-    }
-  });
-})();
+// Media Share Chart (grouped bar: lead share vs revenue share)
+new Chart(document.getElementById('mediaShareChart'),{
+  type:'bar',
+  data:{
+    labels:D.mediaData.map(m=>m.media),
+    datasets:[
+      {label:'Lead Share',data:D.mediaData.map(m=>+(m.leadShare*100).toFixed(1)),backgroundColor:'rgba(10,132,255,0.55)',borderRadius:5,borderSkipped:false},
+      {label:'Revenue Share',data:D.mediaData.map(m=>+(m.revenueShare*100).toFixed(1)),backgroundColor:'rgba(255,214,10,0.7)',borderRadius:5,borderSkipped:false},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(1)}%`}}},
+    scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'},max:70}}
+  }
+});
 
-// ─── Ratio Bins Chart ────────────────────────────────────
-(function buildRatioBins() {
-  const bins = D.ratioBinData;
-  const labels = bins.map(b => b.bin);
-  const acqData = bins.map(b => b.avgAcq);
-  const contData = bins.map(b => +(b.avgContactedRatio * 100).toFixed(2));
+// Campaign comparison chart (horizontal bar)
+const cmpData = D.campData;
+new Chart(document.getElementById('campCompChart'),{
+  type:'bar',
+  data:{
+    labels:['Conversion Rate','Rev/Lead (÷10)','Contact Rate','Lead Share (%)'],
+    datasets: cmpData.map((c,i)=>({
+      label:c.campaign,
+      data:[+(c.conversionRate*100).toFixed(2), +(c.revenuePerLead/10).toFixed(2), +(c.contactedRate*100).toFixed(2), +(c.leadShare*100).toFixed(1)],
+      backgroundColor:i===0?'rgba(255,159,10,0.7)':'rgba(90,200,250,0.7)',
+      borderRadius:5,borderSkipped:false,
+    }))
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1}},
+    scales:{x:{grid:{color:GC},border:{display:false}},y:{grid:{display:false},border:{display:false}}}
+  }
+});
 
-  new Chart(document.getElementById('ratioBinsChart'), {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'Avg Acquisitions',
-          data: acqData,
-          backgroundColor: labels.map(l => (['15-20','20-25','25-30','30-35'].includes(l) ? 'rgba(10,132,255,0.75)' : 'rgba(10,132,255,0.3)')),
-          borderRadius: 6, borderSkipped: false,
-          yAxisID: 'y',
-        },
-        {
-          label: 'Contacted % (right)',
-          data: contData,
-          type: 'line',
-          borderColor: '#ffd60a',
-          backgroundColor: 'transparent',
-          pointBackgroundColor: '#ffd60a',
-          pointRadius: 4,
-          tension: 0.3,
-          yAxisID: 'y2',
-        }
+// Executive trend chart
+(function(){
+  const ml = D.monthlyData;
+  new Chart(document.getElementById('execTrendChart'),{
+    type:'line',
+    data:{
+      labels:ml.map(m=>m.month),
+      datasets:[
+        {label:'Avg Revenue/Day',data:ml.map(m=>+m.avgRevenue.toFixed(0)),borderColor:'#ffd60a',backgroundColor:'rgba(255,214,10,0.07)',fill:true,tension:.4,pointRadius:2,yAxisID:'y'},
+        {label:'Avg Acquisitions/Day',data:ml.map(m=>+m.avgAcq.toFixed(2)),borderColor:'#30d158',backgroundColor:'transparent',borderDash:[3,2],tension:.4,pointRadius:2,yAxisID:'y2'},
+        {label:'Avg Orders/Day',data:ml.map(m=>+m.avgOrders.toFixed(2)),borderColor:'#0a84ff',backgroundColor:'transparent',borderDash:[6,3],tension:.4,pointRadius:2,yAxisID:'y2'},
       ]
     },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      layout: { padding: { right: 8 } },
-      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 } },
-      scales: {
-        x: { grid: { display: false }, border: { display: false } },
-        y: { title: { display: true, text: 'Avg Acq', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 0 },
-        y2: { position: 'right', title: { display: true, text: 'Contacted %', font: { size: 10 } }, grid: { display: false }, border: { display: false }, min: 30, max: 55 }
-      }
-    }
-  });
-
-  const sovData = bins.map(b => +b.avgSOV.toFixed(0));
-  new Chart(document.getElementById('ratioBinsSOVChart'), {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        data: sovData,
-        backgroundColor: labels.map(l => (['15-20','20-25','25-30'].includes(l) ? 'rgba(191,90,242,0.7)' : 'rgba(191,90,242,0.25)')),
-        borderRadius: 6, borderSkipped: false,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: i => `SOV: $${i.raw.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 } },
-      scales: {
-        x: { grid: { display: false }, border: { display: false } },
-        y: { grid: { color: gridColor }, border: { display: false }, min: 0, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' } }
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false}},
+      scales:{
+        x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},
+        y:{title:{display:true,text:'Revenue ($)',font:{size:10}},grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}},
+        y2:{position:'right',title:{display:true,text:'Acq / Orders',font:{size:10}},grid:{display:false},border:{display:false},min:0,max:40}
       }
     }
   });
 })();
 
-// ─── Monthly Trend Chart ─────────────────────────────────
-(function buildTrend() {
-  const months = D.monthlyData;
-  const labels = months.map(m => m.month);
-  const acqData = months.map(m => +m.avgAcq.toFixed(2));
-  const ratioData = months.map(m => +m.avgLeadsPerShift.toFixed(2));
-
-  new Chart(document.getElementById('trendChart'), {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        {
-          label: 'Avg Acquisitions/Day',
-          data: acqData,
-          borderColor: '#30d158',
-          backgroundColor: 'rgba(48,209,88,0.08)',
-          fill: true,
-          tension: 0.4,
-          pointRadius: 3,
-          pointBackgroundColor: '#30d158',
-          yAxisID: 'y',
-        },
-        {
-          label: 'Avg L/S Ratio',
-          data: ratioData,
-          borderColor: '#ffd60a',
-          backgroundColor: 'transparent',
-          borderDash: [4, 2],
-          tension: 0.4,
-          pointRadius: 2,
-          pointBackgroundColor: '#ffd60a',
-          yAxisID: 'y2',
-        }
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: true, labels: { boxWidth: 10, font: { size: 10 } } }, tooltip: { backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 } },
-      scales: {
-        x: { grid: { display: false }, border: { display: false }, ticks: { maxTicksLimit: 12 } },
-        y: { title: { display: true, text: 'Avg Acq', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 0 },
-        y2: { position: 'right', title: { display: true, text: 'L/S Ratio', font: { size: 10 } }, grid: { display: false }, border: { display: false }, min: 15, max: 45 }
-      }
-    }
-  });
-})();
-
-// ─── Top Days Table ──────────────────────────────────────
-(function buildTable() {
-  const body = document.getElementById('topDaysBody');
-  D.topDays.forEach((d, i) => {
-    const tr = document.createElement('tr');
-    if (d.isWeekend) tr.classList.add('weekend-row');
-    const isOptimal = D.scatterData.find(s => s.date === d.date && s.optimalZone);
-    tr.innerHTML = `
-      <td style="color:var(--text-tertiary);font-family:'JetBrains Mono',monospace">${String(i+1).padStart(2,'0')}</td>
-      <td style="font-family:'JetBrains Mono',monospace;color:${isOptimal?'var(--blue)':'var(--text-primary)'}">${d.date}${isOptimal?' ●':''}</td>
-      <td style="color:${d.isWeekend?'var(--gold)':'var(--text-secondary)'}">${d.dayName}</td>
-      <td>${d.totalLeads.toLocaleString()}</td>
-      <td>${d.totalShift.toFixed(1)}</td>
-      <td style="font-family:'JetBrains Mono',monospace;color:${d.leadsPerShift>=19.2&&d.leadsPerShift<=28.5?'var(--green)':d.leadsPerShift>35?'var(--red)':'var(--text-secondary)'}">${d.leadsPerShift.toFixed(1)}</td>
-      <td style="font-weight:700;color:var(--text-primary)">${d.totalAcquisitions}</td>
-      <td>$${d.totalSOV.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')}</td>
-      <td style="color:${d.contactedRatio>=0.5?'var(--green)':'var(--text-secondary)'}">${(d.contactedRatio*100).toFixed(1)}%</td>
-    `;
-    body.appendChild(tr);
-  });
-})();
-
-// ─── WEEKEND PANELS ──────────────────────────────────────
-function buildWkdPanel(containerId, data, color, compareData) {
-  const metrics = [
-    { label: 'Avg Leads/Day', val: data.avgLeads, fmt: v => v.toFixed(0), cmp: compareData?.avgLeads },
-    { label: 'Avg Shifts/Day', val: data.avgShift, fmt: v => v.toFixed(1), cmp: compareData?.avgShift },
-    { label: 'Acquisitions/Day', val: data.avgAcq, fmt: v => v.toFixed(1), cmp: compareData?.avgAcq },
-    { label: 'SOV/Day', val: data.avgSOV, fmt: v => '$' + (v/1000).toFixed(1) + 'k', cmp: compareData?.avgSOV },
-    { label: 'Contacted Ratio', val: data.avgContactedRatio, fmt: v => (v*100).toFixed(1) + '%', cmp: compareData?.avgContactedRatio },
-    { label: 'Leads / Shift', val: data.avgLeadsPerShift, fmt: v => v.toFixed(1), cmp: compareData?.avgLeadsPerShift },
-  ];
-  const container = document.getElementById(containerId);
-  metrics.forEach(m => {
-    let diffHtml = '';
-    if (m.cmp !== undefined) {
-      const pct = ((m.val - m.cmp) / m.cmp * 100);
-      const cls = pct >= 0 ? 'diff-up' : 'diff-down';
-      diffHtml = `<div class="wkd-metric-diff ${cls}">${pct>=0?'+':''}${pct.toFixed(1)}% vs other</div>`;
-    }
-    container.innerHTML += `<div class="wkd-metric">
-      <div class="wkd-metric-label">${m.label}</div>
-      <div class="wkd-metric-val" style="color:${color}">${m.fmt(m.val)}</div>
-      ${diffHtml}
+// Media scorecard rows
+(function(){
+  const maxRPL = Math.max(...D.mediaData.map(m=>m.revenuePerLead));
+  const maxCVR = Math.max(...D.mediaData.map(m=>m.conversionRate));
+  const container = document.getElementById('mediaScorecardRows');
+  D.mediaData.forEach(m=>{
+    const rplPct = m.revenuePerLead/maxRPL*100;
+    const cvrPct = m.conversionRate/maxCVR*100;
+    const col = MEDIA_COLORS[m.media]||'#fff';
+    container.innerHTML += `<div class="score-row">
+      <div class="score-label"><strong style="color:${col}">${m.media}</strong></div>
+      <div style="display:flex;flex-direction:column;gap:4px;min-width:200px">
+        <div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">CVR</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${cvrPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmtPct(m.conversionRate)}</span></div>
+        <div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">Rev/Lead</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${rplPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmt$(m.revenuePerLead)}</span></div>
+      </div>
     </div>`;
   });
-}
+})();
 
-const wkdData = {
-  avgLeads: D.kpis.weekdayAvgLeads,
-  avgShift: D.kpis.weekdayAvgShift,
-  avgAcq: D.kpis.weekdayAvgAcq,
-  avgSOV: D.kpis.weekdayAvgSOV,
-  avgContactedRatio: D.kpis.weekdayAvgContactedRatio,
-  avgLeadsPerShift: D.kpis.weekdayAvgLeadsPerShift,
-};
-const wkendData = {
-  avgLeads: D.kpis.weekendAvgLeads,
-  avgShift: D.kpis.weekendAvgShift,
-  avgAcq: D.kpis.weekendAvgAcq,
-  avgSOV: D.kpis.weekendAvgSOV,
-  avgContactedRatio: D.kpis.weekendAvgContactedRatio,
-  avgLeadsPerShift: D.kpis.weekendAvgLeadsPerShift,
-};
-buildWkdPanel('weekdayMetrics', wkdData, 'var(--blue)', wkendData);
-buildWkdPanel('weekendMetrics', wkendData, 'var(--gold)', wkdData);
-
-// ─── Day of Week Charts ──────────────────────────────────
-const DOW = D.dowData;
-const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const isWkend = d => ['Saturday','Sunday'].includes(d);
-
-const dowColors = days.map(d => isWkend(d) ? 'rgba(255,214,10,0.75)' : 'rgba(10,132,255,0.72)');
-const dowColorsBorder = days.map(d => isWkend(d) ? '#ffd60a' : '#0a84ff');
-
-function buildDOWChart(id, valKey, fmt, yLabel, yMin) {
-  const vals = days.map(d => +DOW[d][valKey].toFixed(2));
-  new Chart(document.getElementById(id), {
-    type: 'bar',
-    data: {
-      labels: days.map(d => d.slice(0,3)),
-      datasets: [{
-        data: vals,
-        backgroundColor: dowColors,
-        borderColor: dowColorsBorder,
-        borderWidth: 1,
-        borderRadius: 8,
-        borderSkipped: false,
-      }]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: i => fmt(i.raw) }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
-        annotation: {
-          annotations: {
-            avgLine: {
-              type: 'line',
-              yMin: D.kpis.avgAcqPerDay, yMax: D.kpis.avgAcqPerDay,
-              borderColor: 'rgba(255,255,255,0.3)',
-              borderDash: [4, 3],
-              borderWidth: 1,
-              label: { display: id === 'dowAcqChart', content: 'Overall Avg', position: 'end', color: 'rgba(255,255,255,0.4)', font: { size: 9 } }
-            }
-          }
-        }
-      },
-      scales: {
-        x: { grid: { display: false }, border: { display: false } },
-        y: { title: { display: true, text: yLabel, font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: yMin }
-      }
-    }
+// Campaign scorecard rows
+(function(){
+  const container = document.getElementById('campScorecardRows');
+  D.campData.forEach(c=>{
+    const col = CAMP_COLORS[c.campaign]||'#fff';
+    container.innerHTML += `<div class="score-row">
+      <div class="score-label" style="min-width:130px"><strong style="color:${col}">${c.campaign}</strong></div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="font-size:12px;color:var(--text-2)">CVR: <strong style="color:${col}">${fmtPct(c.conversionRate)}</strong> · Rev/Lead: <strong style="color:${col}">${fmt$(c.revenuePerLead)}</strong></div>
+        <div style="font-size:12px;color:var(--text-2)">Lead Share: <strong>${fmtPct(c.leadShare)}</strong> · Rev Share: <strong>${fmtPct(c.revenueShare)}</strong></div>
+        <div style="font-size:11px;color:var(--text-3)">Rev/Acq: ${fmt$(c.revenuePerAcq)} · Contact Rate: ${fmtPct(c.contactedRate)}</div>
+      </div>
+    </div>`;
   });
-}
+})();
 
-buildDOWChart('dowAcqChart', 'avgAcq', v => `${v.toFixed(1)} acq/day`, 'Avg Acq', 0);
-buildDOWChart('dowSOVChart', 'avgSOV', v => '$' + v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,','), 'Avg SOV', 0);
+// ═══ TAB 1: REVENUE ═══════════════════════════════════════
 
-// Contacted ratio chart
-new Chart(document.getElementById('dowContactedChart'), {
-  type: 'bar',
-  data: {
-    labels: days.map(d => d.slice(0,3)),
-    datasets: [{
-      data: days.map(d => +(DOW[d].avgContactedRatio * 100).toFixed(2)),
-      backgroundColor: dowColors,
-      borderRadius: 6,
-      borderSkipped: false,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: i => `${i.raw.toFixed(1)}% contacted` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
-      annotation: {
-        annotations: {
-          optLine: { type: 'line', yMin: 50, yMax: 50, borderColor: 'rgba(48,209,88,0.4)', borderDash: [4,3], borderWidth: 1, label: { display: true, content: 'Optimal ≥50%', position: 'end', color: 'rgba(48,209,88,0.5)', font: { size: 9 } } }
-        }
-      }
-    },
-    scales: {
-      x: { grid: { display: false }, border: { display: false } },
-      y: { title: { display: true, text: 'Contacted %', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 30, max: 60 }
-    }
-  }
-});
-
-// L/S Ratio chart
-new Chart(document.getElementById('dowRatioChart'), {
-  type: 'bar',
-  data: {
-    labels: days.map(d => d.slice(0,3)),
-    datasets: [{
-      data: days.map(d => +DOW[d].avgLeadsPerShift.toFixed(2)),
-      backgroundColor: days.map(d => {
-        const r = DOW[d].avgLeadsPerShift;
-        if (r >= 19.2 && r <= 28.5) return 'rgba(48,209,88,0.7)';
-        if (r > 35) return 'rgba(255,69,58,0.7)';
-        return 'rgba(255,159,10,0.7)';
-      }),
-      borderRadius: 6,
-      borderSkipped: false,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: { callbacks: { label: i => `L/S Ratio: ${i.raw.toFixed(1)}` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
-      annotation: {
-        annotations: {
-          minLine: { type: 'line', yMin: 19.2, yMax: 19.2, borderColor: 'rgba(48,209,88,0.4)', borderDash: [3,3], borderWidth: 1 },
-          maxLine: { type: 'line', yMin: 28.5, yMax: 28.5, borderColor: 'rgba(48,209,88,0.4)', borderDash: [3,3], borderWidth: 1, label: { display: true, content: 'Optimal 19.2–28.5', position: 'center', color: 'rgba(48,209,88,0.5)', font: { size: 9 } } },
-          ceilLine: { type: 'line', yMin: 35, yMax: 35, borderColor: 'rgba(255,69,58,0.4)', borderDash: [3,3], borderWidth: 1, label: { display: true, content: 'Ceiling 35', position: 'end', color: 'rgba(255,69,58,0.5)', font: { size: 9 } } }
-        }
-      }
-    },
-    scales: {
-      x: { grid: { display: false }, border: { display: false } },
-      y: { title: { display: true, text: 'L/S Ratio', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 15, max: 40 }
-    }
-  }
-});
-
-// ─── Compare Bar Chart ───────────────────────────────────
-(function buildCompare() {
-  const metrics = ['Avg Leads', 'Avg Shifts', 'Avg Acq', 'Avg SOV ($k)', 'Contacted %', 'L/S Ratio'];
-  const wkdRaw   = [wkdData.avgLeads, wkdData.avgShift, wkdData.avgAcq, wkdData.avgSOV/1000, wkdData.avgContactedRatio*100, wkdData.avgLeadsPerShift];
-  const wkendRaw = [wkendData.avgLeads, wkendData.avgShift, wkendData.avgAcq, wkendData.avgSOV/1000, wkendData.avgContactedRatio*100, wkendData.avgLeadsPerShift];
-  const wkdIdx   = wkdRaw.map(_ => 100);
-  const wkendIdx = wkdRaw.map((v,i) => +(wkendRaw[i]/v*100).toFixed(1));
-
-  new Chart(document.getElementById('compareBarChart'), {
-    type: 'bar',
-    data: {
-      labels: metrics,
-      datasets: [
-        { label: 'Weekdays (baseline 100)', data: wkdIdx, backgroundColor: 'rgba(10,132,255,0.65)', borderRadius: 5, borderSkipped: false },
-        { label: 'Weekends (indexed)', data: wkendIdx, backgroundColor: 'rgba(255,214,10,0.65)', borderRadius: 5, borderSkipped: false },
-      ]
-    },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { labels: { boxWidth: 10, font: { size: 10 } } },
-        tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.raw.toFixed(1)} index` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
-        annotation: {
-          annotations: {
-            baseline: { type: 'line', yMin: 100, yMax: 100, borderColor: 'rgba(255,255,255,0.2)', borderDash: [4,3], borderWidth: 1 }
-          }
-        }
+// Revenue Scatter
+(function(){
+  const opt = D.scatterData.filter(d=>d.revOptimal);
+  const rest = D.scatterData.filter(d=>!d.revOptimal);
+  const sovToCol = (v,a)=>{const t=Math.min(1,Math.max(0,(v-340)/27500));return `rgba(${Math.round(180+t*75)},${Math.round(140+t*74)},${Math.round(10)},${a})`};
+  new Chart(document.getElementById('revScatterChart'),{
+    type:'bubble',
+    data:{datasets:[
+      {label:'Rev Optimal',data:opt.map(d=>({x:+d.leadsPerShift.toFixed(1),y:+d.totalRevenue.toFixed(0),r:Math.max(4,d.contactedRatio*20),rev:d.totalRevenue,acq:d.totalAcquisitions,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),
+        backgroundColor:ctx=>{const p=ctx.raw;return p?sovToCol(p.rev,.85):'rgba(255,214,10,.8)'},borderColor:'#ffd60a',borderWidth:1.5},
+      {label:'Other',data:rest.map(d=>({x:+d.leadsPerShift.toFixed(1),y:+d.totalRevenue.toFixed(0),r:Math.max(3,d.contactedRatio*15),rev:d.totalRevenue,acq:d.totalAcquisitions,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),
+        backgroundColor:ctx=>{const p=ctx.raw;return p?sovToCol(p.rev,.3):'rgba(255,214,10,.2)'},borderColor:'rgba(255,255,255,.1)',borderWidth:.5}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,layout:{padding:{top:10,right:16,bottom:10,left:20}},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{
+          title:i=>`${i[0].raw.date} · ${i[0].raw.day}`,
+          label:i=>{const d=i.raw;return[`  Revenue: ${fmt$(d.y)}`,`  L/S Ratio: ${d.x}`,`  Acquisitions: ${d.acq}`,`  Leads: ${d.leads}`,`  Shifts: ${d.shift.toFixed(1)}`]}
+        }},
+        annotation:{annotations:{
+          optZone:{type:'box',xMin:16.5,xMax:25.9,yMin:0,yMax:40000,backgroundColor:'rgba(255,214,10,.04)',borderColor:'rgba(255,214,10,.25)',borderWidth:1,borderDash:[4,3],label:{display:true,content:'◈ REVENUE OPTIMAL',position:'start',color:'rgba(255,214,10,.6)',font:{size:10,weight:'600',family:'Inter'},padding:4}},
+          ceilLine:{type:'line',xMin:35,xMax:35,borderColor:'rgba(255,69,58,.3)',borderWidth:1,borderDash:[3,3]}
+        }}
       },
-      scales: {
-        x: { grid: { display: false }, border: { display: false } },
-        y: { title: { display: true, text: 'Index (Weekday = 100)', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 0, max: 140 }
+      scales:{
+        x:{title:{display:true,text:'Leads / Rep Shift Ratio',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{top:6}},grid:{color:GC},border:{color:'transparent'},min:0,max:60,ticks:{stepSize:5}},
+        y:{title:{display:true,text:'Daily Revenue ($)',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{bottom:6}},grid:{color:GC},border:{color:'transparent'},min:0,ticks:{callback:v=>fmt$k(v)}}
       }
     }
   });
 })();
 
-// ─── Optimal Pie Chart ───────────────────────────────────
-new Chart(document.getElementById('optimalPieChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Weekday Optimal (97)', 'Weekend Optimal (4)'],
-    datasets: [{
-      data: [97, 4],
-      backgroundColor: ['rgba(10,132,255,0.8)', 'rgba(255,214,10,0.8)'],
-      borderColor: ['#0a84ff', '#ffd60a'],
-      borderWidth: 1.5,
-      hoverOffset: 8,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    cutout: '72%',
-    plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 10, padding: 14, font: { size: 11 } } },
-      tooltip: { callbacks: { label: i => `${i.label}: ${i.raw} days (${(i.raw/101*100).toFixed(1)}%)` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
-    }
-  }
+// Revenue ratio bins chart
+(function(){
+  const bins=D.ratioBinData;
+  new Chart(document.getElementById('revBinsChart'),{
+    type:'bar',
+    data:{labels:bins.map(b=>b.bin),datasets:[
+      {label:'Avg Revenue/Day',data:bins.map(b=>b.avgRevenue),backgroundColor:bins.map(b=>['15-20','20-25','25-30','30-35'].includes(b.bin)?'rgba(255,214,10,.8)':'rgba(255,214,10,.3)'),borderRadius:5,borderSkipped:false,yAxisID:'y'},
+      {label:'Avg Orders',data:bins.map(b=>b.avgOrders),type:'line',borderColor:'#5ac8fa',backgroundColor:'transparent',pointBackgroundColor:'#5ac8fa',pointRadius:3,tension:.3,yAxisID:'y2'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{right:8}},
+      plugins:{legend:{labels:{boxWidth:8,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>i.dataset.label==='Avg Revenue/Day'?`Revenue: ${fmt$(i.raw)}`:`Orders: ${i.raw.toFixed(1)}`}}},
+      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}},y2:{position:'right',grid:{display:false},border:{display:false},min:10,max:30}}}
+  });
+  new Chart(document.getElementById('revPerLeadBinsChart'),{
+    type:'bar',
+    data:{labels:bins.map(b=>b.bin),datasets:[{data:bins.map(b=>b.avgRevenuePerLead),backgroundColor:bins.map(b=>['15-20','20-25'].includes(b.bin)?'rgba(90,200,250,.8)':'rgba(90,200,250,.3)'),borderRadius:5,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`Rev/Lead: ${fmt$(i.raw)}`}}},
+      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
+  });
+})();
+
+// Revenue corr badges
+const revCorrs=[{n:'Orders → Rev',v:+.8506,t:'strong'},{n:'Acq → Rev',v:+.7705,t:'strong'},{n:'Leads → Rev',v:+.3358,t:'mod'},{n:'Contacted% → Rev',v:+.2863,t:'mod'},{n:'Shift → Rev',v:+.2866,t:'mod'},{n:'L/S Ratio → Rev',v:-.2432,t:'neg'}];
+revCorrs.forEach(c=>{document.getElementById('revCorrBadges').innerHTML+=`<div class="corr-b"><span class="cn">${c.n}</span><span class="cv ${c.t==='strong'?'hl-green':c.t==='mod'?'hl':'hl-red'}">${c.v>0?'+':''}${c.v.toFixed(4)}</span></div>`});
+
+// Revenue per lead segment chart
+new Chart(document.getElementById('revPerLeadSegChart'),{
+  type:'bar',
+  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]}\n${s.campaign.split(' ')[0]}`),datasets:[{data:D.segmentData.map(s=>+s.revenuePerLead.toFixed(1)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+' · '+D.segmentData[i[0].dataIndex].campaign,label:i=>`Rev/Lead: ${fmt$(i.raw)}`}}},
+    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}},
+    plugins:{annotation:{annotations:{avgLine:{type:'line',yMin:K.avgRevenuePerLead,yMax:K.avgRevenuePerLead,borderColor:'rgba(255,255,255,.3)',borderDash:[4,3],borderWidth:1}}}}}
 });
+
+// Top Revenue Days table
+D.topRevDays.forEach((d,i)=>{
+  document.getElementById('topRevBody').innerHTML+=`<tr>
+    <td class="num" style="color:var(--text-3)">${String(i+1).padStart(2,'0')}</td>
+    <td class="num" style="color:${d.totalRevenue>20000?'var(--gold)':'var(--text-1)'}">${d.date}</td>
+    <td style="color:${d.isWeekend?'var(--gold)':'var(--text-2)'}">${d.dayName}</td>
+    <td>${d.totalLeads.toLocaleString()}</td>
+    <td>${d.totalShift.toFixed(1)}</td>
+    <td class="num" style="color:${d.leadsPerShift>=16.5&&d.leadsPerShift<=25.9?'var(--green)':d.leadsPerShift>35?'var(--red)':'var(--text-2)'}">${d.leadsPerShift.toFixed(1)}</td>
+    <td style="font-weight:700;color:var(--gold)">${fmt$(d.totalRevenue)}</td>
+    <td>${d.totalAcquisitions}</td>
+    <td>${d.totalOrders}</td>
+  </tr>`;
+});
+
+// ═══ TAB 2: LEAD QUALITY MATRIX ══════════════════════════
+
+// Build quality matrix
+(function(){
+  const medias = ['Affiliates','Email Marketing','Organic','PPC - All'];
+  const camps = ['Biblical Related','Hebrew Related'];
+  const table = document.getElementById('qualityMatrix');
+
+  // header row
+  let hRow = '<thead><tr><th>Media ↓ / School →</th>';
+  camps.forEach(c=>{ hRow += `<th>${c}</th>`; });
+  hRow += '</tr></thead>';
+  table.innerHTML = hRow + '<tbody>';
+
+  const maxRPL = Math.max(...D.segmentData.map(s=>s.revenuePerLead));
+  const minRPL = Math.min(...D.segmentData.map(s=>s.revenuePerLead));
+  const maxCVR = Math.max(...D.segmentData.map(s=>s.conversionRate));
+
+  let body = '';
+  medias.forEach(media=>{
+    body += `<tr><td style="padding:10px 14px;font-weight:600;font-size:12px;color:var(--text-1);white-space:nowrap;border-right:1px solid var(--border)">${media}</td>`;
+    camps.forEach(camp=>{
+      const seg = D.segmentData.find(s=>s.media===media&&s.campaign===camp);
+      if(!seg){body+='<td></td>';return;}
+      const t = (seg.revenuePerLead-minRPL)/(maxRPL-minRPL);
+      const isTop = t > 0.6;
+      const isMid = t > 0.3;
+      const bg = isTop?'rgba(48,209,88,0.15)':isMid?'rgba(255,159,10,0.12)':'rgba(255,69,58,0.1)';
+      const accentCol = isTop?'var(--green)':isMid?'var(--orange)':'var(--red)';
+      const barW = Math.round(t*100);
+      body += `<td style="background:${bg}">
+        <div class="matrix-cell">
+          <div class="mc-media">${fmtPct(seg.conversionRate)} CVR · ${seg.totalLeads.toLocaleString()} leads</div>
+          <div class="mc-cvr" style="color:${accentCol}">${fmtPct(seg.conversionRate)}</div>
+          <div class="mc-rpl" style="color:${accentCol}">${fmt$(seg.revenuePerLead)}<span style="font-size:10px;font-weight:400;color:var(--text-2)"> / lead</span></div>
+          <div class="mc-leads">Acq: ${seg.totalAcquisitions.toLocaleString()} · Rev: ${fmt$(seg.totalRevenue/1000)}k</div>
+          <div class="mc-bar" style="background:${accentCol};width:${barW}%"></div>
+        </div>
+      </td>`;
+    });
+    body += '</tr>';
+  });
+  table.innerHTML += body + '</tbody>';
+})();
+
+// CVR by segment
+new Chart(document.getElementById('cvrSegChart'),{
+  type:'bar',
+  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0].slice(0,4)}`),datasets:[{data:D.segmentData.map(s=>+(s.conversionRate*100).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+'\n'+D.segmentData[i[0].dataIndex].campaign,label:i=>`CVR: ${i.raw.toFixed(2)}%`}}},
+    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
+});
+
+new Chart(document.getElementById('rplSegChart'),{
+  type:'bar',
+  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0].slice(0,4)}`),datasets:[{data:D.segmentData.map(s=>+s.revenuePerLead.toFixed(1)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+'\n'+D.segmentData[i[0].dataIndex].campaign,label:i=>`Rev/Lead: ${fmt$(i.raw)}`}}},
+    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
+});
+
+new Chart(document.getElementById('rpaSegChart'),{
+  type:'bar',
+  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0].slice(0,4)}`),datasets:[{data:D.segmentData.map(s=>+s.revenuePerAcq.toFixed(0)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+'\n'+D.segmentData[i[0].dataIndex].campaign,label:i=>`Rev/Acq: ${fmt$(i.raw)}`}}},
+    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v.toFixed(0)}}}}
+});
+
+// Lead/Revenue share grouped bar
+new Chart(document.getElementById('leadRevShareChart'),{
+  type:'bar',
+  data:{
+    labels:D.mediaData.map(m=>m.media),
+    datasets:[
+      {label:'Lead Share %',data:D.mediaData.map(m=>+(m.leadShare*100).toFixed(1)),backgroundColor:'rgba(10,132,255,.6)',borderRadius:5,borderSkipped:false},
+      {label:'Revenue Share %',data:D.mediaData.map(m=>+(m.revenueShare*100).toFixed(1)),backgroundColor:'rgba(255,214,10,.65)',borderRadius:5,borderSkipped:false},
+      {label:'Acq Share %',data:D.mediaData.map(m=>+(m.acqShare*100).toFixed(1)),backgroundColor:'rgba(48,209,88,.55)',borderRadius:5,borderSkipped:false},
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(1)}%`}}},
+    scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
+});
+
+new Chart(document.getElementById('contactRateSegChart'),{
+  type:'bar',
+  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0].slice(0,4)}`),datasets:[{data:D.segmentData.map(s=>+(s.contactedRate*100).toFixed(1)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+'\n'+D.segmentData[i[0].dataIndex].campaign,label:i=>`Contact Rate: ${i.raw.toFixed(1)}%`}},
+    annotation:{annotations:{optLine:{type:'line',yMin:50,yMax:50,borderColor:'rgba(48,209,88,.4)',borderDash:[4,3],borderWidth:1}}}},
+    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'},min:0,max:80}}}
+});
+
+// ═══ TAB 3: OPTIMAL ZONE ══════════════════════════════════
+
+// Scatter
+(function(){
+  const sd = D.scatterData;
+  const opt = sd.filter(d=>{
+    const lps=d.leadsPerShift; const cr=d.contactedRatio; const acq=d.totalAcquisitions; const sov=d.totalSOV;
+    return acq>=19 && sov>=14621 && cr>=0.5;
+  });
+  const rest = sd.filter(d=>!opt.includes(d));
+  const sovCol=(s,a)=>{const t=Math.min(1,Math.max(0,(s-340)/27500));return `rgba(${Math.round(10+t*30)},${Math.round(50+t*82)},${Math.round(120+t*135)},${a})`};
+  new Chart(document.getElementById('scatterChart'),{
+    type:'bubble',
+    data:{datasets:[
+      {label:'Optimal Zone',data:opt.map(d=>({x:+d.leadsPerShift.toFixed(1),y:d.totalAcquisitions,r:Math.max(4,d.contactedRatio*22),sov:d.totalSOV,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift,cont:d.contactedRatio})),
+        backgroundColor:ctx=>{const p=ctx.raw;return p?sovCol(p.sov,.85):'rgba(10,132,255,.8)'},borderColor:'#ffd60a',borderWidth:1.5},
+      {label:'Other',data:rest.map(d=>({x:+d.leadsPerShift.toFixed(1),y:d.totalAcquisitions,r:Math.max(3,d.contactedRatio*16),sov:d.totalSOV,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift,cont:d.contactedRatio})),
+        backgroundColor:ctx=>{const p=ctx.raw;return p?sovCol(p.sov,.3):'rgba(255,255,255,.12)'},borderColor:'rgba(255,255,255,.1)',borderWidth:.5}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:10,right:16,bottom:10,left:20}},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{
+        title:i=>`${i[0].raw.date} · ${i[0].raw.day}`,
+        label:i=>{const d=i.raw;return[`  Acq: ${d.y}`,`  SOV: ${fmt$(d.sov)}`,`  L/S: ${d.x}`,`  Leads: ${d.leads}`,`  Shifts: ${d.shift.toFixed(1)}`,`  Contacted: ${fmtPct(d.cont)}`]}
+      }},
+      annotation:{annotations:{
+        optZone:{type:'box',xMin:19.2,xMax:28.5,yMin:0,yMax:40,backgroundColor:'rgba(10,132,255,.04)',borderColor:'rgba(10,132,255,.25)',borderWidth:1,borderDash:[4,3],label:{display:true,content:'◈ OPTIMAL ZONE',position:'start',color:'rgba(10,132,255,.6)',font:{size:10,weight:'600',family:'Inter'},padding:4}},
+        ceil:{type:'line',xMin:35,xMax:35,borderColor:'rgba(255,69,58,.3)',borderWidth:1,borderDash:[3,3]}
+      }}},
+      scales:{
+        x:{title:{display:true,text:'Leads / Rep Shift',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{top:6}},grid:{color:GC},border:{color:'transparent'},min:0,max:60,ticks:{stepSize:5}},
+        y:{title:{display:true,text:'Daily Acquisitions',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{bottom:6}},grid:{color:GC},border:{color:'transparent'},min:0,max:40}
+      }
+    }
+  });
+})();
+
+// Ratio bins Acq chart
+(function(){
+  const bins=D.ratioBinData;
+  new Chart(document.getElementById('ratioBinsAcqChart'),{
+    type:'bar',
+    data:{labels:bins.map(b=>b.bin),datasets:[
+      {label:'Avg Acq',data:bins.map(b=>b.avgAcq),backgroundColor:bins.map(b=>['15-20','20-25','25-30','30-35'].includes(b.bin)?'rgba(10,132,255,.75)':'rgba(10,132,255,.3)'),borderRadius:5,borderSkipped:false,yAxisID:'y'},
+      {label:'Contacted %',data:bins.map(b=>+(b.avgContactedRatio*100).toFixed(1)),type:'line',borderColor:'#ffd60a',backgroundColor:'transparent',pointBackgroundColor:'#ffd60a',pointRadius:3,tension:.3,yAxisID:'y2'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{right:8}},
+      plugins:{legend:{labels:{boxWidth:8,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1}},
+      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},min:0},y2:{position:'right',grid:{display:false},border:{display:false},min:30,max:55,ticks:{callback:v=>v+'%'}}}}
+  });
+  new Chart(document.getElementById('ratioBinsSOVChart2'),{
+    type:'bar',
+    data:{labels:bins.map(b=>b.bin),datasets:[{data:bins.map(b=>+b.avgRevenue.toFixed(0)),backgroundColor:bins.map(b=>['15-20','20-25','25-30'].includes(b.bin)?'rgba(191,90,242,.7)':'rgba(191,90,242,.25)'),borderRadius:5,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`Revenue: ${fmt$(i.raw)}`}}},
+      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}}}}
+  });
+})();
+
+// Acq corr badges
+const acqCorrs=[{n:'SOV → Acq',v:+.8288,t:'strong'},{n:'Leads → Acq',v:+.5161,t:'strong'},{n:'Contacted%',v:+.3505,t:'mod'},{n:'Shift',v:+.3356,t:'mod'},{n:'L/S Ratio',v:-.1925,t:'neg'}];
+acqCorrs.forEach(c=>{document.getElementById('acqCorrBadges').innerHTML+=`<div class="corr-b"><span class="cn">${c.n}</span><span class="cv ${c.t==='strong'?'hl-green':c.t==='mod'?'hl':'hl-red'}">${c.v>0?'+':''}${c.v.toFixed(4)}</span></div>`});
+
+// Monthly Trend Acq
+(function(){
+  const ml=D.monthlyData;
+  new Chart(document.getElementById('trendAcqChart'),{
+    type:'line',
+    data:{labels:ml.map(m=>m.month),datasets:[
+      {label:'Avg Acq/Day',data:ml.map(m=>+m.avgAcq.toFixed(2)),borderColor:'#30d158',backgroundColor:'rgba(48,209,88,.08)',fill:true,tension:.4,pointRadius:2,yAxisID:'y'},
+      {label:'Avg L/S Ratio',data:ml.map(m=>+m.avgLeadsPerShift.toFixed(2)),borderColor:'#ffd60a',backgroundColor:'transparent',borderDash:[4,2],tension:.4,pointRadius:2,yAxisID:'y2'}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1}},
+      scales:{x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:12}},y:{title:{display:true,text:'Avg Acq',font:{size:10}},grid:{color:GC},border:{display:false},min:0},y2:{position:'right',title:{display:true,text:'L/S Ratio',font:{size:10}},grid:{display:false},border:{display:false},min:15,max:45}}}
+  });
+})();
+
+// Top Acq Days table
+(function(){
+  const topAcq = D.scatterData.slice().sort((a,b)=>b.totalAcquisitions-a.totalAcquisitions).slice(0,30);
+  topAcq.forEach((d,i)=>{
+    const isOpt = d.leadsPerShift>=19.2&&d.leadsPerShift<=28.5&&d.contactedRatio>=.5&&d.totalAcquisitions>=19&&d.totalSOV>=14621;
+    document.getElementById('topAcqBody').innerHTML+=`<tr>
+      <td class="num" style="color:var(--text-3)">${String(i+1).padStart(2,'0')}</td>
+      <td class="num" style="color:${isOpt?'var(--blue)':'var(--text-1)'}">${d.date}${isOpt?' ●':''}</td>
+      <td style="color:${d.isWeekend?'var(--gold)':'var(--text-2)'}">${d.dayName}</td>
+      <td>${d.totalLeads.toLocaleString()}</td>
+      <td>${d.totalShift.toFixed(1)}</td>
+      <td class="num" style="color:${d.leadsPerShift>=19.2&&d.leadsPerShift<=28.5?'var(--green)':d.leadsPerShift>35?'var(--red)':'var(--text-2)'}">${d.leadsPerShift.toFixed(1)}</td>
+      <td style="font-weight:700;color:var(--text-1)">${d.totalAcquisitions}</td>
+      <td>${fmt$(d.totalSOV)}</td>
+      <td style="color:${d.contactedRatio>=.5?'var(--green)':'var(--text-2)'}">${fmtPct(d.contactedRatio)}</td>
+    </tr>`;
+  });
+})();
+
+// ═══ TAB 4: WEEKDAY vs WEEKEND ════════════════════════════
+
+// Weekday/Weekend metric panels
+function buildWkdMets(id, data, acqCmp, revCmp, shiftCmp, contCmp, ratioCmp, color){
+  const metrics=[
+    {l:'Avg Leads/Day',v:data.leads,f:v=>v.toFixed(0),cmp:null},
+    {l:'Avg Shifts/Day',v:data.shift,f:v=>v.toFixed(1),cmp:shiftCmp},
+    {l:'Acquisitions/Day',v:data.acq,f:v=>v.toFixed(1),cmp:acqCmp},
+    {l:'Revenue/Day',v:data.rev,f:v=>fmt$k(v),cmp:revCmp},
+    {l:'Contacted Ratio',v:data.cont,f:v=>fmtPct(v),cmp:contCmp},
+    {l:'Leads/Shift',v:data.ratio,f:v=>v.toFixed(1),cmp:ratioCmp},
+  ];
+  document.getElementById(id).innerHTML = metrics.map(m=>{
+    let diff='';
+    if(m.cmp!=null){const pct=(m.v-m.cmp)/Math.abs(m.cmp)*100;const cls=pct>=0?'up':'down';diff=`<div class="wkd-met-diff ${cls}">${pct>=0?'+':''}${pct.toFixed(1)}% vs other</div>`;}
+    return `<div class="wkd-met"><div class="wkd-met-lbl">${m.l}</div><div class="wkd-met-val" style="color:${color}">${m.f(m.v)}</div>${diff}</div>`;
+  }).join('');
+}
+
+const wkday = {leads:K.weekdayAvgLeads,shift:K.weekdayAvgShift,acq:K.weekdayAvgAcq,rev:K.weekdayAvgRevenue||K.avgDailyRevenue*1.15,cont:K.weekdayAvgContactedRatio,ratio:K.weekdayAvgLeadsPerShift};
+const wkend = {leads:K.weekendAvgLeads,shift:K.weekendAvgShift,acq:K.weekendAvgAcq,rev:K.weekendAvgRevenue||K.avgDailyRevenue*.68,cont:K.weekendAvgContactedRatio,ratio:K.weekendAvgLeadsPerShift};
+buildWkdMets('wkdayMets',wkday,wkend.acq,wkend.rev,wkend.shift,wkend.cont,wkend.ratio,'var(--blue)');
+buildWkdMets('wkendMets',wkend,wkday.acq,wkday.rev,wkday.shift,wkday.cont,wkday.ratio,'var(--gold)');
+
+// DOW charts
+const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const dowC=days.map(d=>['Saturday','Sunday'].includes(d)?'rgba(255,214,10,.75)':'rgba(10,132,255,.72)');
+const dowCB=days.map(d=>['Saturday','Sunday'].includes(d)?'#ffd60a':'#0a84ff');
+function buildDOWChart(id,key,fmt,yLabel,annotations){
+  const vals=days.map(d=>+D.dowData[d][key].toFixed(2));
+  new Chart(document.getElementById(id),{
+    type:'bar',
+    data:{labels:days.map(d=>d.slice(0,3)),datasets:[{data:vals,backgroundColor:dowC,borderColor:dowCB,borderWidth:1,borderRadius:7,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>fmt(i.raw)}},annotation:{annotations:annotations||{}}},
+      scales:{x:{grid:{display:false},border:{display:false}},y:{title:{display:true,text:yLabel,font:{size:10}},grid:{color:GC},border:{display:false}}}}
+  });
+}
+buildDOWChart('dowAcqChart','avgAcq',v=>`${v.toFixed(1)} acq/day`,'Avg Acq',{avgL:{type:'line',yMin:K.avgDailyAcq,yMax:K.avgDailyAcq,borderColor:'rgba(255,255,255,.25)',borderDash:[4,3],borderWidth:1}});
+buildDOWChart('dowRevChart','avgRevenue',v=>fmt$(v),'Avg Revenue',{avgL:{type:'line',yMin:K.avgDailyRevenue,yMax:K.avgDailyRevenue,borderColor:'rgba(255,255,255,.25)',borderDash:[4,3],borderWidth:1}});
+buildDOWChart('dowContChart','avgContactedRatio',v=>fmtPct(v),'Contacted %',{optL:{type:'line',yMin:.5,yMax:.5,borderColor:'rgba(48,209,88,.4)',borderDash:[4,3],borderWidth:1,label:{display:true,content:'Optimal ≥50%',position:'end',color:'rgba(48,209,88,.5)',font:{size:9}}}});
+
+new Chart(document.getElementById('dowRatioChart'),{
+  type:'bar',
+  data:{labels:days.map(d=>d.slice(0,3)),datasets:[{data:days.map(d=>+D.dowData[d].avgLeadsPerShift.toFixed(2)),backgroundColor:days.map(d=>{const r=D.dowData[d].avgLeadsPerShift;return r>=19.2&&r<=28.5?'rgba(48,209,88,.7)':r>35?'rgba(255,69,58,.7)':'rgba(255,159,10,.7)'}),borderRadius:7,borderSkipped:false}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`L/S: ${i.raw.toFixed(1)}`}},
+    annotation:{annotations:{mn:{type:'line',yMin:19.2,yMax:19.2,borderColor:'rgba(48,209,88,.4)',borderDash:[3,3],borderWidth:1},mx:{type:'line',yMin:28.5,yMax:28.5,borderColor:'rgba(48,209,88,.4)',borderDash:[3,3],borderWidth:1,label:{display:true,content:'Optimal 19.2–28.5',position:'center',color:'rgba(48,209,88,.45)',font:{size:9}}},cl:{type:'line',yMin:35,yMax:35,borderColor:'rgba(255,69,58,.4)',borderDash:[3,3],borderWidth:1}}}},
+    scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},min:15,max:40}}}
+});
+
+// Compare indexed bar
+new Chart(document.getElementById('compareBarChart'),{
+  type:'bar',
+  data:{labels:['Avg Leads','Avg Shifts','Avg Acq','Revenue','Contacted %','L/S Ratio'],
+    datasets:[
+      {label:'Weekdays (=100)',data:[100,100,100,100,100,100],backgroundColor:'rgba(10,132,255,.65)',borderRadius:4,borderSkipped:false},
+      {label:'Weekends (indexed)',data:[
+        +(wkend.leads/wkday.leads*100).toFixed(1),
+        +(wkend.shift/wkday.shift*100).toFixed(1),
+        +(wkend.acq/wkday.acq*100).toFixed(1),
+        +(wkend.rev/wkday.rev*100).toFixed(1),
+        +(wkend.cont/wkday.cont*100).toFixed(1),
+        +(wkend.ratio/wkday.ratio*100).toFixed(1)
+      ],backgroundColor:'rgba(255,214,10,.65)',borderRadius:4,borderSkipped:false}
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(1)} index`}},
+    annotation:{annotations:{bl:{type:'line',yMin:100,yMax:100,borderColor:'rgba(255,255,255,.2)',borderDash:[4,3],borderWidth:1}}}},
+    scales:{x:{grid:{display:false},border:{display:false}},y:{title:{display:true,text:'Index (Weekday=100)',font:{size:10}},grid:{color:GC},border:{display:false},min:0,max:140}}}
+});
+
+// Optimal Pie
+new Chart(document.getElementById('optPieChart'),{
+  type:'doughnut',
+  data:{labels:['Weekday Optimal (97)','Weekend Optimal (4)'],datasets:[{data:[97,4],backgroundColor:['rgba(10,132,255,.8)','rgba(255,214,10,.8)'],borderColor:['#0a84ff','#ffd60a'],borderWidth:1.5,hoverOffset:8}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'72%',
+    plugins:{legend:{position:'bottom',labels:{boxWidth:9,padding:12,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.label}: ${i.raw} days (${(i.raw/101*100).toFixed(1)}%)`}}}}
+});
+
 </script>
 </body>
 </html>
