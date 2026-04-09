@@ -52,6 +52,25 @@ body{background:var(--bg-deep);color:var(--text-1);font-family:'Inter',-apple-sy
 .tb-num.purple{background:var(--purple-dim);color:var(--purple);border-color:rgba(191,90,242,.25)}
 .tb-num.teal{background:var(--teal-dim);color:var(--teal);border-color:rgba(90,200,250,.25)}
 .tb-num.orange{background:var(--orange-dim);color:var(--orange);border-color:rgba(255,159,10,.25)}
+.tb-num.red{background:rgba(255,69,58,.12);color:var(--red);border-color:rgba(255,69,58,.3)}
+.kc.alert{border-color:rgba(255,69,58,.4);background:rgba(255,69,58,.07)}
+.delta-bad{color:var(--red);font-size:11px;font-weight:600}
+.delta-ok{color:var(--green);font-size:11px;font-weight:600}
+.day-row{display:grid;grid-template-columns:90px 70px repeat(6,1fr);gap:0;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border);transition:background .15s}
+.day-row:hover{background:rgba(255,255,255,.04)}
+.day-row.weekend{background:rgba(255,214,10,.03)}
+.day-lbl{font-size:12px;font-weight:600;color:var(--text-dim)}
+.day-date{font-size:11px;color:var(--text-muted)}
+.day-cell{font-size:12px;text-align:right;padding:0 8px}
+.day-cell.bad{color:var(--red);font-weight:700}
+.day-cell.warn{color:var(--orange);font-weight:600}
+.day-cell.good{color:var(--green);font-weight:600}
+.day-cell.dim{color:var(--text-dim)}
+.zone-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:700}
+.zone-in{background:rgba(52,199,89,.15);color:var(--green)}
+.zone-above{background:rgba(255,159,10,.15);color:var(--orange)}
+.zone-below{background:rgba(10,132,255,.15);color:var(--blue)}
+.rc-block{border-left:3px solid var(--red);padding:12px 16px;background:rgba(255,69,58,.05);border-radius:0 8px 8px 0;margin-bottom:12px}
 .badge.orange{background:var(--orange-dim);color:var(--orange);border-color:rgba(255,159,10,.3)}
 
 /* ─── PANELS ────────────────────────────────────────── */
@@ -280,6 +299,7 @@ tbody tr:last-child td{border-bottom:none}
   <button class="tb" onclick="switchTab(3)">◈ Optimal Zone <span class="tb-num purple">4-Way</span></button>
   <button class="tb" onclick="switchTab(4)">◷ Weekday vs Weekend <span class="tb-num green">Calendar</span></button>
   <button class="tb" onclick="switchTab(5)">💲 ROI &amp; Media Cost <span class="tb-num orange">New</span></button>
+  <button class="tb" onclick="switchTab(6)">🚨 April Crisis <span class="tb-num red">Live</span></button>
 </nav>
 
 <!-- ══════════════════════════════════════════════════════
@@ -766,6 +786,140 @@ tbody tr:last-child td{border-bottom:none}
         <tbody></tbody>
       </table>
     </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════ TAB 6 — APRIL CRISIS ═══════════════════════ -->
+<section class="pnl" id="tab-6">
+
+  <!-- Header -->
+  <div class="sh" style="margin-bottom:20px">
+    <div class="sh-left">
+      <div class="title" style="font-size:17px;color:var(--red)">April 2026 — Crisis Diagnosis</div>
+      <div class="sub">8 days elapsed (Apr 1–8) · 6 weekdays · Data excludes today’s partial day (Apr 9) · All comparisons vs all-time historical weekday avg</div>
+    </div>
+    <span class="badge" style="background:rgba(255,69,58,.15);color:var(--red);border-color:rgba(255,69,58,.3)">Live Month</span>
+  </div>
+
+  <!-- KPI Damage Cards -->
+  <div class="kpi-grid g6" style="margin-bottom:20px">
+    <div class="kc alert">
+      <div class="kc-lbl">Avg Daily Acquisitions</div>
+      <div class="kc-val" style="color:var(--red)">11.0</div>
+      <div class="kc-sub">vs 17.2 historical</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −35.9%</div>
+    </div>
+    <div class="kc alert">
+      <div class="kc-lbl">Avg Daily Revenue</div>
+      <div class="kc-val" style="color:var(--red)">$11.9k</div>
+      <div class="kc-sub">vs $17.3k historical</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −31.0%</div>
+    </div>
+    <div class="kc alert">
+      <div class="kc-lbl">Contacted Rate</div>
+      <div class="kc-val" style="color:var(--red)">33.8%</div>
+      <div class="kc-sub">vs 46.7% historical</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −12.9pp</div>
+    </div>
+    <div class="kc alert">
+      <div class="kc-lbl">Conversion Rate</div>
+      <div class="kc-val" style="color:var(--orange)">3.88%</div>
+      <div class="kc-sub">vs 5.7% all-time avg</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −1.8pp</div>
+    </div>
+    <div class="kc alert">
+      <div class="kc-lbl">Monthly ROI</div>
+      <div class="kc-val" style="color:var(--red)">23.1%</div>
+      <div class="kc-sub">vs 67.6% all-time avg</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −44.5pp</div>
+    </div>
+    <div class="kc">
+      <div class="kc-lbl">Lead Volume</div>
+      <div class="kc-val" style="color:var(--teal)">311/day</div>
+      <div class="kc-sub">vs 315 historical — normal</div>
+      <div style="font-size:11px;font-weight:700;color:var(--teal);margin-top:4px">► −1.4% — Not the issue</div>
+    </div>
+  </div>
+
+  <!-- Root Cause Diagnosis -->
+  <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Root Cause Diagnosis</div><div class="sub">Lead volume is stable — the problem is deep inside the funnel</div></div><span class="badge" style="background:rgba(255,69,58,.12);color:var(--red);border-color:rgba(255,69,58,.3)">3 Confirmed Root Causes</span></div>
+
+  <div class="rc-block">
+    <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:4px">#1 — Hebrew Contacted Rate in Freefall — Most Critical</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Hebrew contacted rate crashed from <strong style="color:var(--green)">57.1%</strong> (Jan’26) to <strong style="color:var(--red)">31.2%</strong> (Apr’26) — a <strong style="color:var(--red)">-25.9pp collapse</strong> in 4 months. This single metric explains most of the acquisition drop. Hebrew leads historically convert at 9.04%; in April, only 5.77%. When leads can’t be reached, nothing else in the funnel matters. Cause: lead intent quality and/or contact information accuracy has structurally deteriorated in Hebrew campaigns.</div>
+  </div>
+  <div class="rc-block" style="border-color:var(--orange)">
+    <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:4px">#2 — PPC ROI at −29.4% — Actively Burning Cash</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">PPC generated 1,290 leads in April (57.5% of all leads) at a cost of <strong style="color:var(--red)">$74,333</strong>, returning only $52,473 in revenue — a <strong style="color:var(--red)">−29.4% ROI</strong>. Every PPC dollar spent is returning only $0.71. April 8 alone saw <strong style="color:var(--red)">ROI of −41.8%</strong> — revenue of $6,083 on cost of $10,447. The contacted rate on PPC leads is 33.1% vs 43.2% historical, meaning PPC lead quality has collapsed alongside cost increases.</div>
+  </div>
+  <div class="rc-block" style="border-color:var(--gold);margin-bottom:20px">
+    <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:4px">#3 — 5-Month ROI Deterioration — Structural, Not Random</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">ROI has declined every month for 5 consecutive months: <strong style="color:var(--green)">94.7% → 73.1% → 52.7% → 23.1%</strong>. This is not a one-off April anomaly — it’s an accelerating structural deterioration. The contacted rate began declining in March (35.5%) and has worsened in April (33.8%). The underlying causes — declining lead quality, rising PPC costs, and lower conversion — were already visible in March and went unaddressed.</div>
+  </div>
+
+  <!-- Two charts row -->
+  <div class="row r2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">Contacted Rate Collapse by Category</div><div class="sub">Hebrew (green) vs Biblical (blue) · 6-month trend · Hebrew most affected</div></div></div>
+      <div style="height:280px"><canvas id="contactedTrendChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">Monthly ROI Deterioration</div><div class="sub">5 consecutive months of decline · April worst on record</div></div></div>
+      <div style="height:280px"><canvas id="roiDeclineChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Two charts row 2 -->
+  <div class="row r2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">CVR Collapse — April vs Historical</div><div class="sub">Conversion rate by category · 6-month trend · Hebrew CVR halved</div></div></div>
+      <div style="height:280px"><canvas id="cvrDeclineChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">Daily Revenue vs Acquisitions — April</div><div class="sub">Bars = revenue · Line = acquisitions · Red = negative ROI day</div></div></div>
+      <div style="height:280px"><canvas id="aprDailyChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Day-by-day breakdown table -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Day-by-Day Performance (Apr 1–8)</div><div class="sub">L/S zone: ✓ In optimal (21.1–30.9) · ↑ Above ceiling · ↓ Below floor</div></div></div>
+    <!-- Header row -->
+    <div class="day-row" style="background:var(--surface-2);border-radius:8px 8px 0 0;border-bottom:1px solid var(--border)">
+      <div class="day-lbl">Day</div>
+      <div class="day-lbl" style="font-size:10px">Date</div>
+      <div class="day-cell" style="color:var(--text-muted);font-size:10px">Leads</div>
+      <div class="day-cell" style="color:var(--text-muted);font-size:10px">Shifts</div>
+      <div class="day-cell" style="color:var(--text-muted);font-size:10px">L/S</div>
+      <div class="day-cell" style="color:var(--text-muted);font-size:10px">Contacted%</div>
+      <div class="day-cell" style="color:var(--text-muted);font-size:10px">Acq</div>
+      <div class="day-cell" style="color:var(--text-muted);font-size:10px">Revenue</div>
+    </div>
+    <div id="aprDayRows"></div>
+  </div>
+
+  <!-- Channel + Category breakdown -->
+  <div class="row r2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">April by Channel — Contacted Rate vs Historical</div><div class="sub">Contact rate by channel · orange = April · teal = historical</div></div></div>
+      <div style="height:240px"><canvas id="mediaContactChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Hebrew vs Biblical — April vs Historical</div><div class="sub">Key metrics side-by-side · green = historical · orange = April</div></div></div>
+      <div style="height:240px"><canvas id="catCompChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Action items -->
+  <div class="narrative card-accent orange">
+    <h3>Immediate Actions to Arrest the Decline</h3>
+    <p>
+      <strong style="color:var(--red)">1. Pause or cut Hebrew PPC spend immediately</strong> — Hebrew PPC contacted rate has dropped from 55% to 31%. Continuing to pay PPC prices for leads that can’t be reached is compounding losses. Redirect Hebrew PPC budget to Affiliates (316% ROI, 9.3% CVR) or run a Hebrew Organic content push while diagnosing lead quality.<br><br>
+      <strong style="color:var(--orange)">2. Audit Hebrew lead sources</strong> — The 23.7pp contacted rate drop in Hebrew signals corrupted lead quality: wrong phone numbers, uninterested audiences, or bot traffic. Pull individual lead-level contact attempt data for April Hebrew PPC leads and compare to January levels. Look for changes in campaign targeting, landing page, or lead form that went live around March.<br><br>
+      <strong style="color:var(--gold)">3. Realign staffing to Organic priority</strong> — Organic is the only channel performing at historical norms (9.13% CVR, $85.30/lead). With 219 leads in April generating $18,681 at zero cost, Organic is keeping this month alive. Assign your highest-performing reps to Organic and Hebrew Affiliate queues.<br><br>
+      <strong style="color:var(--teal)">4. Investigate the April 8 collapse</strong> — April 8 saw 370 leads, only 8 acquisitions, and −41.8% ROI. This was the worst single day of the month. Something specific happened that day — a technical failure, CRM issue, or shift attendance problem. Diagnose and prevent recurrence.
+    </p>
   </div>
 
 </section>
@@ -1452,6 +1606,167 @@ new Chart(document.getElementById('monthlyCplChart'),{
     tbody.appendChild(tr);
   });
 })();
+
+// ═══════════════════════════════════════════════════════════
+// TAB 6 — APRIL CRISIS
+// ═══════════════════════════════════════════════════════════
+
+const APR  = D.aprDaily;
+const T6   = D.trend6;
+const CT6  = D.catTrend6;
+const MC   = D.mediaCmp;
+const CC   = D.catCompare;
+const mLbl6 = T6.map(m=>m.month);
+
+// ── Contacted Rate collapse chart (Hebrew vs Biblical) ─────────────────
+new Chart(document.getElementById('contactedTrendChart'),{
+  type:'line',
+  data:{labels:mLbl6,datasets:[
+    {label:'Hebrew Contacted %', data:CT6.map(m=>m.hebContactedRate),borderColor:'#34c759',backgroundColor:'rgba(52,199,89,.08)',borderWidth:2.5,tension:.35,fill:true,pointRadius:4,pointHoverRadius:6,spanGaps:true},
+    {label:'Biblical Contacted %',data:CT6.map(m=>m.bibContactedRate),borderColor:'#0a84ff',backgroundColor:'rgba(10,132,255,.06)',borderWidth:2,tension:.35,fill:true,pointRadius:4,pointHoverRadius:6,spanGaps:true}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
+        callbacks:{label:i=>`${i.dataset.label}: ${i.raw!==null?i.raw.toFixed(1)+'%':'N/A'}`}},
+      annotation:{annotations:{
+        histLine:{type:'line',yMin:46.7,yMax:46.7,borderColor:'rgba(52,199,89,.35)',borderWidth:1,borderDash:[4,3],
+          label:{display:true,content:'Historical avg 46.7%',position:'end',font:{size:9},color:'rgba(52,199,89,.7)',backgroundColor:'transparent',yAdjust:-12}}
+      }}
+    },
+    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'},min:20,max:70}}
+  }
+});
+
+// ── ROI deterioration chart ───────────────────────────────────────
+new Chart(document.getElementById('roiDeclineChart'),{
+  type:'bar',
+  data:{labels:mLbl6,datasets:[{
+    label:'Monthly ROI %',
+    data:T6.map(m=>m.roi),
+    backgroundColor:T6.map(m=>m.roi!==null&&m.roi<40?'rgba(255,69,58,.75)':m.roi<70?'rgba(255,159,10,.75)':'rgba(52,199,89,.65)'),
+    borderColor:T6.map(m=>m.roi!==null&&m.roi<40?'#ff453a':m.roi<70?'#ff9f0a':'#34c759'),
+    borderWidth:1,borderRadius:5,
+  }]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,
+        callbacks:{label:i=>i.raw!==null?`ROI: ${i.raw.toFixed(1)}%`:'N/A'}},
+      annotation:{annotations:{
+        target:{type:'line',yMin:67.6,yMax:67.6,borderColor:'rgba(52,199,89,.4)',borderWidth:1,borderDash:[4,3],
+          label:{display:true,content:'All-time avg 67.6%',position:'end',font:{size:9},color:'rgba(52,199,89,.7)',backgroundColor:'transparent',yAdjust:-12}}
+      }}
+    },
+    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'}}}
+  }
+});
+
+// ── CVR decline chart ───────────────────────────────────────────
+new Chart(document.getElementById('cvrDeclineChart'),{
+  type:'line',
+  data:{labels:mLbl6,datasets:[
+    {label:'Hebrew CVR %', data:CT6.map(m=>m.hebCVR),borderColor:'#34c759',borderWidth:2.5,tension:.35,pointRadius:4,spanGaps:true},
+    {label:'Biblical CVR %',data:CT6.map(m=>m.bibCVR),borderColor:'#0a84ff',borderWidth:2,tension:.35,pointRadius:4,spanGaps:true}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
+        callbacks:{label:i=>`${i.dataset.label}: ${i.raw!==null?i.raw.toFixed(2)+'%':'N/A'}`}},
+      annotation:{annotations:{
+        hebHist:{type:'line',yMin:9.04,yMax:9.04,borderColor:'rgba(52,199,89,.3)',borderWidth:1,borderDash:[3,3],
+          label:{display:true,content:'Hebrew hist 9.04%',position:'start',font:{size:9},color:'rgba(52,199,89,.7)',backgroundColor:'transparent',yAdjust:-10}}
+      }}
+    },
+    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'}}}
+  }
+});
+
+// ── April daily bar+line chart ───────────────────────────────────
+new Chart(document.getElementById('aprDailyChart'),{
+  type:'bar',
+  data:{labels:APR.map(r=>`${r.dayName.slice(0,3)} ${r.date.slice(8)}`),
+    datasets:[
+      {type:'bar',label:'Revenue $',data:APR.map(r=>r.totalRevenue),
+       backgroundColor:APR.map(r=>r.roi!==null&&r.roi<0?'rgba(255,69,58,.65)':'rgba(10,132,255,.55)'),
+       borderColor:APR.map(r=>r.roi!==null&&r.roi<0?'#ff453a':'#0a84ff'),borderWidth:1,borderRadius:4,yAxisID:'y'},
+      {type:'line',label:'Acquisitions',data:APR.map(r=>r.totalAcq),
+       borderColor:'#ffd60a',backgroundColor:'rgba(255,214,10,.15)',borderWidth:2,pointRadius:5,pointHoverRadius:7,tension:.3,yAxisID:'y1'}
+    ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false}},
+    scales:{
+      x:{grid:{color:GC},ticks:{font:{size:10}}},
+      y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>'$'+v.toLocaleString()},position:'left'},
+      y1:{grid:{display:false},ticks:{font:{size:10}},position:'right',title:{display:true,text:'Acq',font:{size:9}}}
+    }
+  }
+});
+
+// ── Day-by-day table ────────────────────────────────────────────
+(()=>{
+  const cont = document.getElementById('aprDayRows');
+  const histCont = 46.7; // historical weekday avg
+  APR.forEach(r=>{
+    const isWk = r.isWeekend;
+    const cClass = r.contactedRatio < 30 ? 'bad' : r.contactedRatio < 40 ? 'warn' : 'good';
+    const acqClass = r.totalAcq < 10 ? 'bad' : r.totalAcq < 14 ? 'warn' : 'good';
+    const revClass = r.totalRevenue < 8000 ? 'bad' : r.totalRevenue < 13000 ? 'warn' : 'good';
+    const roiClass = r.roi!==null&&r.roi<0 ? 'bad' : r.roi!==null&&r.roi<50 ? 'warn' : 'good';
+    const zoneClass = r.lsZone==='in'?'zone-in':r.lsZone==='above'?'zone-above':'zone-below';
+    const zoneIcon = r.lsZone==='in'?'✓':r.lsZone==='above'?'↑':'↓';
+    const div = document.createElement('div');
+    div.className = `day-row${isWk?' weekend':''}`;
+    div.innerHTML = [
+      `<div class="day-lbl">${r.dayName.slice(0,3)}<span style="color:var(--text-muted);font-size:9px;margin-left:4px">${isWk?'WE':''}</span></div>`,
+      `<div class="day-date">${r.date.slice(5)}</div>`,
+      `<div class="day-cell dim">${r.totalLeads}</div>`,
+      `<div class="day-cell dim">${r.totalShift.toFixed(1)}</div>`,
+      `<div class="day-cell"><span class="zone-tag ${zoneClass}">${r.leadsPerShift!==null?r.leadsPerShift.toFixed(1):'N/A'} ${zoneIcon}</span></div>`,
+      `<div class="day-cell ${cClass}">${r.contactedRatio.toFixed(1)}%</div>`,
+      `<div class="day-cell ${acqClass}">${r.totalAcq}</div>`,
+      `<div class="day-cell ${revClass}">$${r.totalRevenue.toLocaleString(undefined,{maximumFractionDigits:0})}</div>`,
+    ].join('');
+    cont.appendChild(div);
+  });
+})();
+
+// ── Channel contacted rate chart ────────────────────────────────
+new Chart(document.getElementById('mediaContactChart'),{
+  type:'bar',
+  data:{labels:MC.map(m=>m.media),datasets:[
+    {label:'April Contacted %',   data:MC.map(m=>m.aprContactedRate),backgroundColor:'rgba(255,159,10,.7)',borderColor:'#ff9f0a',borderWidth:1,borderRadius:4},
+    {label:'Historical Contacted %',data:MC.map(m=>m.histContactedRate),backgroundColor:'rgba(90,200,250,.5)', borderColor:'#5ac8fa',borderWidth:1,borderRadius:4}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false}},
+    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'},max:80}}
+  }
+});
+
+// ── Category comparison chart (CVR + contacted) ─────────────────
+const catLabels = ['Biblical CVR%','Hebrew CVR%','Biblical Contacted%','Hebrew Contacted%'];
+const catApr    = [CC.biblical.aprCVR, CC.hebrew.aprCVR, CC.biblical.aprContactedRate, CC.hebrew.aprContactedRate];
+const catHist   = [CC.biblical.histCVR,CC.hebrew.histCVR,CC.biblical.histContactedRate,CC.hebrew.histContactedRate];
+new Chart(document.getElementById('catCompChart'),{
+  type:'bar',
+  data:{labels:catLabels,datasets:[
+    {label:'Historical',data:catHist,backgroundColor:'rgba(52,199,89,.55)',borderColor:'#34c759',borderWidth:1,borderRadius:4},
+    {label:'April 2026', data:catApr, backgroundColor:'rgba(255,159,10,.7)', borderColor:'#ff9f0a',borderWidth:1,borderRadius:4}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
+      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
+        callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(2)}%`}}},
+    scales:{x:{grid:{color:GC},ticks:{font:{size:9},maxRotation:15}},
+             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'}}}
+  }
+});
 
 </script>
 </body>

@@ -25110,5 +25110,370 @@ const DASHBOARD_DATA = {
       "roas": 3.16,
       "leadsPerShift": 28.6
     }
+  ],
+  "aprSummary": {
+    "daysElapsed": 8,
+    "weekdaysElapsed": 6,
+    "weekendsElapsed": 2,
+    "totalLeads": 2244,
+    "totalAcq": 87,
+    "totalRevenue": 91471,
+    "totalCost": 74333,
+    "roi": 23.1,
+    "contactedRate": 33.8,
+    "avgDailyAcqWkday": 11.0,
+    "avgDailyRevWkday": 11960.0
+  },
+  "benchmarks": {
+    "avgDailyLeads": [
+      311.0,
+      315.0,
+      300.0
+    ],
+    "avgDailyAcq": [
+      11.0,
+      17.2,
+      14.8
+    ],
+    "avgDailyRev": [
+      11960.0,
+      17339.0,
+      16024.0
+    ],
+    "avgShifts": [
+      12.0,
+      12.8,
+      11.8
+    ],
+    "avgLPS": [
+      26.2,
+      25.9,
+      27.0
+    ],
+    "avgContactedRate": [
+      33.8,
+      46.7,
+      43.3
+    ]
+  },
+  "aprDaily": [
+    {
+      "date": "2026-04-01",
+      "dayName": "Wednesday",
+      "isWeekend": false,
+      "totalLeads": 258,
+      "totalContacted": 98,
+      "totalAcq": 14,
+      "totalOrders": 15,
+      "totalRevenue": 9472.21,
+      "totalCost": 9875.05,
+      "totalShift": 10.25,
+      "contactedRatio": 38.0,
+      "leadsPerShift": 25.2,
+      "lsZone": "in",
+      "roi": -4.1,
+      "roas": 0.96,
+      "cvr": 5.43
+    },
+    {
+      "date": "2026-04-02",
+      "dayName": "Thursday",
+      "isWeekend": false,
+      "totalLeads": 282,
+      "totalContacted": 87,
+      "totalAcq": 12,
+      "totalOrders": 17,
+      "totalRevenue": 12984.14,
+      "totalCost": 8486.49,
+      "totalShift": 10.75,
+      "contactedRatio": 30.9,
+      "leadsPerShift": 26.2,
+      "lsZone": "in",
+      "roi": 53.0,
+      "roas": 1.53,
+      "cvr": 4.26
+    },
+    {
+      "date": "2026-04-03",
+      "dayName": "Friday",
+      "isWeekend": false,
+      "totalLeads": 257,
+      "totalContacted": 61,
+      "totalAcq": 10,
+      "totalOrders": 18,
+      "totalRevenue": 12855.63,
+      "totalCost": 8818.74,
+      "totalShift": 10.6,
+      "contactedRatio": 23.7,
+      "leadsPerShift": 24.2,
+      "lsZone": "in",
+      "roi": 45.8,
+      "roas": 1.46,
+      "cvr": 3.89
+    },
+    {
+      "date": "2026-04-04",
+      "dayName": "Saturday",
+      "isWeekend": true,
+      "totalLeads": 197,
+      "totalContacted": 60,
+      "totalAcq": 7,
+      "totalOrders": 10,
+      "totalRevenue": 6320.5,
+      "totalCost": 7598.0,
+      "totalShift": 6.5,
+      "contactedRatio": 30.5,
+      "leadsPerShift": 30.3,
+      "lsZone": "in",
+      "roi": -16.8,
+      "roas": 0.83,
+      "cvr": 3.55
+    },
+    {
+      "date": "2026-04-05",
+      "dayName": "Sunday",
+      "isWeekend": true,
+      "totalLeads": 182,
+      "totalContacted": 68,
+      "totalAcq": 14,
+      "totalOrders": 21,
+      "totalRevenue": 13390.32,
+      "totalCost": 7923.61,
+      "totalShift": 12.65,
+      "contactedRatio": 37.4,
+      "leadsPerShift": 14.4,
+      "lsZone": "below",
+      "roi": 69.0,
+      "roas": 1.69,
+      "cvr": 7.69
+    },
+    {
+      "date": "2026-04-06",
+      "dayName": "Monday",
+      "isWeekend": false,
+      "totalLeads": 288,
+      "totalContacted": 127,
+      "totalAcq": 13,
+      "totalOrders": 20,
+      "totalRevenue": 16569.9,
+      "totalCost": 10685.7,
+      "totalShift": 15.57,
+      "contactedRatio": 44.1,
+      "leadsPerShift": 18.5,
+      "lsZone": "below",
+      "roi": 55.1,
+      "roas": 1.55,
+      "cvr": 4.51
+    },
+    {
+      "date": "2026-04-07",
+      "dayName": "Tuesday",
+      "isWeekend": false,
+      "totalLeads": 410,
+      "totalContacted": 143,
+      "totalAcq": 9,
+      "totalOrders": 21,
+      "totalRevenue": 13795.55,
+      "totalCost": 10498.46,
+      "totalShift": 12.87,
+      "contactedRatio": 34.9,
+      "leadsPerShift": 31.9,
+      "lsZone": "above",
+      "roi": 31.4,
+      "roas": 1.31,
+      "cvr": 2.2
+    },
+    {
+      "date": "2026-04-08",
+      "dayName": "Wednesday",
+      "isWeekend": false,
+      "totalLeads": 370,
+      "totalContacted": 115,
+      "totalAcq": 8,
+      "totalOrders": 9,
+      "totalRevenue": 6082.78,
+      "totalCost": 10446.62,
+      "totalShift": 11.93,
+      "contactedRatio": 31.1,
+      "leadsPerShift": 31.0,
+      "lsZone": "above",
+      "roi": -41.8,
+      "roas": 0.58,
+      "cvr": 2.16
+    }
+  ],
+  "catCompare": {
+    "biblical": {
+      "aprLeads": 1724,
+      "aprAcq": 57,
+      "aprRevenue": 59398.0,
+      "aprCVR": 3.31,
+      "aprContactedRate": 34.6,
+      "aprRPL": 34.45,
+      "histCVR": 3.9,
+      "histContactedRate": 40.9,
+      "histRPL": 38.73
+    },
+    "hebrew": {
+      "aprLeads": 520,
+      "aprAcq": 30,
+      "aprRevenue": 32073.0,
+      "aprCVR": 5.77,
+      "aprContactedRate": 31.2,
+      "aprRPL": 61.68,
+      "histCVR": 9.04,
+      "histContactedRate": 54.9,
+      "histRPL": 92.75
+    }
+  },
+  "trend6": [
+    {
+      "month": "2025-11",
+      "avgDailyAcq": 13.3,
+      "avgDailyRev": 16638.0,
+      "cvr": 5.75,
+      "contactedRate": 45.6,
+      "rpl": 72.09,
+      "roi": 91.3
+    },
+    {
+      "month": "2025-12",
+      "avgDailyAcq": 15.3,
+      "avgDailyRev": 16418.0,
+      "cvr": 5.62,
+      "contactedRate": 44.5,
+      "rpl": 60.52,
+      "roi": 87.3
+    },
+    {
+      "month": "2026-01",
+      "avgDailyAcq": 15.0,
+      "avgDailyRev": 15251.0,
+      "cvr": 4.86,
+      "contactedRate": 45.6,
+      "rpl": 49.38,
+      "roi": 94.7
+    },
+    {
+      "month": "2026-02",
+      "avgDailyAcq": 11.7,
+      "avgDailyRev": 13181.0,
+      "cvr": 4.66,
+      "contactedRate": 43.2,
+      "rpl": 52.63,
+      "roi": 73.1
+    },
+    {
+      "month": "2026-03",
+      "avgDailyAcq": 12.3,
+      "avgDailyRev": 13176.0,
+      "cvr": 4.61,
+      "contactedRate": 35.5,
+      "rpl": 49.26,
+      "roi": 52.7
+    },
+    {
+      "month": "2026-04",
+      "avgDailyAcq": 10.9,
+      "avgDailyRev": 11434.0,
+      "cvr": 3.88,
+      "contactedRate": 33.8,
+      "rpl": 40.76,
+      "roi": 23.1
+    }
+  ],
+  "catTrend6": [
+    {
+      "month": "2025-11",
+      "hebContactedRate": 53.9,
+      "bibContactedRate": 42.0,
+      "hebCVR": 6.28,
+      "bibCVR": 5.52
+    },
+    {
+      "month": "2025-12",
+      "hebContactedRate": 49.4,
+      "bibContactedRate": 42.8,
+      "hebCVR": 6.51,
+      "bibCVR": 5.3
+    },
+    {
+      "month": "2026-01",
+      "hebContactedRate": 57.1,
+      "bibContactedRate": 41.9,
+      "hebCVR": 6.93,
+      "bibCVR": 4.2
+    },
+    {
+      "month": "2026-02",
+      "hebContactedRate": 53.7,
+      "bibContactedRate": 39.7,
+      "hebCVR": 7.51,
+      "bibCVR": 3.7
+    },
+    {
+      "month": "2026-03",
+      "hebContactedRate": 44.6,
+      "bibContactedRate": 32.5,
+      "hebCVR": 7.66,
+      "bibCVR": 3.6
+    },
+    {
+      "month": "2026-04",
+      "hebContactedRate": 31.2,
+      "bibContactedRate": 34.6,
+      "hebCVR": 5.77,
+      "bibCVR": 3.31
+    }
+  ],
+  "mediaCmp": [
+    {
+      "media": "Affiliates",
+      "aprLeads": 5,
+      "aprAcq": 0,
+      "aprRevenue": 0,
+      "aprCVR": 0.0,
+      "aprContactedRate": 20.0,
+      "aprRPL": 0.0,
+      "histCVR": 9.11,
+      "histContactedRate": 56.9,
+      "roi": null
+    },
+    {
+      "media": "Email Marketing",
+      "aprLeads": 730,
+      "aprAcq": 22,
+      "aprRevenue": 20317,
+      "aprCVR": 3.01,
+      "aprContactedRate": 31.4,
+      "aprRPL": 27.83,
+      "histCVR": 4.58,
+      "histContactedRate": 41.4,
+      "roi": null
+    },
+    {
+      "media": "Organic",
+      "aprLeads": 219,
+      "aprAcq": 20,
+      "aprRevenue": 18681,
+      "aprCVR": 9.13,
+      "aprContactedRate": 46.6,
+      "aprRPL": 85.3,
+      "histCVR": 11.01,
+      "histContactedRate": 58.7,
+      "roi": null
+    },
+    {
+      "media": "PPC - All",
+      "aprLeads": 1290,
+      "aprAcq": 45,
+      "aprRevenue": 52473,
+      "aprCVR": 3.49,
+      "aprContactedRate": 33.1,
+      "aprRPL": 40.68,
+      "histCVR": 4.48,
+      "histContactedRate": 43.2,
+      "roi": -29.4
+    }
   ]
 };
