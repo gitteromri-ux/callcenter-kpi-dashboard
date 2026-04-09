@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Call Center Intelligence — KPI Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script src="data.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-deep:     #07070e;
+    --bg-base:     #0c0c17;
+    --bg-card:     #111122;
+    --bg-card-alt: #141428;
+    --bg-hover:    #1a1a30;
+    --border:      rgba(255,255,255,0.07);
+    --border-mid:  rgba(255,255,255,0.12);
+
+    --blue:        #0a84ff;
+    --blue-dim:    rgba(10,132,255,0.18);
+    --blue-glow:   rgba(10,132,255,0.35);
+    --gold:        #ffd60a;
+    --gold-dim:    rgba(255,214,10,0.15);
+    --green:       #30d158;
+    --green-dim:   rgba(48,209,88,0.15);
+    --red:         #ff453a;
+    --red-dim:     rgba(255,69,58,0.15);
+    --purple:      #bf5af2;
+    --purple-dim:  rgba(191,90,242,0.15);
+    --orange:      #ff9f0a;
+
+    --text-primary:   #f5f5f7;
+    --text-secondary: rgba(245,245,247,0.55);
+    --text-tertiary:  rgba(245,245,247,0.35);
+
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 28px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ────────────────────────────────── */
+  .app-header {
+    padding: 28px 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(10,132,255,0.04) 0%, transparent 100%);
+  }
+  .logo-block {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 24px;
+  }
+  .logo-svg { flex-shrink: 0; }
+  .logo-text { line-height: 1.1; }
+  .logo-text .title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; }
+  .logo-text .subtitle { font-size: 11px; color: var(--text-secondary); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px; }
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 24px;
+  }
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-radius: 100px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-mid);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+  .meta-pill .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ── Tabs ────────────────────────────────────── */
+  .tab-nav {
+    display: flex;
+    gap: 4px;
+    padding: 20px 40px 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-deep);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(20px);
+  }
+  .tab-btn {
+    position: relative;
+    padding: 10px 20px 12px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s;
+    letter-spacing: -0.1px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab-btn:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
+  .tab-btn.active { color: var(--text-primary); }
+  .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 2px;
+    background: var(--blue);
+    border-radius: 2px 2px 0 0;
+    box-shadow: 0 0 12px var(--blue);
+  }
+  .tab-icon { font-size: 15px; }
+  .tab-badge {
+    padding: 1px 7px;
+    border-radius: 100px;
+    background: var(--blue-dim);
+    color: var(--blue);
+    font-size: 10px;
+    font-weight: 600;
+    border: 1px solid rgba(10,132,255,0.25);
+  }
+
+  /* ── Tab Panels ─────────────────────────────── */
+  .tab-panel { display: none; padding: 32px 40px 60px; }
+  .tab-panel.active { display: block; }
+
+  /* ── Grid Layouts ────────────────────────────── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .kpi-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .chart-row {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+  .chart-row-2 { grid-template-columns: 1fr 1fr; }
+  .chart-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .chart-row-65 { grid-template-columns: 1.5fr 1fr; }
+
+  /* ── Cards ─────────────────────────────────── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border-mid); }
+  .card-glow::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+    opacity: 0.5;
+  }
+  .card-gold::before {
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .card-green::before {
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+  }
+  .card-purple::before {
+    background: linear-gradient(90deg, transparent, var(--purple), transparent);
+  }
+
+  /* ── KPI Cards ──────────────────────────────── */
+  .kpi-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 18px 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .kpi-card:hover {
+    border-color: var(--border-mid);
+    transform: translateY(-1px);
+  }
+  .kpi-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 400;
+  }
+  .kpi-accent-bar {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    border-radius: 0 2px 0 0;
+    width: 40%;
+  }
+  .accent-blue { background: var(--blue); box-shadow: 0 0 10px var(--blue-glow); }
+  .accent-gold { background: var(--gold); box-shadow: 0 0 10px var(--gold-dim); }
+  .accent-green { background: var(--green); }
+  .accent-purple { background: var(--purple); }
+  .accent-orange { background: var(--orange); }
+
+  /* ── Section Headers ───────────────────────── */
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    gap: 16px;
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .section-sub {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+    font-weight: 400;
+    line-height: 1.5;
+    max-width: 600px;
+  }
+  .section-badge {
+    flex-shrink: 0;
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid;
+  }
+  .badge-blue { background: var(--blue-dim); color: var(--blue); border-color: rgba(10,132,255,0.3); }
+  .badge-gold { background: var(--gold-dim); color: var(--gold); border-color: rgba(255,214,10,0.3); }
+  .badge-green { background: var(--green-dim); color: var(--green); border-color: rgba(48,209,88,0.3); }
+
+  /* ── Chart Containers ───────────────────────── */
+  .chart-container { position: relative; }
+  .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+  .chart-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  /* ── Insight Boxes ─────────────────────────── */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .insight-box {
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--bg-card-alt);
+  }
+  .insight-box .label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-bottom: 6px;
+  }
+  .insight-box .value {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .insight-box .desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  /* ── Zone Analysis Block ─────────────────────── */
+  .zone-block {
+    background: linear-gradient(135deg, rgba(10,132,255,0.08) 0%, rgba(191,90,242,0.05) 100%);
+    border: 1px solid rgba(10,132,255,0.25);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .zone-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .zone-title::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+    box-shadow: 0 0 8px var(--blue);
+  }
+  .zone-params {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .zone-param {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+  }
+  .zone-param-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+  .zone-param-val {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text-primary);
+  }
+  .zone-param-range {
+    font-size: 10px;
+    color: var(--text-secondary);
+    margin-top: 3px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── Analysis Narrative ─────────────────────── */
+  .narrative {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .narrative h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.2px;
+  }
+  .narrative p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+  .narrative p:last-child { margin-bottom: 0; }
+  .narrative strong { color: var(--text-primary); font-weight: 600; }
+  .narrative .highlight { color: var(--blue); font-weight: 600; }
+  .narrative .highlight-gold { color: var(--gold); font-weight: 600; }
+  .narrative .highlight-green { color: var(--green); font-weight: 600; }
+  .narrative .stat-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--blue-dim);
+    border: 1px solid rgba(10,132,255,0.2);
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--blue);
+    font-weight: 500;
+  }
+  .narrative .stat-tag-gold {
+    background: var(--gold-dim);
+    border-color: rgba(255,214,10,0.2);
+    color: var(--gold);
+  }
+  .narrative .stat-tag-green {
+    background: var(--green-dim);
+    border-color: rgba(48,209,88,0.2);
+    color: var(--green);
+  }
+
+  /* ── Top Days Table ─────────────────────────── */
+  .data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 12px;
+  }
+  .data-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-tertiary);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card-alt);
+    position: sticky;
+    top: 0;
+  }
+  .data-table th:first-child { border-radius: 8px 0 0 0; }
+  .data-table th:last-child { border-radius: 0 8px 0 0; }
+  .data-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-weight: 400;
+    color: var(--text-secondary);
+    transition: background 0.1s;
+  }
+  .data-table td:first-child { font-weight: 500; color: var(--text-primary); }
+  .data-table tr:hover td { background: var(--bg-hover); }
+  .data-table tr:last-child td { border-bottom: none; }
+  .table-scroll { max-height: 380px; overflow-y: auto; border-radius: var(--radius-md); border: 1px solid var(--border); }
+  .table-scroll::-webkit-scrollbar { width: 4px; }
+  .table-scroll::-webkit-scrollbar-track { background: transparent; }
+  .table-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+  .weekend-row td { color: rgba(245,245,247,0.4); }
+  .optimal-row td:first-child::after {
+    content: ' ●';
+    color: var(--blue);
+    font-size: 8px;
+    vertical-align: super;
+  }
+
+  /* ── Weekend vs Weekday ─────────────────────── */
+  .wkd-compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .wkd-panel {
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    border: 1px solid;
+  }
+  .wkd-panel.weekday {
+    background: linear-gradient(135deg, rgba(10,132,255,0.07) 0%, rgba(10,132,255,0.02) 100%);
+    border-color: rgba(10,132,255,0.2);
+  }
+  .wkd-panel.weekend {
+    background: linear-gradient(135deg, rgba(255,214,10,0.06) 0%, rgba(255,214,10,0.01) 100%);
+    border-color: rgba(255,214,10,0.2);
+  }
+  .wkd-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .wkd-panel-title { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; }
+  .wkd-panel-tag {
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .weekday .wkd-panel-tag { background: var(--blue-dim); color: var(--blue); }
+  .weekend .wkd-panel-tag { background: var(--gold-dim); color: var(--gold); }
+  .wkd-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .wkd-metric {
+    background: rgba(255,255,255,0.04);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    border: 1px solid var(--border);
+  }
+  .wkd-metric-label {
+    font-size: 9.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-tertiary);
+    margin-bottom: 5px;
+  }
+  .wkd-metric-val {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    line-height: 1;
+  }
+  .wkd-metric-diff {
+    font-size: 10px;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+  .diff-up { color: var(--green); }
+  .diff-down { color: var(--red); }
+
+  /* ── Divider ─────────────────────────────── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  /* ── Legend ─────────────────────────────── */
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--text-secondary); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .legend-line { width: 16px; height: 2px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ── Scrollable ─────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+  /* ── Responsive ─────────────────────────── */
+  @media (max-width: 1100px) {
+    .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+    .zone-params { grid-template-columns: repeat(2, 1fr); }
+    .chart-row-65 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    .app-header, .tab-nav, .tab-panel { padding-left: 20px; padding-right: 20px; }
+    .kpi-grid, .kpi-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .chart-row-2, .chart-row-3 { grid-template-columns: 1fr; }
+    .wkd-compare-grid { grid-template-columns: 1fr; }
+    .insight-grid { grid-template-columns: 1fr; }
+    .wkd-metrics { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ── Animation ───────────────────────────── */
+  .fade-in { animation: fadeIn 0.4s ease forwards; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Correlation badges ─────────────────── */
+  .corr-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .corr-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--bg-card-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+  }
+  .corr-badge .corr-name { color: var(--text-secondary); font-weight: 500; }
+  .corr-badge .corr-val { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 13px; }
+  .corr-strong { color: var(--green); }
+  .corr-mod { color: var(--blue); }
+  .corr-weak { color: var(--orange); }
+  .corr-neg { color: var(--red); }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HEADER ═══════ -->
+<header class="app-header">
+  <div class="logo-block">
+    <svg class="logo-svg" aria-label="Dashboard logo" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="36" height="36" rx="10" fill="rgba(10,132,255,0.12)"/>
+      <rect x="7" y="20" width="5" height="9" rx="1.5" fill="#0a84ff" opacity="0.5"/>
+      <rect x="14" y="14" width="5" height="15" rx="1.5" fill="#0a84ff" opacity="0.75"/>
+      <rect x="21" y="9" width="5" height="20" rx="1.5" fill="#0a84ff"/>
+      <path d="M8 13 L14 9 L21 11 L29 7" stroke="#ffd60a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="8" cy="13" r="2" fill="#ffd60a"/>
+      <circle cx="29" cy="7" r="2" fill="#ffd60a"/>
+    </svg>
+    <div class="logo-text">
+      <div class="title">Call Center Intelligence</div>
+      <div class="subtitle">KPI Performance Analytics · Jan 2024 – Apr 2026</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="meta-pill"><span class="dot"></span>830 Daily Observations</div>
+    <div class="meta-pill" style="color:var(--gold);">101 Optimal Zone Days</div>
+  </div>
+</header>
+
+<!-- ═══════ TABS ═══════ -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab(0)">
+    <span class="tab-icon">◈</span> Optimal Zone Analysis
+    <span class="tab-badge">4-Way</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab(1)">
+    <span class="tab-icon">◷</span> Weekday vs Weekend
+    <span class="tab-badge">Calendar</span>
+  </button>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     TAB 1: OPTIMAL ZONE ANALYSIS
+═══════════════════════════════════════════════ -->
+<section class="tab-panel active" id="tab-0">
+
+  <!-- KPI Row -->
+  <div class="kpi-grid">
+    <div class="kpi-card card-glow">
+      <div class="kpi-label">Total Days Analyzed</div>
+      <div class="kpi-value">830</div>
+      <div class="kpi-sub">Jan 2024 – Apr 2026</div>
+      <div class="kpi-accent-bar accent-blue" style="width:100%"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Daily Leads</div>
+      <div class="kpi-value" id="kpi-leads">—</div>
+      <div class="kpi-sub">All days, all media</div>
+      <div class="kpi-accent-bar accent-blue"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Daily Shifts</div>
+      <div class="kpi-value" id="kpi-shifts">—</div>
+      <div class="kpi-sub">Rep-hours ÷ 7h shift</div>
+      <div class="kpi-accent-bar accent-purple"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Contacted Ratio</div>
+      <div class="kpi-value" id="kpi-contacted">—</div>
+      <div class="kpi-sub">Contacted / Leads per day</div>
+      <div class="kpi-accent-bar accent-orange"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg Daily Acquisitions</div>
+      <div class="kpi-value" id="kpi-acq">—</div>
+      <div class="kpi-sub">New students enrolled</div>
+      <div class="kpi-accent-bar accent-green"></div>
+    </div>
+    <div class="kpi-card card-gold">
+      <div class="kpi-label">Optimal Zone Days</div>
+      <div class="kpi-value" style="color:var(--gold)">101</div>
+      <div class="kpi-sub">12.2% of all days qualify</div>
+      <div class="kpi-accent-bar accent-gold" style="width:12.2%"></div>
+    </div>
+  </div>
+
+  <!-- ZONE BLOCK -->
+  <div class="zone-block">
+    <div class="zone-title">The Optimal 4-Way Zone — Performance Intersection</div>
+    <div class="zone-params">
+      <div class="zone-param">
+        <div class="zone-param-label">Daily Lead Volume</div>
+        <div class="zone-param-val" style="color:var(--blue)">259–392</div>
+        <div class="zone-param-range">IQR of optimal days · avg 339</div>
+      </div>
+      <div class="zone-param">
+        <div class="zone-param-label">Rep Shifts (7h equiv.)</div>
+        <div class="zone-param-val" style="color:var(--purple)">12.9–16.6</div>
+        <div class="zone-param-range">IQR of optimal days · avg 15.0</div>
+      </div>
+      <div class="zone-param">
+        <div class="zone-param-label">Leads / Shift Ratio</div>
+        <div class="zone-param-val" style="color:var(--gold)">19.2–28.5</div>
+        <div class="zone-param-range">IQR of optimal days · avg 23.4</div>
+      </div>
+      <div class="zone-param">
+        <div class="zone-param-label">Contacted Ratio</div>
+        <div class="zone-param-val" style="color:var(--green)">≥ 50%</div>
+        <div class="zone-param-range">Optimal avg 53.2% vs 44.5% overall</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN SCATTER CHART -->
+  <div class="chart-row chart-row-65" style="margin-bottom:24px">
+    <div class="card card-glow">
+      <div class="section-header">
+        <div>
+          <div class="chart-title">4-Way Intersection: Lead/Shift Ratio × Acquisitions × SOV × Contacted Rate</div>
+          <div class="chart-desc">Each point = one calendar day · X-axis: Leads per Rep Shift · Y-axis: Total Acquisitions · Bubble size: Contacted Ratio · Color gradient: SOV value (dark→light = low→high) · Gold ring = Optimal Zone day</div>
+        </div>
+        <span class="section-badge badge-blue">n = 830 days</span>
+      </div>
+      <div class="chart-container" style="height:420px">
+        <canvas id="scatterChart"></canvas>
+      </div>
+      <div class="legend" style="margin-top:14px">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--blue);border:2px solid var(--gold)"></div>Optimal Zone Day</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(10,132,255,0.5)"></div>High SOV (>15k)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(10,132,255,0.25)"></div>Low SOV</div>
+        <div class="legend-item"><div style="width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2)"></div>Bubble size = Contacted Ratio</div>
+      </div>
+    </div>
+
+    <!-- Right: Ratio Bins Performance -->
+    <div class="card">
+      <div class="section-header">
+        <div>
+          <div class="chart-title">Leads/Shift Ratio Bands</div>
+          <div class="chart-desc">Avg Acquisitions &amp; Contacted Ratio by ratio bracket. Sweet spot clearly emerges in 15–35 range.</div>
+        </div>
+      </div>
+      <div class="chart-container" style="height:200px">
+        <canvas id="ratioBinsChart"></canvas>
+      </div>
+      <div class="divider"></div>
+      <div class="chart-title" style="margin-bottom:4px">Avg SOV by Ratio Band</div>
+      <div class="chart-container" style="height:160px">
+        <canvas id="ratioBinsSOVChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORRELATION + INSIGHTS -->
+  <div class="chart-row chart-row-2">
+    <div class="narrative">
+      <h3>Harvard-Level Analysis: Optimal Lead-to-Shift Ratio</h3>
+      <p>
+        Across <strong>830 operational days</strong>, the data reveals a clear <span class="highlight">inverted-U performance curve</span> when leads are plotted against allocated rep capacity. The <span class="stat-tag">optimal Leads/Shift window of 19.2–28.5</span> consistently outperforms all other brackets. Below this range, the team is over-resourced relative to inbound volume — a capital inefficiency. Above 35, performance collapses as reps are overwhelmed, contacted ratios fall below 35%, and acquisitions drop from an optimal average of <span class="stat-tag-gold">24.1/day</span> to just <span class="stat-tag">11.8/day</span>.
+      </p>
+      <p>
+        The strongest single predictor of acquisitions is <span class="highlight">total lead volume</span> (Pearson r = <span class="stat-tag">+0.52, p&lt;0.0001</span>), confirming that volume is foundational. However, raw volume without adequate capacity destroys conversion. The <span class="highlight-green">contacted ratio carries an r = +0.35</span> correlation with acquisitions — every point of conversion efficiency translates directly to enrollment.
+      </p>
+      <p>
+        The <span class="highlight-gold">4-way optimal zone</span> requires simultaneous satisfaction of all four dimensions: <strong>259–392 daily leads, 12.9–16.6 shifts, 19.2–28.5 L/S ratio, and ≥50% contacted rate</strong>. Only <strong>101 of 830 days</strong> (12.2%) hit all four. Those days average <span class="stat-tag-gold">24.1 acquisitions and SOV 18,317</span> — <strong>61% above the dataset mean</strong>.
+      </p>
+      <div class="corr-grid" id="corrGrid"></div>
+    </div>
+
+    <!-- Monthly Trend -->
+    <div class="card">
+      <div class="chart-title">Monthly Trend — Avg Daily Acquisitions &amp; L/S Ratio</div>
+      <div class="chart-desc">28-month rolling view. L/S ratio (right axis) shows inverse relationship with acquisitions peaks.</div>
+      <div class="chart-container" style="height:300px">
+        <canvas id="trendChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP DAYS TABLE -->
+  <div class="card" style="margin-top:0">
+    <div class="section-header">
+      <div>
+        <div class="section-title">Top 30 Acquisition Days</div>
+        <div class="section-sub">Ranked by total acquisitions · Blue dot = Optimal Zone · Italic = Weekend</div>
+      </div>
+      <span class="section-badge badge-gold">All-Time Best</span>
+    </div>
+    <div class="table-scroll">
+      <table class="data-table" id="topDaysTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Day</th>
+            <th>Leads</th>
+            <th>Shifts</th>
+            <th>L/S Ratio</th>
+            <th>Acquisitions</th>
+            <th>SOV</th>
+            <th>Contacted %</th>
+          </tr>
+        </thead>
+        <tbody id="topDaysBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     TAB 2: WEEKDAY vs WEEKEND
+═══════════════════════════════════════════════ -->
+<section class="tab-panel" id="tab-1">
+
+  <!-- Header -->
+  <div class="section-header" style="margin-bottom:24px">
+    <div>
+      <div class="section-title" style="font-size:18px">Weekday vs Weekend Performance Analysis</div>
+      <div class="section-sub">Calendar-accurate classification · Monday–Friday = Weekdays · Saturday–Sunday = Weekends · Based on actual ISO calendar dates across 830 days</div>
+    </div>
+    <span class="section-badge badge-blue">Calendar-Based</span>
+  </div>
+
+  <!-- KPI Split -->
+  <div class="kpi-grid-4" style="margin-bottom:20px">
+    <div class="kpi-card card-glow">
+      <div class="kpi-label">Weekday Days</div>
+      <div class="kpi-value" style="color:var(--blue)">594</div>
+      <div class="kpi-sub">71.6% of the dataset</div>
+      <div class="kpi-accent-bar accent-blue" style="width:71.6%"></div>
+    </div>
+    <div class="kpi-card card-gold">
+      <div class="kpi-label">Weekend Days</div>
+      <div class="kpi-value" style="color:var(--gold)">236</div>
+      <div class="kpi-sub">28.4% of the dataset</div>
+      <div class="kpi-accent-bar accent-gold" style="width:28.4%"></div>
+    </div>
+    <div class="kpi-card card-green">
+      <div class="kpi-label">Weekday Optimal Days</div>
+      <div class="kpi-value" style="color:var(--green)">97</div>
+      <div class="kpi-sub">96% of all optimal zone days</div>
+      <div class="kpi-accent-bar accent-green" style="width:96%"></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Weekend Optimal Days</div>
+      <div class="kpi-value" style="color:var(--orange)">4</div>
+      <div class="kpi-sub">Only 4% of optimal zone days</div>
+      <div class="kpi-accent-bar accent-orange" style="width:4%"></div>
+    </div>
+  </div>
+
+  <!-- Side-by-side panels -->
+  <div class="wkd-compare-grid">
+    <div class="wkd-panel weekday">
+      <div class="wkd-panel-header">
+        <div class="wkd-panel-title">Weekdays <span style="color:var(--text-secondary);font-weight:400;font-size:13px">Mon – Fri</span></div>
+        <span class="wkd-panel-tag">594 days</span>
+      </div>
+      <div class="wkd-metrics" id="weekdayMetrics"></div>
+    </div>
+    <div class="wkd-panel weekend">
+      <div class="wkd-panel-header">
+        <div class="wkd-panel-title">Weekends <span style="color:var(--text-secondary);font-weight:400;font-size:13px">Sat – Sun</span></div>
+        <span class="wkd-panel-tag">236 days</span>
+      </div>
+      <div class="wkd-metrics" id="weekendMetrics"></div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="chart-row chart-row-2">
+    <!-- Day of Week Bar Chart -->
+    <div class="card card-glow">
+      <div class="chart-title">Average Daily Acquisitions by Day of Week</div>
+      <div class="chart-desc">Blue bars = weekdays · Gold bars = weekends · Dashed line = overall average (14.96/day)</div>
+      <div class="chart-container" style="height:300px">
+        <canvas id="dowAcqChart"></canvas>
+      </div>
+    </div>
+
+    <!-- SOV by Day of Week -->
+    <div class="card">
+      <div class="chart-title">Average Daily SOV by Day of Week</div>
+      <div class="chart-desc">Significant drop on weekends confirms staffing and pipeline misalignment during non-business days.</div>
+      <div class="chart-container" style="height:300px">
+        <canvas id="dowSOVChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contacted Ratio + L/S Ratio by day -->
+  <div class="chart-row chart-row-2">
+    <div class="card">
+      <div class="chart-title">Contacted Ratio by Day of Week</div>
+      <div class="chart-desc">Contacts as % of daily leads. Weekend drop reveals structural engagement gap — fewer reps covering similar lead volumes proportionally.</div>
+      <div class="chart-container" style="height:260px">
+        <canvas id="dowContactedChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="chart-title">Leads / Shift Ratio by Day of Week</div>
+      <div class="chart-desc">Weekend ratio (~32) exceeds the optimal upper bound (28.5), explaining performance degradation. Reps are structurally over-leveraged on weekends.</div>
+      <div class="chart-container" style="height:260px">
+        <canvas id="dowRatioChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekday vs Weekend Narrative -->
+  <div class="narrative">
+    <h3>Strategic Insights: Weekday vs Weekend Dynamics</h3>
+    <p>
+      The calendar analysis reveals a <span class="highlight">structural performance bifurcation</span> between weekdays and weekends. Weekdays produce an average of <span class="stat-tag">17.07 acquisitions/day</span> versus only <span class="stat-tag">9.65/day</span> on weekends — a <span class="highlight-gold">76.8% premium</span> for Monday–Friday operations. SOV follows the same pattern: <span class="stat-tag-green">$12,920 avg weekday SOV</span> versus <span class="stat-tag">$7,091 on weekends</span> (45.3% gap).
+    </p>
+    <p>
+      The root cause is <strong>staffing imbalance under demand</strong>. Weekends see fewer rep shifts (avg <span class="stat-tag">8.6 shifts</span> vs <span class="stat-tag-green">14.0 on weekdays</span>), yet the Lead/Shift ratio explodes to <span class="stat-tag">32.1</span> — well above the optimal ceiling of 28.5. Reps are over-stretched, the contacted ratio falls to <span class="stat-tag">39.4%</span> (vs 46.5% on weekdays), and conversion collapses. This is not a demand problem — weekend lead volume is naturally lower at avg 218/day — but it <em>is</em> a staffing calibration problem.
+    </p>
+    <p>
+      Only <span class="highlight-green">4 of 101 optimal zone days</span> (4%) occur on weekends, despite weekends comprising 28.4% of the dataset. The implication is clear: <strong>the optimal zone is almost exclusively a weekday phenomenon</strong>. Strategic investment should focus on deepening weekday capacity in the 12.9–16.6 shift range while exploring whether a targeted weekend staffing increase (bringing weekend shifts from 8.6 to ~11–12) could unlock a meaningful weekend conversion bump without exceeding the ratio ceiling.
+    </p>
+    <p>
+      Among weekdays, <span class="highlight">Thursday</span> leads in avg acquisitions (16.9/day) followed by Tuesday (16.6). Friday shows the strongest Leads/Shift ratio efficiency (25.3) while maintaining solid acquisition levels, suggesting Friday reps are particularly productive. <span class="highlight">Sunday</span> shows the highest weekend acquisition rate (10.4/day) with the best weekend L/S ratio structure (31.9) — if any weekend day warrants additional staffing, it is Sunday.
+    </p>
+  </div>
+
+  <!-- Multi-metric comparison radar / bar -->
+  <div class="chart-row chart-row-2">
+    <div class="card card-glow">
+      <div class="chart-title">Full Metric Comparison — Weekday vs Weekend</div>
+      <div class="chart-desc">Normalized to weekday baseline (100%). All metrics indexed.</div>
+      <div class="chart-container" style="height:300px">
+        <canvas id="compareBarChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="chart-title">Optimal Zone Distribution</div>
+      <div class="chart-desc">Of 101 optimal zone days, 97 are weekdays (96%) and only 4 are weekends — confirming the optimal zone is a fundamentally weekday structure.</div>
+      <div class="chart-container" style="height:200px">
+        <canvas id="optimalPieChart"></canvas>
+      </div>
+      <div class="insight-grid" style="grid-template-columns:1fr 1fr;margin-top:16px">
+        <div class="insight-box">
+          <div class="label" style="color:var(--blue)">Weekday Hit Rate</div>
+          <div class="value" style="color:var(--blue)">16.3%</div>
+          <div class="desc">97/594 weekdays hit the optimal zone</div>
+        </div>
+        <div class="insight-box">
+          <div class="label" style="color:var(--gold)">Weekend Hit Rate</div>
+          <div class="value" style="color:var(--gold)">1.7%</div>
+          <div class="desc">Only 4/236 weekend days qualify</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ═══════ SCRIPTS ═══════ -->
+<script>
+const D = DASHBOARD_DATA;
+
+// ─── Tab switching ───────────────────────────────────────
+function switchTab(idx) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+
+// ─── Chart.js global defaults ───────────────────────────
+Chart.defaults.color = 'rgba(245,245,247,0.45)';
+Chart.defaults.font.family = "'Inter', -apple-system, sans-serif";
+Chart.defaults.font.size = 11;
+
+const gridColor = 'rgba(255,255,255,0.05)';
+const gridColorMid = 'rgba(255,255,255,0.08)';
+
+// ─── Colour helpers ─────────────────────────────────────
+function sovToColor(sov, alpha=0.7) {
+  const min = 340, max = 28000;
+  const t = Math.min(1, Math.max(0, (sov - min) / (max - min)));
+  // blue gradient: dim → bright
+  const r = Math.round(10  + t * 30);
+  const g = Math.round(50  + t * 82);
+  const b = Math.round(120 + t * 135);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ─── Populate KPI cards ──────────────────────────────────
+document.getElementById('kpi-leads').textContent     = D.kpis.avgLeadsPerDay.toFixed(0);
+document.getElementById('kpi-shifts').textContent    = D.kpis.avgShiftPerDay.toFixed(1);
+document.getElementById('kpi-contacted').textContent = (D.kpis.avgContactedRatio * 100).toFixed(1) + '%';
+document.getElementById('kpi-acq').textContent       = D.kpis.avgAcqPerDay.toFixed(1);
+
+// ─── Correlation Badges ──────────────────────────────────
+const corrs = [
+  { name: 'Leads → Acq', val: +0.5161, type: 'strong' },
+  { name: 'Contacted% → Acq', val: +0.3505, type: 'mod' },
+  { name: 'Shift → Acq', val: +0.3356, type: 'mod' },
+  { name: 'L/S Ratio → Acq', val: -0.1925, type: 'neg' },
+  { name: 'SOV → Acq', val: +0.8288, type: 'strong' },
+  { name: 'Leads → SOV', val: +0.4031, type: 'mod' },
+];
+const corrGrid = document.getElementById('corrGrid');
+corrs.forEach(c => {
+  corrGrid.innerHTML += `<div class="corr-badge">
+    <span class="corr-name">${c.name}</span>
+    <span class="corr-val corr-${c.type}">${c.val>0?'+':''}${c.val.toFixed(4)}</span>
+  </div>`;
+});
+
+// ─── Scatter Chart (4-way) ───────────────────────────────
+(function buildScatter() {
+  const datasets = [
+    {
+      label: 'Optimal Zone',
+      data: D.scatterData.filter(d => d.optimalZone).map(d => ({
+        x: parseFloat(d.leadsPerShift.toFixed(2)),
+        y: d.totalAcquisitions,
+        r: Math.max(4, d.contactedRatio * 22),
+        sov: d.totalSOV,
+        date: d.date,
+        dayName: d.dayName,
+        leads: d.totalLeads,
+        shift: d.totalShift,
+        cont: d.contactedRatio,
+      })),
+      backgroundColor: ctx => {
+        const pt = ctx.raw;
+        if (!pt) return 'rgba(10,132,255,0.8)';
+        return sovToColor(pt.sov, 0.85);
+      },
+      borderColor: '#ffd60a',
+      borderWidth: 1.5,
+      hoverBorderWidth: 2.5,
+    },
+    {
+      label: 'All Other Days',
+      data: D.scatterData.filter(d => !d.optimalZone).map(d => ({
+        x: parseFloat(d.leadsPerShift.toFixed(2)),
+        y: d.totalAcquisitions,
+        r: Math.max(3, d.contactedRatio * 16),
+        sov: d.totalSOV,
+        date: d.date,
+        dayName: d.dayName,
+        leads: d.totalLeads,
+        shift: d.totalShift,
+        cont: d.contactedRatio,
+      })),
+      backgroundColor: ctx => {
+        const pt = ctx.raw;
+        if (!pt) return 'rgba(255,255,255,0.12)';
+        return sovToColor(pt.sov, 0.35);
+      },
+      borderColor: 'rgba(255,255,255,0.12)',
+      borderWidth: 0.5,
+    }
+  ];
+
+  new Chart(document.getElementById('scatterChart'), {
+    type: 'bubble',
+    data: { datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 10, right: 16, bottom: 10, left: 20 } },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#111122',
+          borderColor: 'rgba(255,255,255,0.15)',
+          borderWidth: 1,
+          padding: 12,
+          callbacks: {
+            title: items => {
+              const d = items[0].raw;
+              return `${d.date} · ${d.dayName}`;
+            },
+            label: item => {
+              const d = item.raw;
+              return [
+                `  Acquisitions: ${d.y}`,
+                `  SOV: $${d.sov.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+                `  Leads / Shift: ${d.x.toFixed(1)}`,
+                `  Total Leads: ${d.leads}`,
+                `  Rep Shifts: ${d.shift.toFixed(1)}`,
+                `  Contacted: ${(d.cont * 100).toFixed(1)}%`,
+              ];
+            },
+          },
+        },
+        annotation: {
+          annotations: {
+            optZoneBox: {
+              type: 'box',
+              xMin: 19.2, xMax: 28.5,
+              yMin: 0, yMax: 40,
+              backgroundColor: 'rgba(10,132,255,0.04)',
+              borderColor: 'rgba(10,132,255,0.25)',
+              borderWidth: 1,
+              borderDash: [4, 3],
+              label: {
+                display: true,
+                content: '◈ OPTIMAL ZONE',
+                position: { x: 'center', y: 'start' },
+                color: 'rgba(10,132,255,0.6)',
+                font: { size: 10, weight: '600', family: 'Inter' },
+                padding: 4,
+              }
+            },
+            ratioLine: {
+              type: 'line',
+              xMin: 35, xMax: 35,
+              borderColor: 'rgba(255,69,58,0.3)',
+              borderWidth: 1,
+              borderDash: [3, 3],
+              label: {
+                display: true,
+                content: 'Ceiling 35',
+                position: 'start',
+                color: 'rgba(255,69,58,0.6)',
+                font: { size: 9, weight: '600' },
+              }
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'Leads / Rep Shift Ratio', color: 'rgba(245,245,247,0.4)', font: { size: 11, weight: '500' }, padding: { top: 6 } },
+          grid: { color: gridColor },
+          border: { color: 'transparent' },
+          min: 0, max: 60,
+          ticks: { stepSize: 5 },
+        },
+        y: {
+          title: { display: true, text: 'Daily Acquisitions', color: 'rgba(245,245,247,0.4)', font: { size: 11, weight: '500' }, padding: { bottom: 6 } },
+          grid: { color: gridColor },
+          border: { color: 'transparent' },
+          min: 0, max: 40,
+        }
+      }
+    }
+  });
+})();
+
+// ─── Ratio Bins Chart ────────────────────────────────────
+(function buildRatioBins() {
+  const bins = D.ratioBinData;
+  const labels = bins.map(b => b.bin);
+  const acqData = bins.map(b => b.avgAcq);
+  const contData = bins.map(b => +(b.avgContactedRatio * 100).toFixed(2));
+
+  new Chart(document.getElementById('ratioBinsChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Avg Acquisitions',
+          data: acqData,
+          backgroundColor: labels.map(l => (['15-20','20-25','25-30','30-35'].includes(l) ? 'rgba(10,132,255,0.75)' : 'rgba(10,132,255,0.3)')),
+          borderRadius: 6, borderSkipped: false,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Contacted % (right)',
+          data: contData,
+          type: 'line',
+          borderColor: '#ffd60a',
+          backgroundColor: 'transparent',
+          pointBackgroundColor: '#ffd60a',
+          pointRadius: 4,
+          tension: 0.3,
+          yAxisID: 'y2',
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { right: 8 } },
+      plugins: { legend: { display: false }, tooltip: { backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 } },
+      scales: {
+        x: { grid: { display: false }, border: { display: false } },
+        y: { title: { display: true, text: 'Avg Acq', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 0 },
+        y2: { position: 'right', title: { display: true, text: 'Contacted %', font: { size: 10 } }, grid: { display: false }, border: { display: false }, min: 30, max: 55 }
+      }
+    }
+  });
+
+  const sovData = bins.map(b => +b.avgSOV.toFixed(0));
+  new Chart(document.getElementById('ratioBinsSOVChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: sovData,
+        backgroundColor: labels.map(l => (['15-20','20-25','25-30'].includes(l) ? 'rgba(191,90,242,0.7)' : 'rgba(191,90,242,0.25)')),
+        borderRadius: 6, borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: i => `SOV: $${i.raw.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 } },
+      scales: {
+        x: { grid: { display: false }, border: { display: false } },
+        y: { grid: { color: gridColor }, border: { display: false }, min: 0, ticks: { callback: v => '$' + (v/1000).toFixed(0) + 'k' } }
+      }
+    }
+  });
+})();
+
+// ─── Monthly Trend Chart ─────────────────────────────────
+(function buildTrend() {
+  const months = D.monthlyData;
+  const labels = months.map(m => m.month);
+  const acqData = months.map(m => +m.avgAcq.toFixed(2));
+  const ratioData = months.map(m => +m.avgLeadsPerShift.toFixed(2));
+
+  new Chart(document.getElementById('trendChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Avg Acquisitions/Day',
+          data: acqData,
+          borderColor: '#30d158',
+          backgroundColor: 'rgba(48,209,88,0.08)',
+          fill: true,
+          tension: 0.4,
+          pointRadius: 3,
+          pointBackgroundColor: '#30d158',
+          yAxisID: 'y',
+        },
+        {
+          label: 'Avg L/S Ratio',
+          data: ratioData,
+          borderColor: '#ffd60a',
+          backgroundColor: 'transparent',
+          borderDash: [4, 2],
+          tension: 0.4,
+          pointRadius: 2,
+          pointBackgroundColor: '#ffd60a',
+          yAxisID: 'y2',
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: true, labels: { boxWidth: 10, font: { size: 10 } } }, tooltip: { backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 } },
+      scales: {
+        x: { grid: { display: false }, border: { display: false }, ticks: { maxTicksLimit: 12 } },
+        y: { title: { display: true, text: 'Avg Acq', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 0 },
+        y2: { position: 'right', title: { display: true, text: 'L/S Ratio', font: { size: 10 } }, grid: { display: false }, border: { display: false }, min: 15, max: 45 }
+      }
+    }
+  });
+})();
+
+// ─── Top Days Table ──────────────────────────────────────
+(function buildTable() {
+  const body = document.getElementById('topDaysBody');
+  D.topDays.forEach((d, i) => {
+    const tr = document.createElement('tr');
+    if (d.isWeekend) tr.classList.add('weekend-row');
+    const isOptimal = D.scatterData.find(s => s.date === d.date && s.optimalZone);
+    tr.innerHTML = `
+      <td style="color:var(--text-tertiary);font-family:'JetBrains Mono',monospace">${String(i+1).padStart(2,'0')}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:${isOptimal?'var(--blue)':'var(--text-primary)'}">${d.date}${isOptimal?' ●':''}</td>
+      <td style="color:${d.isWeekend?'var(--gold)':'var(--text-secondary)'}">${d.dayName}</td>
+      <td>${d.totalLeads.toLocaleString()}</td>
+      <td>${d.totalShift.toFixed(1)}</td>
+      <td style="font-family:'JetBrains Mono',monospace;color:${d.leadsPerShift>=19.2&&d.leadsPerShift<=28.5?'var(--green)':d.leadsPerShift>35?'var(--red)':'var(--text-secondary)'}">${d.leadsPerShift.toFixed(1)}</td>
+      <td style="font-weight:700;color:var(--text-primary)">${d.totalAcquisitions}</td>
+      <td>$${d.totalSOV.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')}</td>
+      <td style="color:${d.contactedRatio>=0.5?'var(--green)':'var(--text-secondary)'}">${(d.contactedRatio*100).toFixed(1)}%</td>
+    `;
+    body.appendChild(tr);
+  });
+})();
+
+// ─── WEEKEND PANELS ──────────────────────────────────────
+function buildWkdPanel(containerId, data, color, compareData) {
+  const metrics = [
+    { label: 'Avg Leads/Day', val: data.avgLeads, fmt: v => v.toFixed(0), cmp: compareData?.avgLeads },
+    { label: 'Avg Shifts/Day', val: data.avgShift, fmt: v => v.toFixed(1), cmp: compareData?.avgShift },
+    { label: 'Acquisitions/Day', val: data.avgAcq, fmt: v => v.toFixed(1), cmp: compareData?.avgAcq },
+    { label: 'SOV/Day', val: data.avgSOV, fmt: v => '$' + (v/1000).toFixed(1) + 'k', cmp: compareData?.avgSOV },
+    { label: 'Contacted Ratio', val: data.avgContactedRatio, fmt: v => (v*100).toFixed(1) + '%', cmp: compareData?.avgContactedRatio },
+    { label: 'Leads / Shift', val: data.avgLeadsPerShift, fmt: v => v.toFixed(1), cmp: compareData?.avgLeadsPerShift },
+  ];
+  const container = document.getElementById(containerId);
+  metrics.forEach(m => {
+    let diffHtml = '';
+    if (m.cmp !== undefined) {
+      const pct = ((m.val - m.cmp) / m.cmp * 100);
+      const cls = pct >= 0 ? 'diff-up' : 'diff-down';
+      diffHtml = `<div class="wkd-metric-diff ${cls}">${pct>=0?'+':''}${pct.toFixed(1)}% vs other</div>`;
+    }
+    container.innerHTML += `<div class="wkd-metric">
+      <div class="wkd-metric-label">${m.label}</div>
+      <div class="wkd-metric-val" style="color:${color}">${m.fmt(m.val)}</div>
+      ${diffHtml}
+    </div>`;
+  });
+}
+
+const wkdData = {
+  avgLeads: D.kpis.weekdayAvgLeads,
+  avgShift: D.kpis.weekdayAvgShift,
+  avgAcq: D.kpis.weekdayAvgAcq,
+  avgSOV: D.kpis.weekdayAvgSOV,
+  avgContactedRatio: D.kpis.weekdayAvgContactedRatio,
+  avgLeadsPerShift: D.kpis.weekdayAvgLeadsPerShift,
+};
+const wkendData = {
+  avgLeads: D.kpis.weekendAvgLeads,
+  avgShift: D.kpis.weekendAvgShift,
+  avgAcq: D.kpis.weekendAvgAcq,
+  avgSOV: D.kpis.weekendAvgSOV,
+  avgContactedRatio: D.kpis.weekendAvgContactedRatio,
+  avgLeadsPerShift: D.kpis.weekendAvgLeadsPerShift,
+};
+buildWkdPanel('weekdayMetrics', wkdData, 'var(--blue)', wkendData);
+buildWkdPanel('weekendMetrics', wkendData, 'var(--gold)', wkdData);
+
+// ─── Day of Week Charts ──────────────────────────────────
+const DOW = D.dowData;
+const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const isWkend = d => ['Saturday','Sunday'].includes(d);
+
+const dowColors = days.map(d => isWkend(d) ? 'rgba(255,214,10,0.75)' : 'rgba(10,132,255,0.72)');
+const dowColorsBorder = days.map(d => isWkend(d) ? '#ffd60a' : '#0a84ff');
+
+function buildDOWChart(id, valKey, fmt, yLabel, yMin) {
+  const vals = days.map(d => +DOW[d][valKey].toFixed(2));
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: {
+      labels: days.map(d => d.slice(0,3)),
+      datasets: [{
+        data: vals,
+        backgroundColor: dowColors,
+        borderColor: dowColorsBorder,
+        borderWidth: 1,
+        borderRadius: 8,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: i => fmt(i.raw) }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
+        annotation: {
+          annotations: {
+            avgLine: {
+              type: 'line',
+              yMin: D.kpis.avgAcqPerDay, yMax: D.kpis.avgAcqPerDay,
+              borderColor: 'rgba(255,255,255,0.3)',
+              borderDash: [4, 3],
+              borderWidth: 1,
+              label: { display: id === 'dowAcqChart', content: 'Overall Avg', position: 'end', color: 'rgba(255,255,255,0.4)', font: { size: 9 } }
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, border: { display: false } },
+        y: { title: { display: true, text: yLabel, font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: yMin }
+      }
+    }
+  });
+}
+
+buildDOWChart('dowAcqChart', 'avgAcq', v => `${v.toFixed(1)} acq/day`, 'Avg Acq', 0);
+buildDOWChart('dowSOVChart', 'avgSOV', v => '$' + v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,','), 'Avg SOV', 0);
+
+// Contacted ratio chart
+new Chart(document.getElementById('dowContactedChart'), {
+  type: 'bar',
+  data: {
+    labels: days.map(d => d.slice(0,3)),
+    datasets: [{
+      data: days.map(d => +(DOW[d].avgContactedRatio * 100).toFixed(2)),
+      backgroundColor: dowColors,
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: i => `${i.raw.toFixed(1)}% contacted` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
+      annotation: {
+        annotations: {
+          optLine: { type: 'line', yMin: 50, yMax: 50, borderColor: 'rgba(48,209,88,0.4)', borderDash: [4,3], borderWidth: 1, label: { display: true, content: 'Optimal ≥50%', position: 'end', color: 'rgba(48,209,88,0.5)', font: { size: 9 } } }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, border: { display: false } },
+      y: { title: { display: true, text: 'Contacted %', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 30, max: 60 }
+    }
+  }
+});
+
+// L/S Ratio chart
+new Chart(document.getElementById('dowRatioChart'), {
+  type: 'bar',
+  data: {
+    labels: days.map(d => d.slice(0,3)),
+    datasets: [{
+      data: days.map(d => +DOW[d].avgLeadsPerShift.toFixed(2)),
+      backgroundColor: days.map(d => {
+        const r = DOW[d].avgLeadsPerShift;
+        if (r >= 19.2 && r <= 28.5) return 'rgba(48,209,88,0.7)';
+        if (r > 35) return 'rgba(255,69,58,0.7)';
+        return 'rgba(255,159,10,0.7)';
+      }),
+      borderRadius: 6,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: i => `L/S Ratio: ${i.raw.toFixed(1)}` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
+      annotation: {
+        annotations: {
+          minLine: { type: 'line', yMin: 19.2, yMax: 19.2, borderColor: 'rgba(48,209,88,0.4)', borderDash: [3,3], borderWidth: 1 },
+          maxLine: { type: 'line', yMin: 28.5, yMax: 28.5, borderColor: 'rgba(48,209,88,0.4)', borderDash: [3,3], borderWidth: 1, label: { display: true, content: 'Optimal 19.2–28.5', position: 'center', color: 'rgba(48,209,88,0.5)', font: { size: 9 } } },
+          ceilLine: { type: 'line', yMin: 35, yMax: 35, borderColor: 'rgba(255,69,58,0.4)', borderDash: [3,3], borderWidth: 1, label: { display: true, content: 'Ceiling 35', position: 'end', color: 'rgba(255,69,58,0.5)', font: { size: 9 } } }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, border: { display: false } },
+      y: { title: { display: true, text: 'L/S Ratio', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 15, max: 40 }
+    }
+  }
+});
+
+// ─── Compare Bar Chart ───────────────────────────────────
+(function buildCompare() {
+  const metrics = ['Avg Leads', 'Avg Shifts', 'Avg Acq', 'Avg SOV ($k)', 'Contacted %', 'L/S Ratio'];
+  const wkdRaw   = [wkdData.avgLeads, wkdData.avgShift, wkdData.avgAcq, wkdData.avgSOV/1000, wkdData.avgContactedRatio*100, wkdData.avgLeadsPerShift];
+  const wkendRaw = [wkendData.avgLeads, wkendData.avgShift, wkendData.avgAcq, wkendData.avgSOV/1000, wkendData.avgContactedRatio*100, wkendData.avgLeadsPerShift];
+  const wkdIdx   = wkdRaw.map(_ => 100);
+  const wkendIdx = wkdRaw.map((v,i) => +(wkendRaw[i]/v*100).toFixed(1));
+
+  new Chart(document.getElementById('compareBarChart'), {
+    type: 'bar',
+    data: {
+      labels: metrics,
+      datasets: [
+        { label: 'Weekdays (baseline 100)', data: wkdIdx, backgroundColor: 'rgba(10,132,255,0.65)', borderRadius: 5, borderSkipped: false },
+        { label: 'Weekends (indexed)', data: wkendIdx, backgroundColor: 'rgba(255,214,10,0.65)', borderRadius: 5, borderSkipped: false },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { boxWidth: 10, font: { size: 10 } } },
+        tooltip: { callbacks: { label: i => `${i.dataset.label}: ${i.raw.toFixed(1)} index` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
+        annotation: {
+          annotations: {
+            baseline: { type: 'line', yMin: 100, yMax: 100, borderColor: 'rgba(255,255,255,0.2)', borderDash: [4,3], borderWidth: 1 }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, border: { display: false } },
+        y: { title: { display: true, text: 'Index (Weekday = 100)', font: { size: 10 } }, grid: { color: gridColor }, border: { display: false }, min: 0, max: 140 }
+      }
+    }
+  });
+})();
+
+// ─── Optimal Pie Chart ───────────────────────────────────
+new Chart(document.getElementById('optimalPieChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Weekday Optimal (97)', 'Weekend Optimal (4)'],
+    datasets: [{
+      data: [97, 4],
+      backgroundColor: ['rgba(10,132,255,0.8)', 'rgba(255,214,10,0.8)'],
+      borderColor: ['#0a84ff', '#ffd60a'],
+      borderWidth: 1.5,
+      hoverOffset: 8,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '72%',
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 10, padding: 14, font: { size: 11 } } },
+      tooltip: { callbacks: { label: i => `${i.label}: ${i.raw} days (${(i.raw/101*100).toFixed(1)}%)` }, backgroundColor: '#111122', borderColor: 'rgba(255,255,255,0.15)', borderWidth: 1 },
+    }
+  }
+});
+</script>
+</body>
+</html>
