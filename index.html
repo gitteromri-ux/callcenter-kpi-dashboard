@@ -518,7 +518,8 @@ tbody tr:last-child td{border-bottom:none}
       <div class="sh"><div class="sh-left"><div class="title">Leads/Shift Bands — Acquisitions &amp; Contacted</div></div></div>
       <div style="height:190px"><canvas id="ratioBinsAcqChart"></canvas></div>
       <div class="divider"></div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:10px">Avg SOV by Ratio Band</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:2px">Avg Revenue by Ratio Band</div>
+      <div style="font-size:10px;color:rgba(245,245,247,.4);margin-bottom:8px">Purple = efficiency optimal · Gold = high revenue, low contacted rate (43%)</div>
       <div style="height:155px"><canvas id="ratioBinsSOVChart2"></canvas></div>
     </div>
   </div>
@@ -990,9 +991,15 @@ new Chart(document.getElementById('contactRateSegChart'),{
   });
   new Chart(document.getElementById('ratioBinsSOVChart2'),{
     type:'bar',
-    data:{labels:bins.map(b=>b.bin),datasets:[{data:bins.map(b=>+b.avgRevenue.toFixed(0)),backgroundColor:bins.map(b=>['15-20','20-25','25-30'].includes(b.bin)?'rgba(191,90,242,.7)':'rgba(191,90,242,.25)'),borderRadius:5,borderSkipped:false}]},
+    data:{labels:bins.map(b=>b.bin),datasets:[{data:bins.map(b=>+b.avgRevenue.toFixed(0)),
+      backgroundColor:bins.map(b=>{
+        if(['15-20','20-25','25-30'].includes(b.bin)) return 'rgba(191,90,242,.75)'; // efficiency optimal
+        if(b.bin==='30-35') return 'rgba(255,214,10,.65)'; // high revenue, low efficiency (gold warning)
+        return 'rgba(191,90,242,.2)'; // outside zone
+      }),
+      borderRadius:5,borderSkipped:false}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`Revenue: ${fmt$(i.raw)}`}}},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`Revenue: ${fmt$(i.raw)}${['<15','25-30','20-25','15-20'].includes(bins[i.dataIndex]?.bin)?'':i.dataIndex===4?' ⚠ contacted 43%':''}`}}},
       scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}}}}
   });
 })();
