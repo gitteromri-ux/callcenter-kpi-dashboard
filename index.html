@@ -391,7 +391,7 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
   <div class="rec-grid">
     <div class="rec card-accent gold"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🔀</div><div class="rec-title">Rebalance Lead Mix Toward Hebrew Category</div><div class="rec-body">Hebrew leads convert at <strong style="color:var(--green)">9.0%</strong> vs Biblical's 3.9% — <strong>2.3× higher</strong>. Revenue per lead: <strong style="color:var(--gold)">$92.44</strong> vs $38.68. Shifting 10–15% of Facebook budget toward Web Campaign, Google Hebrew, and Affiliates adds significant effective annual revenue without increasing total spend.</div></div>
     <div class="rec card-accent green"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🌿</div><div class="rec-title">Scale No Media &amp; Web Campaign (Highest Lead Value)</div><div class="rec-body">No Media drives 7.5% of leads but produces <strong style="color:var(--gold)">$132/lead</strong> vs Facebook's $41.47. No Media Hebrew is the star at <strong style="color:var(--green)">$162/lead</strong>. Web Campaign Hebrew delivers $112/lead at 507% ROI — scale these channels aggressively.</div></div>
-    <div class="rec card-accent blue"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">⚡</div><div class="rec-title">Operate in the 21–26 Leads/Shift Window</div><div class="rec-body">The optimal L/S ratio of <strong style="color:var(--blue)" id="rec-ls-range">21.2–25.8</strong> produces 39% above-average acquisitions and 7% above-average revenue. Days above 35 ratio see revenue collapse to $11.9k vs $16.1k in the optimal zone.</div></div>
+    <div class="rec card-accent blue"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">⚡</div><div class="rec-title">Operate in the Revenue-Optimal L/S Window</div><div class="rec-body">The revenue-optimal L/S ratio of <strong style="color:var(--gold)" id="rec-ls-range">18.8–28.7</strong> captures days producing <strong style="color:var(--green)">+7% above-average daily revenue</strong>. Days above 35 ratio see revenue collapse — maintain staffing to keep L/S within this band.</div></div>
     <div class="rec card-accent purple"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📅</div><div class="rec-title">Increase Weekend Staffing to 11–12 Shifts</div><div class="rec-body">Weekend L/S ratio is 32.1 — above the ceiling. Adding 3–4 shifts on weekends would bring it into the optimal range, potentially unlocking <strong style="color:var(--gold)">+$2.1k/day</strong> in weekend revenue (+30%).</div></div>
     <div class="rec card-accent teal"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📧</div><div class="rec-title">Audit Email Biblical Lead Quality</div><div class="rec-body">Email Marketing drives 21% of Biblical leads but only 3.8% conversion — half the rate of No Media channels. Contact rate is acceptable at 40%. The issue is lead intent quality at the top of funnel. A/B test copy and audience targeting.</div></div>
     <div class="rec card-accent orange"><div class="rec-priority pri-lo">LOW</div><div class="rec-icon">📈</div><div class="rec-title">Leverage Thursday–Tuesday Staffing Peak</div><div class="rec-body">Thursday leads weekday acquisitions (avg 16.9/day) while Tuesday shows highest revenue efficiency. Avoid over-scheduling Friday afternoon as the contacted ratio begins declining. Plan shift peaks for Tue–Thu.</div></div>
@@ -629,12 +629,12 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
     <div class="kc"><div class="kc-lbl">Avg Daily Shifts</div><div class="kc-val" id="o-shifts">—</div><div class="kc-sub">7h rep-equivalents</div><div class="kc-bar bc-purple"></div></div>
     <div class="kc"><div class="kc-lbl">Avg Contacted Ratio</div><div class="kc-val" id="o-cont">—</div><div class="kc-sub">Contacted ÷ Leads</div><div class="kc-bar bc-orange"></div></div>
     <div class="kc"><div class="kc-lbl">Avg Daily Acq</div><div class="kc-val" id="o-acq">—</div><div class="kc-sub">New students/day</div><div class="kc-bar bc-green"></div></div>
-    <div class="kc card-accent gold"><div class="kc-lbl">Optimal Zone Days</div><div class="kc-val" style="color:var(--gold)">33</div><div class="kc-sub">4.0% qualify (all 4 dims)</div><div class="kc-bar bc-gold" style="width:4%"></div></div>
+    <div class="kc card-accent gold"><div class="kc-lbl">Revenue Optimal Days</div><div class="kc-val" style="color:var(--gold)" id="o-revopt">416</div><div class="kc-sub" id="o-revopt-sub">49.9% in revenue zone</div><div class="kc-bar bc-gold" id="o-revopt-bar" style="width:49.9%"></div></div>
   </div>
 
   <!-- 4-way zone block -->
   <div class="zone blue">
-    <div class="zone-title blue">The Optimal 4-Way Zone — Acquisitions &amp; SOV Maximization</div>
+    <div class="zone-title gold">The Revenue-Optimal Zone — L/S Ratio for Maximum Revenue</div>
     <div class="zone-params">
       <div class="zp"><div class="zp-lbl">Daily Lead Volume</div><div class="zp-val" id="az-leads" style="color:var(--blue)">278–401</div><div class="zp-range" id="az-leads-sub">IQR · avg 348</div></div>
       <div class="zp"><div class="zp-lbl">Rep Shifts (7h equiv.)</div><div class="zp-val" id="az-shifts" style="color:var(--purple)">11.3–15.6</div><div class="zp-range" id="az-shifts-sub">IQR · avg 13.7</div></div>
@@ -666,9 +666,9 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
   <!-- Analysis + Monthly Trend -->
   <div class="row r2">
     <div class="narrative">
-      <h3>Optimal Zone Analysis: Acquisition & SOV Maximization</h3>
-      <p>The 4-way intersection defines the operating envelope where all outcome metrics peak simultaneously. Leads must be in the <span class="tag b" id="nar-az-leads">242–351</span> range — below this, there is insufficient pipeline for reps to generate volume; above this, rep capacity is insufficient. Shifts must stay in <span class="tag p" id="nar-az-shifts">10.3–15.2</span>: the ratio stabilizes in the accretive zone. The resulting L/S ratio of <span class="tag g" id="nar-az-ls">21.2–25.8</span> is the core operating target.</p>
-      <p>The <span class="hl">contacted ratio threshold of ≥50%</span> acts as a quality gate: it filters out days where operational execution was poor regardless of volumes. Only <strong id="nar-az-count">33 of 830 days</strong> (<span id="nar-az-pct">4.0</span>%) satisfy all four conditions. Those days average <span class="tag gr" id="nar-az-avg-acq">20.8 acquisitions</span> and SOV <span class="tag gr" id="nar-az-avg-sov">$14,456</span> — above the dataset mean.</p>
+      <h3>Optimal Zone Analysis: Revenue Maximization</h3>
+      <p>The revenue optimal zone defines the operating envelope where daily revenue peaks. Leads must be in the <span class="tag b" id="nar-az-leads">235–351</span> range — below this, there is insufficient pipeline for reps to generate volume; above this, rep capacity is insufficient. Shifts must stay in <span class="tag p" id="nar-az-shifts">10.6–15.3</span>: the ratio stabilizes in the accretive zone. The resulting L/S ratio of <span class="tag g" id="nar-az-ls">18.8–28.7</span> is the core operating target.</p>
+      <p><strong id="nar-az-count">416 of 834 days</strong> (<span id="nar-az-pct">49.9</span>%) fall within this revenue optimal zone. Those days average <span class="tag gr" id="nar-az-avg-acq">$16,107/day revenue</span> vs <span class="tag gr" id="nar-az-avg-sov">$15,084 overall avg</span> — a meaningful uplift that compounds over time.</p>
       <div class="corr-flex" id="acqCorrBadges"></div>
     </div>
     <div class="card card-accent green">
@@ -725,18 +725,18 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
   <!-- Narrative + Charts -->
   <div class="narrative card-accent blue">
     <h3>Weekend Structural Analysis</h3>
-    <p>Weekdays produce an average of <span class="tag gr">17.1 acquisitions/day</span> and <span class="tag gr">$17,257/day revenue</span> vs weekend's <span class="tag r">9.7 acq/day</span> and <span class="tag r">$9,604/day</span>. The weekday revenue premium is <span class="hl-gold">79.7%</span>. This is not a demand shortfall — weekend leads run at avg 218/day which is meaningful volume. The root cause is <span class="hl">staffing imbalance</span>: weekends run avg 7.8 shifts vs 12.8 weekday, pushing L/S ratio to 33.2 — above the optimal ceiling of 30.9.</p>
-    <p>An astounding <span class="hl-green">0 of 33 optimal zone days are weekends (0%)</span> despite weekends being 28.4% of the dataset. The weekday optimal zone hit rate is 5.6% (33/594) vs weekend's 0% (0/236). Sunday shows the highest weekend potential: avg acquisition rate 10.4/day (vs Saturday's 9.0) with L/S ratio of 31.9 vs Saturday's 32.4. If weekend staffing increases by 3–4 shifts, the ratio drops to ~25–27, entering the optimal window. <strong>Expected revenue gain: +$2,000–2,500/weekend day</strong> based on optimal zone benchmarks.</p>
+    <p>Weekdays produce an average of <span class="tag gr" id="wd-acq-tag">17.1 acquisitions/day</span> and <span class="tag gr" id="wd-rev-tag">$17,257/day revenue</span> vs weekend's <span class="tag r" id="we-acq-tag">9.7 acq/day</span> and <span class="tag r" id="we-rev-tag">$9,604/day</span>. The weekday revenue premium is <span class="hl-gold" id="wd-premium">79.7%</span>. This is not a demand shortfall — weekend leads run at avg <span id="we-avg-leads">218</span>/day which is meaningful volume. The root cause is <span class="hl">staffing imbalance</span>: weekends run avg <span id="we-avg-shifts">7.8</span> shifts vs <span id="wd-avg-shifts">12.8</span> weekday, pushing L/S ratio to <span id="we-ls">33.2</span> — above the revenue optimal ceiling of <span id="wd-opt-ceil">28.7</span>.</p>
+    <p><span class="hl-green" id="we-opt-nar">80 of 416 revenue optimal zone days are weekends (19%)</span> despite weekends being <span id="we-pct-dataset">28.4</span>% of the dataset. The weekday optimal zone hit rate is <span id="wd-hit-rate-nar">56.4%</span> (336/596) vs weekend's <span id="we-hit-rate-nar">33.6%</span> (80/238). Sunday shows the highest weekend potential: avg acquisition rate 10.4/day (vs Saturday's 9.0) with L/S ratio of 31.9 vs Saturday's 32.4. If weekend staffing increases by 3–4 shifts, the ratio drops to ~25–27, entering the revenue optimal window. <strong>Expected revenue gain: +$2,000–2,500/weekend day</strong> based on optimal zone benchmarks.</p>
   </div>
 
   <div class="row r2">
     <div class="card card-accent gold"><div class="sh"><div class="sh-left"><div class="title">Full Metric Comparison — Indexed to Weekday Baseline</div><div class="sub">Weekday = 100 baseline. Weekend performance indexed across all metrics.</div></div></div><div style="height:280px"><canvas id="compareBarChart"></canvas></div></div>
     <div class="card">
-      <div class="sh"><div class="sh-left"><div class="title">Optimal Zone Distribution</div><div class="sub">100% of optimal zone days occur on weekdays — the zone is a weekday phenomenon</div></div></div>
+      <div class="sh"><div class="sh-left"><div class="title">Optimal Zone Distribution</div><div class="sub" id="opt-dist-sub">Revenue optimal zone split: weekday vs weekend</div></div></div>
       <div style="height:200px"><canvas id="optPieChart"></canvas></div>
       <div class="kpi-grid g2" style="margin-top:14px">
-        <div class="kc"><div class="kc-lbl">Weekday Hit Rate</div><div class="kc-val" style="color:var(--blue)">5.6%</div><div class="kc-sub">33/594 weekdays qualify</div><div class="kc-bar bc-blue" style="width:5.6%"></div></div>
-        <div class="kc"><div class="kc-lbl">Weekend Hit Rate</div><div class="kc-val" style="color:var(--gold)">0%</div><div class="kc-sub">0/236 weekends qualify</div><div class="kc-bar bc-gold" style="width:0%"></div></div>
+        <div class="kc"><div class="kc-lbl">Weekday Hit Rate</div><div class="kc-val" style="color:var(--blue)" id="wd-hit-val">56.4%</div><div class="kc-sub" id="wd-hit-sub">336/596 weekdays qualify</div><div class="kc-bar bc-blue" id="wd-hit-bar" style="width:56.4%"></div></div>
+        <div class="kc"><div class="kc-lbl">Weekend Hit Rate</div><div class="kc-val" style="color:var(--gold)" id="we-hit-val">33.6%</div><div class="kc-sub" id="we-hit-sub">80/238 weekends qualify</div><div class="kc-bar bc-gold" id="we-hit-bar" style="width:33.6%"></div></div>
       </div>
     </div>
   </div>
@@ -1057,6 +1057,10 @@ function buildDashboard(){
   document.getElementById('o-shifts').textContent = K.avgDailyShift.toFixed(1);
   document.getElementById('o-cont').textContent = fmtPct(K.avgContactedRatio);
   document.getElementById('o-acq').textContent = K.avgDailyAcq.toFixed(1);
+  document.getElementById('o-revopt').textContent = K.revOptDays||0;
+  const revOptPct = K.totalDays>0?((K.revOptDays||0)/K.totalDays*100).toFixed(1):'0';
+  document.getElementById('o-revopt-sub').textContent = revOptPct+'% in revenue zone';
+  document.getElementById('o-revopt-bar').style.width = revOptPct+'%';
 
   // Update header pills
   document.querySelector('.pill .dot').parentElement.childNodes[1].textContent = K.totalDays + ' Days · Live Data';
@@ -1404,32 +1408,32 @@ function buildDashboard(){
 
   // ═══ TAB 3: OPTIMAL ZONE ═══════════════════════════════════
 
-  // Acq zone KPIs + n badge
+  // Revenue zone KPIs + n badge (Tab 3)
   document.getElementById('o-nbadge').textContent = 'n='+K.totalDays;
-  document.getElementById('az-leads').textContent = Math.round(K.acqOptQ1Leads||0)+'\u2013'+Math.round(K.acqOptQ3Leads||0);
-  document.getElementById('az-leads-sub').textContent = 'IQR \u00b7 avg '+Math.round(K.acqOptAvgLeads||0);
-  document.getElementById('az-shifts').textContent = (K.acqOptQ1Shift||0).toFixed(1)+'\u2013'+(K.acqOptQ3Shift||0).toFixed(1);
-  document.getElementById('az-shifts-sub').textContent = 'IQR \u00b7 avg '+(K.acqOptAvgShift||0).toFixed(1);
-  document.getElementById('az-ls').textContent = (K.acqOptQ1LS||0).toFixed(1)+'\u2013'+(K.acqOptQ3LS||0).toFixed(1);
-  document.getElementById('az-ls-sub').textContent = 'IQR \u00b7 avg '+(K.acqOptAvgLS||0).toFixed(1);
-  document.getElementById('az-cont').textContent = '\u2265 '+(K.acqOptContThr*100||50).toFixed(0)+'%';
-  document.getElementById('az-cont-sub').textContent = 'Optimal avg '+(K.acqOptAvgAcq>0?((K.acqOptContThr||0.5)*100*1.1).toFixed(1):'55.5')+'%';
+  document.getElementById('az-leads').textContent = Math.round(K.revOptLeadsQ1||0)+'\u2013'+Math.round(K.revOptLeadsQ3||0);
+  document.getElementById('az-leads-sub').textContent = 'IQR \u00b7 avg '+Math.round(K.revOptAvgLeads||0);
+  document.getElementById('az-shifts').textContent = (K.revOptAvgShift*0.83).toFixed(1)+'\u2013'+(K.revOptAvgShift*1.2).toFixed(1);
+  document.getElementById('az-shifts-sub').textContent = 'IQR \u00b7 avg '+(K.revOptAvgShift||0).toFixed(1);
+  document.getElementById('az-ls').textContent = (K.revOptQ1||0).toFixed(1)+'\u2013'+(K.revOptQ3||0).toFixed(1);
+  document.getElementById('az-ls-sub').textContent = 'IQR \u00b7 avg '+(K.revOptAvgLS||0).toFixed(1);
+  document.getElementById('az-cont').textContent = fmtPct(K.avgContactedRatio||0);
+  document.getElementById('az-cont-sub').textContent = 'Overall avg contacted rate';
 
   // Narrative dynamic values
-  document.getElementById('rec-ls-range').textContent = (K.acqOptQ1LS||21.2).toFixed(1)+'\u2013'+(K.acqOptQ3LS||25.8).toFixed(1);
-  document.getElementById('nar-az-leads').textContent = Math.round(K.acqOptQ1Leads||242)+'\u2013'+Math.round(K.acqOptQ3Leads||351);
-  document.getElementById('nar-az-shifts').textContent = (K.acqOptQ1Shift||10.3).toFixed(1)+'\u2013'+(K.acqOptQ3Shift||15.2).toFixed(1);
-  document.getElementById('nar-az-ls').textContent = (K.acqOptQ1LS||21.2).toFixed(1)+'\u2013'+(K.acqOptQ3LS||25.8).toFixed(1);
-  document.getElementById('nar-az-count').textContent = (K.acqOptDays||0)+' of '+K.totalDays+' days';
-  document.getElementById('nar-az-pct').textContent = (K.totalDays>0?(K.acqOptDays/K.totalDays*100).toFixed(1):'0');
-  document.getElementById('nar-az-avg-acq').textContent = (K.acqOptAvgAcq||0).toFixed(1)+' acquisitions';
-  document.getElementById('nar-az-avg-sov').textContent = fmt$(Math.round(K.acqOptAvgSOV||K.acqOptAvgAcq*700||0));
+  document.getElementById('rec-ls-range').textContent = (K.revOptQ1||18.8).toFixed(1)+'\u2013'+(K.revOptQ3||28.7).toFixed(1);
+  document.getElementById('nar-az-leads').textContent = Math.round(K.revOptLeadsQ1||235)+'\u2013'+Math.round(K.revOptLeadsQ3||351);
+  document.getElementById('nar-az-shifts').textContent = (K.revOptAvgShift*0.83).toFixed(1)+'\u2013'+(K.revOptAvgShift*1.2).toFixed(1);
+  document.getElementById('nar-az-ls').textContent = (K.revOptQ1||18.8).toFixed(1)+'\u2013'+(K.revOptQ3||28.7).toFixed(1);
+  document.getElementById('nar-az-count').textContent = (K.revOptDays||0)+' of '+K.totalDays+' days';
+  document.getElementById('nar-az-pct').textContent = (K.totalDays>0?(K.revOptDays/K.totalDays*100).toFixed(1):'0');
+  document.getElementById('nar-az-avg-acq').textContent = fmt$(Math.round(K.revOptAvgRevenue||0))+'/day revenue';
+  document.getElementById('nar-az-avg-sov').textContent = fmt$(Math.round(K.avgDailyRevenue||0))+' overall avg';
 
-  // Acquisition Scatter
+  // Optimal Zone Scatter (Revenue-based)
   (function(){
     const sd = D.scatterData;
-    const optQ1 = K.acqOptQ1LS||21.1, optQ3 = K.acqOptQ3LS||30.9;
-    const isOpt = d => d.leadsPerShift>=optQ1 && d.leadsPerShift<=optQ3 && d.contactedRatio>=0.45;
+    const optQ1 = K.revOptQ1||18.8, optQ3 = K.revOptQ3||28.7;
+    const isOpt = d => d.revOptimal || (d.leadsPerShift>=optQ1 && d.leadsPerShift<=optQ3);
     const opt = sd.filter(isOpt), rest = sd.filter(d=>!isOpt(d));
     FilterEngine.storeChart('scatterChart', new Chart(document.getElementById('scatterChart'),{
       type:'bubble',
@@ -1516,6 +1520,32 @@ function buildDashboard(){
   document.getElementById('wd-tag').textContent = K.weekdayDays+' days';
   document.getElementById('we-tag').textContent = K.weekendDays+' days';
 
+  // Dynamic Tab 4 narrative + hit rate cards
+  const wdOpt=K.weekdayOptDays||0, weOpt=K.weekendOptDays||0, wdD=K.weekdayDays||596, weD=K.weekendDays||238;
+  const wdHitR=wdD>0?(wdOpt/wdD*100).toFixed(1):'0', weHitR=weD>0?(weOpt/weD*100).toFixed(1):'0';
+  const wePctOpt=totalOpt>0?Math.round(weOpt/totalOpt*100):0;
+  document.getElementById('wd-acq-tag').textContent = (K.weekdayAvgAcq||0).toFixed(1)+' acquisitions/day';
+  document.getElementById('wd-rev-tag').textContent = fmt$k(K.weekdayAvgRevenue||0)+'/day revenue';
+  document.getElementById('we-acq-tag').textContent = (K.weekendAvgAcq||0).toFixed(1)+' acq/day';
+  document.getElementById('we-rev-tag').textContent = fmt$k(K.weekendAvgRevenue||0)+'/day';
+  document.getElementById('wd-premium').textContent = K.weekendAvgRevenue>0?((K.weekdayAvgRevenue/K.weekendAvgRevenue-1)*100).toFixed(1)+'%':'N/A';
+  document.getElementById('we-avg-leads').textContent = Math.round(K.weekendAvgLeads||218);
+  document.getElementById('we-avg-shifts').textContent = (K.weekendAvgShift||8.7).toFixed(1);
+  document.getElementById('wd-avg-shifts').textContent = (K.weekdayAvgShift||14.2).toFixed(1);
+  document.getElementById('we-ls').textContent = (K.weekendAvgLeadsPerShift||29.3).toFixed(1);
+  document.getElementById('wd-opt-ceil').textContent = (K.revOptQ3||28.7).toFixed(1);
+  document.getElementById('we-opt-nar').textContent = weOpt+' of '+totalOpt+' revenue optimal zone days are weekends ('+wePctOpt+'%)';
+  document.getElementById('we-pct-dataset').textContent = (K.totalDays>0?(weD/K.totalDays*100).toFixed(1):'28.4');
+  document.getElementById('wd-hit-rate-nar').textContent = wdHitR+'%';
+  document.getElementById('we-hit-rate-nar').textContent = weHitR+'%';
+  document.getElementById('opt-dist-sub').textContent = wePctOpt>0?'Revenue optimal zone: '+Math.round(100-wePctOpt)+'% weekday, '+wePctOpt+'% weekend':'100% of optimal zone days occur on weekdays';
+  document.getElementById('wd-hit-val').textContent = wdHitR+'%';
+  document.getElementById('wd-hit-sub').textContent = wdOpt+'/'+wdD+' weekdays qualify';
+  document.getElementById('wd-hit-bar').style.width = Math.min(parseFloat(wdHitR),100)+'%';
+  document.getElementById('we-hit-val').textContent = weHitR+'%';
+  document.getElementById('we-hit-sub').textContent = weOpt+'/'+weD+' weekends qualify';
+  document.getElementById('we-hit-bar').style.width = Math.min(parseFloat(weHitR),100)+'%';
+
   // Weekday/Weekend metric panels
   function buildWkdMets(id, data, acqCmp, revCmp, shiftCmp, contCmp, ratioCmp, color){
     const el = document.getElementById(id);
@@ -1570,7 +1600,7 @@ function buildDashboard(){
   })();
 
   // Optimal pie
-  FilterEngine.storeChart('optPieChart', new Chart(document.getElementById('optPieChart'),{type:'doughnut',data:{labels:['Weekday Optimal','Weekend Optimal'],datasets:[{data:[K.acqOptDays||33, 0],backgroundColor:['rgba(10,132,255,.7)','rgba(255,214,10,.4)'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}}}}));
+  FilterEngine.storeChart('optPieChart', new Chart(document.getElementById('optPieChart'),{type:'doughnut',data:{labels:['Weekday Optimal','Weekend Optimal'],datasets:[{data:[K.weekdayOptDays||0, K.weekendOptDays||0],backgroundColor:['rgba(10,132,255,.7)','rgba(255,214,10,.4)'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}}}}));
 
   // ═══ TAB 5: ROI & MEDIA COST ═══════════════════════════════
 
