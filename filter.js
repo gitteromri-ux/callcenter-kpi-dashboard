@@ -76,9 +76,11 @@ const FilterEngine = (function(){
     const totalRev = sum(recs,RI), totalCost = sum(recs,MCI);
     const n = days.length;
 
-    // L/S IQR for optimal zone
-    const lsValues = days.filter(d=>d.leadsPerShift>0).map(d=>d.leadsPerShift).sort((a,b)=>a-b);
-    const q25 = percentile(lsValues, 25), q75 = percentile(lsValues, 75);
+    // Revenue optimal zone: IQR of L/S across top-25% revenue days
+    const nRevTop = Math.max(1, Math.floor(n*0.25));
+    const topRevDays = [...days].sort((a,b)=>b.rev-a.rev).slice(0,nRevTop);
+    const topRevLS = topRevDays.map(d=>d.leadsPerShift).sort((a,b)=>a-b);
+    const q25 = percentile(topRevLS, 25), q75 = percentile(topRevLS, 75);
 
     // Top 4% by acq for acq optimal
     const nOpt = Math.max(1, Math.floor(n*0.04));
