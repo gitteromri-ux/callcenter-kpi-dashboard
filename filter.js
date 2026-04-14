@@ -117,6 +117,7 @@ const FilterEngine = (function(){
       acqOptQ3Shift: acqOptDays.length>0?percentile(acqOptDays.map(d=>d.shift).sort((a,b)=>a-b),75):0,
       acqOptAvgShift: acqOptDays.length>0?mean(acqOptDays.map(d=>d.shift)):0,
       acqOptAvgLeads: acqOptDays.length>0?mean(acqOptDays.map(d=>d.leads)):0,
+      acqOptAvgSOV: acqOptDays.length>0?mean(acqOptDays.map(d=>d.rev)):0,
       acqOptContThr: topAcqDays.length>0?mean(topAcqDays.map(x=>x.contactedRatio))*0.9:0.45,
       weekdayOptDays: acqOptDays.filter(d=>!d.isWeekend).length,
       weekendOptDays: acqOptDays.filter(d=>d.isWeekend).length,
