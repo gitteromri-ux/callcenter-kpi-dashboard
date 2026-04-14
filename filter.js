@@ -63,7 +63,7 @@ const FilterEngine = (function(){
         isWeekend,
         pyDow,
         dayName: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][pyDow],
-        roi: d.cost>0 ? (d.rev-d.cost)/d.cost*100 : null,
+        roi: d.cost>0 ? d.rev/d.cost : null,
       });
     }
     days.sort((a,b) => a.dateIdx - b.dateIdx);
@@ -143,8 +143,7 @@ const FilterEngine = (function(){
       corrOrdersRev: correlation(days.map(d=>d.orders), days.map(d=>d.rev)),
       corrSOVAcq: 0, // Would need SOV field in daily agg
       // ROI
-      totalCost, overallROI: totalCost>0?(totalRev-totalCost)/totalCost*100:0,
-      overallROAS: totalCost>0?totalRev/totalCost:0,
+      totalCost, overallROI: totalCost>0?totalRev/totalCost:0,
       overallCPL: totalLeads>0?totalCost/totalLeads:0,
       overallCPA: totalAcq>0?totalCost/totalAcq:0,
     };
@@ -239,8 +238,7 @@ const FilterEngine = (function(){
       cpl: s.leads>0?round2(s.cost/s.leads):0,
       cpa: s.acq>0?Math.round(s.cost/s.acq):0,
       cvr: s.leads>0?round2(s.acq/s.leads*100):0,
-      roi: s.cost>0?round1((s.rev-s.cost)/s.cost*100):null,
-      roas: s.cost>0?round2(s.rev/s.cost):null,
+      roi: s.cost>0?round2(s.rev/s.cost):null,
       rpl: s.leads>0?round2(s.rev/s.leads):0,
       contactedRate: s.leads>0?round1(s.contacted/s.leads*100):0,
       totalImpressions: s.imp,
@@ -265,8 +263,7 @@ const FilterEngine = (function(){
       cpa: c.acq>0?Math.round(c.cost/c.acq):0,
       rpl: c.leads>0?round2(c.rev/c.leads):0,
       cvr: c.leads>0?round2(c.acq/c.leads*100):0,
-      roi: c.cost>0?round1((c.rev-c.cost)/c.cost*100):null,
-      roas: c.cost>0?round2(c.rev/c.cost):null,
+      roi: c.cost>0?round2(c.rev/c.cost):null,
       rpa: c.acq>0?Math.round(c.rev/c.acq):0,
       contactedRate: c.leads>0?round1(c.contacted/c.leads*100):0,
       totalImpressions: c.imp,
@@ -368,10 +365,8 @@ const FilterEngine = (function(){
       const heb = byCatMonth['Hebrew|'+m];
       return {
         month: m,
-        biblicalROI: bib&&bib.cost>0?round1((bib.rev-bib.cost)/bib.cost*100):null,
-        hebrewROI: heb&&heb.cost>0?round1((heb.rev-heb.cost)/heb.cost*100):null,
-        biblicalROAS: bib&&bib.cost>0?round2(bib.rev/bib.cost):null,
-        hebrewROAS: heb&&heb.cost>0?round2(heb.rev/heb.cost):null,
+        biblicalROI: bib&&bib.cost>0?round2(bib.rev/bib.cost):null,
+        hebrewROI: heb&&heb.cost>0?round2(heb.rev/heb.cost):null,
         biblicalCPL: bib&&bib.leads>0?round2(bib.cost/bib.leads):null,
         hebrewCPL: heb&&heb.leads>0?round2(heb.cost/heb.leads):null,
       };
@@ -383,8 +378,7 @@ const FilterEngine = (function(){
     const tr = sum(recs,RI), tc = sum(recs,MCI), tl = sum(recs,LI), ta = sum(recs,AI), ti = sum(recs,IMPI);
     return {
       totalRevenue: round2(tr), totalCost: round2(tc),
-      overallROI: tc>0?round1((tr-tc)/tc*100):0,
-      overallROAS: tc>0?round2(tr/tc):0,
+      overallROI: tc>0?round2(tr/tc):0,
       overallCPL: tl>0?round2(tc/tl):0,
       overallCPA: ta>0?Math.round(tc/ta):0,
       totalImpressions: ti,
@@ -408,7 +402,7 @@ const FilterEngine = (function(){
   function computeTopRoiDays(days, n=30){
     return days.filter(d=>d.cost>0).sort((a,b)=>(b.roi||0)-(a.roi||0)).slice(0,n).map(d=>({
       date: d.date, totalRevenue: round2(d.rev), totalCost: round2(d.cost),
-      roi: round1(d.roi), roas: d.cost>0?round2(d.rev/d.cost):0,
+      roi: d.roi!==null?round2(d.roi):0,
       totalLeads: d.leads, totalAcq: d.acq,
     }));
   }
@@ -417,8 +411,7 @@ const FilterEngine = (function(){
   function computeDailyRoiScatter(days){
     return days.map(d=>({
       date: d.date, totalRevenue: round2(d.rev), totalCost: round2(d.cost),
-      roi: d.roi!==null?round1(d.roi):null,
-      roas: d.cost>0?round2(d.rev/d.cost):null,
+      roi: d.roi!==null?round2(d.roi):null,
       totalLeads: d.leads, totalAcq: d.acq,
     }));
   }
