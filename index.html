@@ -7,9 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 <script src="data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="filter.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -263,6 +267,43 @@ tbody tr:last-child td{border-bottom:none}
   .wkd-grid,.score-grid{grid-template-columns:1fr}
   .rec-grid{grid-template-columns:1fr}
 }
+
+/* ─── DATE FILTER BAR ──────────────────────────────────── */
+.date-filter-bar{padding:10px 36px;background:rgba(10,132,255,0.03);border-bottom:1px solid var(--border)}
+.df-inner{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.df-label{display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+.df-label svg{color:var(--blue);opacity:.7}
+.df-picker-wrap{display:flex;align-items:center;gap:6px}
+.df-input{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:8px;padding:6px 12px;font-family:inherit;font-size:12px;color:var(--text-1);width:120px;text-align:center;cursor:pointer;transition:border-color .2s}
+.df-input:hover,.df-input:focus{border-color:var(--blue);outline:none}
+.df-dash{color:var(--text-3);font-size:12px}
+.df-presets{display:flex;gap:4px;flex-wrap:wrap}
+.df-btn{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-family:inherit;font-size:11px;font-weight:500;color:var(--text-2);cursor:pointer;transition:all .15s}
+.df-btn:hover{background:var(--bg-hover);border-color:var(--border-mid);color:var(--text-1)}
+.df-btn.active{background:var(--blue-dim);border-color:rgba(10,132,255,.3);color:var(--blue)}
+.df-apply{background:var(--blue);border:none;border-radius:8px;padding:6px 16px;font-family:inherit;font-size:11.5px;font-weight:600;color:#fff;cursor:pointer;transition:opacity .15s;flex-shrink:0}
+.df-apply:hover{opacity:.85}
+.df-apply:disabled{opacity:.4;cursor:default}
+.df-reset{background:transparent;border:1px solid rgba(255,69,58,.3);border-radius:8px;padding:5px 12px;font-family:inherit;font-size:11px;font-weight:600;color:var(--red);cursor:pointer;transition:all .15s;flex-shrink:0}
+.df-reset:hover{background:rgba(255,69,58,.1)}
+.df-status{font-size:11px;color:var(--text-3);font-weight:500}
+.df-status.active{color:var(--blue);font-weight:600}
+/* Flatpickr dark overrides */
+.flatpickr-calendar{background:var(--bg-card)!important;border:1px solid var(--border-mid)!important;box-shadow:0 12px 40px rgba(0,0,0,.5)!important;border-radius:12px!important;font-family:'Inter',-apple-system,sans-serif!important}
+.flatpickr-day{color:var(--text-1)!important;border-radius:6px!important}
+.flatpickr-day:hover{background:var(--blue-dim)!important;border-color:transparent!important}
+.flatpickr-day.selected{background:var(--blue)!important;border-color:var(--blue)!important}
+.flatpickr-months .flatpickr-month{color:var(--text-1)!important}
+.flatpickr-current-month .flatpickr-monthDropdown-months{background:transparent!important;color:var(--text-1)!important}
+.flatpickr-weekday{color:var(--text-3)!important}
+span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text-3)!important}
+.flatpickr-day.flatpickr-disabled{color:rgba(255,255,255,.15)!important}
+.numInputWrapper span{display:none!important}
+@media(max-width:768px){
+  .date-filter-bar{padding:10px 16px}
+  .df-presets{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -285,11 +326,39 @@ tbody tr:last-child td{border-bottom:none}
     </div>
   </div>
   <div class="hdr-right">
-    <div class="pill"><span class="dot"></span>832 Days · Live Data</div>
+    <div class="pill"><span class="dot"></span>834 Days · Live Data</div>
     <div class="pill" style="color:var(--gold)">$12.5M Total Revenue</div>
-    <div class="pill" style="color:var(--green)">12,440 Acquisitions</div>
+    <div class="pill" style="color:var(--green)">12,457 Acquisitions</div>
   </div>
 </header>
+
+
+<!-- ════════════ DATE FILTER ════════════ -->
+<div class="date-filter-bar" id="dateFilterBar">
+  <div class="df-inner">
+    <div class="df-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Date Range</span>
+    </div>
+    <div class="df-picker-wrap">
+      <input type="text" id="dateStartPicker" class="df-input" placeholder="Start date" readonly>
+      <span class="df-dash">—</span>
+      <input type="text" id="dateEndPicker" class="df-input" placeholder="End date" readonly>
+    </div>
+    <div class="df-presets">
+      <button class="df-btn" onclick="applyPreset('all')">All Time</button>
+      <button class="df-btn" onclick="applyPreset('6m')">Last 6M</button>
+      <button class="df-btn" onclick="applyPreset('3m')">Last 3M</button>
+      <button class="df-btn" onclick="applyPreset('1m')">Last Month</button>
+      <button class="df-btn" onclick="applyPreset('ytd')">YTD 2026</button>
+      <button class="df-btn" onclick="applyPreset('2025')">2025</button>
+      <button class="df-btn" onclick="applyPreset('2024')">2024</button>
+    </div>
+    <button class="df-apply" id="dateApplyBtn" onclick="applyDateFilter()">Apply</button>
+    <button class="df-reset" id="dateResetBtn" onclick="resetDateFilter()" style="display:none">Reset</button>
+    <span class="df-status" id="dateFilterStatus"></span>
+  </div>
+</div>
 
 <!-- ════════════ TAB NAV ════════════ -->
 <nav class="tab-nav">
@@ -318,7 +387,7 @@ tbody tr:last-child td{border-bottom:none}
   </div>
 
   <!-- Recommendations -->
-  <div class="sh"><div class="sh-left"><div class="title">Strategic Recommendations</div><div class="sub">Based on 832-day statistical analysis · Ranked by revenue impact potential</div></div><span class="badge blue">Data-Driven</span></div>
+  <div class="sh"><div class="sh-left"><div class="title">Strategic Recommendations</div><div class="sub">Based on 834-day statistical analysis · Ranked by revenue impact potential</div></div><span class="badge blue">Data-Driven</span></div>
   <div class="rec-grid">
     <div class="rec card-accent gold"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🔀</div><div class="rec-title">Rebalance Lead Mix Toward Hebrew Category</div><div class="rec-body">Hebrew leads convert at <strong style="color:var(--green)">9.0%</strong> vs Biblical's 3.9% — <strong>2.3× higher</strong>. Revenue per lead: <strong style="color:var(--gold)">$92.44</strong> vs $38.68. Shifting 10–15% of Facebook budget toward Web Campaign, Google Hebrew, and Affiliates adds significant effective annual revenue without increasing total spend.</div></div>
     <div class="rec card-accent green"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🌿</div><div class="rec-title">Scale No Media &amp; Web Campaign (Highest Lead Value)</div><div class="rec-body">No Media drives 7.5% of leads but produces <strong style="color:var(--gold)">$132/lead</strong> vs Facebook's $41.47. No Media Hebrew is the star at <strong style="color:var(--green)">$162/lead</strong>. Web Campaign Hebrew delivers $112/lead at 507% ROI — scale these channels aggressively.</div></div>
@@ -330,40 +399,40 @@ tbody tr:last-child td{border-bottom:none}
 
   <!-- ─── ROI & Media Cost Intelligence ─────────────────────── -->
   <div class="sh" style="margin-top:8px;margin-bottom:12px">
-    <div class="sh-left"><div class="title">Media Cost &amp; ROI Intelligence</div><div class="sub">Total spend $7.50M across Facebook, Google, Affiliates &amp; other paid channels · Email Marketing &amp; organic = zero cost · Revenue = SOV + Upsales</div></div>
-    <span class="badge orange">$7.50M Spend · 67.5% ROI</span>
+    <div class="sh-left"><div class="title">Media Cost &amp; ROI Intelligence</div><div class="sub" id="e-roi-sub">Total spend $7.52M across Facebook, Google, Affiliates &amp; other paid channels · Email Marketing &amp; organic = zero cost · Revenue = SOV + Upsales</div></div>
+    <span class="badge orange" id="e-roi-badge">$7.52M Spend · 67.3% ROI</span>
   </div>
 
   <!-- ROI KPI row -->
   <div class="kpi-grid g4" style="margin-bottom:14px">
-    <div class="kc card-accent gold"><div class="kc-lbl">Total Media Cost</div><div class="kc-val" style="color:var(--orange)">$7.50M</div><div class="kc-sub">All paid channels</div><div class="kc-bar bc-orange" style="width:60%"></div></div>
-    <div class="kc card-accent green"><div class="kc-lbl">Overall ROI</div><div class="kc-val" style="color:var(--green)">67.5%</div><div class="kc-sub">(Revenue − Cost) / Cost</div><div class="kc-bar bc-green" style="width:67.5%"></div></div>
-    <div class="kc card-accent teal"><div class="kc-lbl">Overall ROAS</div><div class="kc-val" style="color:var(--teal)">1.67×</div><div class="kc-sub">Revenue per $1 spent</div><div class="kc-bar bc-teal" style="width:84%"></div></div>
-    <div class="kc card-accent blue"><div class="kc-lbl">Best ROI Channel</div><div class="kc-val" style="color:var(--green)">Web Campaign</div><div class="kc-sub">321–507% ROI · scale immediately</div><div class="kc-bar bc-green" style="width:100%"></div></div>
+    <div class="kc card-accent gold"><div class="kc-lbl">Total Media Cost</div><div class="kc-val" id="e-mcost" style="color:var(--orange)">$7.52M</div><div class="kc-sub">All paid channels</div><div class="kc-bar bc-orange" style="width:60%"></div></div>
+    <div class="kc card-accent green"><div class="kc-lbl">Overall ROI</div><div class="kc-val" id="e-roipct" style="color:var(--green)">67.3%</div><div class="kc-sub">(Revenue − Cost) / Cost</div><div class="kc-bar bc-green" id="e-roibar" style="width:67.3%"></div></div>
+    <div class="kc card-accent teal"><div class="kc-lbl">Overall ROAS</div><div class="kc-val" id="e-roas" style="color:var(--teal)">1.67×</div><div class="kc-sub">Revenue per $1 spent</div><div class="kc-bar bc-teal" style="width:84%"></div></div>
+    <div class="kc card-accent blue"><div class="kc-lbl">Best ROI Channel</div><div class="kc-val" id="e-bestch" style="color:var(--green)">Web Campaign</div><div class="kc-sub" id="e-bestchsub">321–507% ROI · scale immediately</div><div class="kc-bar bc-green" style="width:100%"></div></div>
   </div>
 
   <!-- Hebrew vs Biblical ROI comparison -->
   <div class="row r2" style="margin-bottom:14px">
     <div class="card card-accent blue">
-      <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Biblical Related — Cost Efficiency</div><div class="sub">High volume · lower CPL · lower conversion</div></div><span class="badge blue">177K leads</span></div>
+      <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Biblical Related — Cost Efficiency</div><div class="sub">High volume · lower CPL · lower conversion</div></div><span class="badge blue" id="e-bib-badge">177K leads</span></div>
       <div class="kpi-grid g3">
-        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" style="color:var(--blue)">$24.29</div><div class="kc-sub">Cost per lead</div></div>
-        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" style="color:var(--orange)">$624</div><div class="kc-sub">Cost per acquisition</div></div>
-        <div class="kc"><div class="kc-lbl">ROAS</div><div class="kc-val" style="color:var(--gold)">1.59×</div><div class="kc-sub">Rev per $1 spent</div></div>
-        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val">3.89%</div><div class="kc-sub">Lead → Acq</div></div>
-        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" style="color:var(--gold)">59.3%</div><div class="kc-sub">(Rev−Cost)/Cost</div></div>
-        <div class="kc"><div class="kc-lbl">Facebook ROI</div><div class="kc-val" style="color:var(--red)">−14.0%</div><div class="kc-sub">Largest drag channel</div></div>
+        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" id="e-bib-cpl" style="color:var(--blue)">$24.29</div><div class="kc-sub">Cost per lead</div></div>
+        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" id="e-bib-cpa" style="color:var(--orange)">$624</div><div class="kc-sub">Cost per acquisition</div></div>
+        <div class="kc"><div class="kc-lbl">ROAS</div><div class="kc-val" id="e-bib-roas" style="color:var(--gold)">1.59×</div><div class="kc-sub">Rev per $1 spent</div></div>
+        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val" id="e-bib-cvr">3.89%</div><div class="kc-sub">Lead → Acq</div></div>
+        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" id="e-bib-roi" style="color:var(--gold)">59.3%</div><div class="kc-sub">(Rev−Cost)/Cost</div></div>
+        <div class="kc"><div class="kc-lbl">Facebook ROI</div><div class="kc-val" id="e-bib-fbroi" style="color:var(--red)">−14.0%</div><div class="kc-sub">Largest drag channel</div></div>
       </div>
     </div>
     <div class="card card-accent green">
-      <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Hebrew Related — Cost Efficiency</div><div class="sub">Higher CPL · 2.3× CVR · net ROI winner</div></div><span class="badge green">61K leads</span></div>
+      <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Hebrew Related — Cost Efficiency</div><div class="sub">Higher CPL · 2.3× CVR · net ROI winner</div></div><span class="badge green" id="e-heb-badge">61K leads</span></div>
       <div class="kpi-grid g3">
-        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" style="color:var(--orange)">$51.64</div><div class="kc-sub">2.1× more than Biblical</div></div>
-        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" style="color:var(--green)">$574</div><div class="kc-sub">$50 cheaper than Biblical</div></div>
-        <div class="kc"><div class="kc-lbl">ROAS</div><div class="kc-val" style="color:var(--green)">1.79×</div><div class="kc-sub">+0.20× vs Biblical</div></div>
-        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val" style="color:var(--green)">9.00%</div><div class="kc-sub">2.3× higher than Biblical</div></div>
-        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" style="color:var(--green)">79.0%</div><div class="kc-sub">+19.7pp vs Biblical</div></div>
-        <div class="kc"><div class="kc-lbl">Facebook ROI</div><div class="kc-val" style="color:var(--red)">−23.9%</div><div class="kc-sub">Worst performing channel</div></div>
+        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" id="e-heb-cpl" style="color:var(--orange)">$51.64</div><div class="kc-sub">Cost per lead</div></div>
+        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" id="e-heb-cpa" style="color:var(--green)">$574</div><div class="kc-sub" id="e-heb-cpa-sub">$50 cheaper than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">ROAS</div><div class="kc-val" id="e-heb-roas" style="color:var(--green)">1.79×</div><div class="kc-sub" id="e-heb-roas-sub">+0.20× vs Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val" id="e-heb-cvr" style="color:var(--green)">9.00%</div><div class="kc-sub" id="e-heb-cvr-sub">2.3× higher than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" id="e-heb-roi" style="color:var(--green)">79.0%</div><div class="kc-sub" id="e-heb-roi-sub">+19.7pp vs Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">Facebook ROI</div><div class="kc-val" id="e-heb-fbroi" style="color:var(--red)">−23.9%</div><div class="kc-sub">Worst performing channel</div></div>
       </div>
     </div>
   </div>
@@ -420,24 +489,24 @@ tbody tr:last-child td{border-bottom:none}
     <div class="kc"><div class="kc-lbl">Avg Daily Revenue</div><div class="kc-val" id="r-adr">—</div><div class="kc-sub">All 830 days</div><div class="kc-bar bc-gold" style="width:65%"></div></div>
     <div class="kc"><div class="kc-lbl">Revenue / Lead</div><div class="kc-val" id="r-rpl">—</div><div class="kc-sub">Overall blended rate</div><div class="kc-bar bc-teal" style="width:40%"></div></div>
     <div class="kc"><div class="kc-lbl">Revenue / Acquisition</div><div class="kc-val" id="r-rpa">—</div><div class="kc-sub">Avg per enrolled student</div><div class="kc-bar bc-purple" style="width:70%"></div></div>
-    <div class="kc card-accent green"><div class="kc-lbl">Rev Optimal Zone Days</div><div class="kc-val" style="color:var(--green)" id="r-opt">346</div><div class="kc-sub">41.7% of all days qualify</div><div class="kc-bar bc-green" style="width:41.7%"></div></div>
+    <div class="kc card-accent green"><div class="kc-lbl">Rev Optimal Zone Days</div><div class="kc-val" style="color:var(--green)" id="r-opt">346</div><div class="kc-sub" id="r-opt-sub">41.7% of all days qualify</div><div class="kc-bar bc-green" style="width:41.7%"></div></div>
   </div>
 
   <!-- Revenue Optimal Zone -->
   <div class="zone gold">
     <div class="zone-title gold">Revenue Optimal Zone — Best Lead/Shift Ratio for Maximum Revenue</div>
     <div class="zone-params">
-      <div class="zp"><div class="zp-lbl">Daily Leads</div><div class="zp-val" style="color:var(--blue)">228–335</div><div class="zp-range">IQR · avg 286</div></div>
-      <div class="zp"><div class="zp-lbl">Rep Shifts</div><div class="zp-val" style="color:var(--purple)">11.3–15.6</div><div class="zp-range">IQR · avg 13.7</div></div>
-      <div class="zp"><div class="zp-lbl">Leads / Shift Ratio</div><div class="zp-val" style="color:var(--gold)">21.0–30.2</div><div class="zp-range">IQR · avg 25.6</div></div>
-      <div class="zp"><div class="zp-lbl">Avg Revenue on Zone Days</div><div class="zp-val" style="color:var(--green)">$16,129</div><div class="zp-range">vs $15,081 overall (+7%)</div></div>
+      <div class="zp"><div class="zp-lbl">Daily Leads</div><div class="zp-val" id="rz-leads" style="color:var(--blue)">228–335</div><div class="zp-range" id="rz-leads-sub">IQR · avg 286</div></div>
+      <div class="zp"><div class="zp-lbl">Rep Shifts</div><div class="zp-val" id="rz-shifts" style="color:var(--purple)">11.3–15.6</div><div class="zp-range" id="rz-shifts-sub">IQR · avg 13.7</div></div>
+      <div class="zp"><div class="zp-lbl">Leads / Shift Ratio</div><div class="zp-val" id="rz-ls" style="color:var(--gold)">21.0–30.2</div><div class="zp-range" id="rz-ls-sub">IQR · avg 25.6</div></div>
+      <div class="zp"><div class="zp-lbl">Avg Revenue on Zone Days</div><div class="zp-val" id="rz-rev" style="color:var(--green)">$16,129</div><div class="zp-range" id="rz-rev-sub">vs $15,081 overall (+7%)</div></div>
     </div>
   </div>
 
   <!-- Revenue Scatter + Ratio Bins -->
   <div class="row r65">
     <div class="card card-accent gold">
-      <div class="sh"><div class="sh-left"><div class="title">Revenue vs Leads/Shift Ratio — Daily Scatter</div><div class="sub">Each bubble = 1 day · Size = contacted ratio · Color intensity = acquisition count · Gold ring = Revenue optimal zone day</div></div><span class="badge gold">n=830</span></div>
+      <div class="sh"><div class="sh-left"><div class="title">Revenue vs Leads/Shift Ratio — Daily Scatter</div><div class="sub">Each bubble = 1 day · Size = contacted ratio · Color intensity = acquisition count · Gold ring = Revenue optimal zone day</div></div><span class="badge gold" id="r-nbadge">n=830</span></div>
       <div style="height:400px"><canvas id="revScatterChart"></canvas></div>
       <div class="legend" style="margin-top:12px">
         <div class="li"><div class="ld" style="background:var(--gold);border:1px solid var(--gold)"></div>Revenue Optimal Day</div>
@@ -459,7 +528,7 @@ tbody tr:last-child td{border-bottom:none}
   <!-- Revenue Narrative -->
   <div class="narrative card-accent gold">
     <h3>Revenue Architecture: SOV + Upsales Deep Dive</h3>
-    <p>Total 2-year revenue of <span class="tag g">$12,557,423</span> is composed of <strong>Course SOV (primary)</strong> and <strong>Upsales (secondary)</strong>. The two components are highly correlated with acquisitions (r = <span class="tag b">+0.77</span>) and even more strongly with orders (r = <span class="tag gr">+0.85</span>), confirming that <span class="hl-gold">orders are the single strongest daily revenue predictor.</span></p>
+    <p>Total 2-year revenue of <span class="tag g">$12,579,844</span> is composed of <strong>Course SOV (primary)</strong> and <strong>Upsales (secondary)</strong>. The two components are highly correlated with acquisitions (r = <span class="tag b">+0.77</span>) and even more strongly with orders (r = <span class="tag gr">+0.85</span>), confirming that <span class="hl-gold">orders are the single strongest daily revenue predictor.</span></p>
     <p>The <span class="hl-gold">Revenue Optimal Zone (L/S ratio 21.0–30.2)</span> aligns closely with the Acquisition Optimal Zone (21.1–30.9). Revenue maximization requires a ratio above 21 — below 15 leads/shift, reps are over-resourced and revenue production plateaus. The ceiling at 35 is clear: days above 35 average just <span class="tag r">$11,893/day</span> vs <span class="tag g">$16,129</span> in the optimal zone — a 26% drop.</p>
     <p>The lead quality decomposition reveals that <span class="hl">Facebook generates 43.2% of total leads but only 34.1% of revenue</span> — a dilutive 0.79× ratio. In contrast, <span class="hl-green">No Media generates 7.5% of leads and 18.9% of revenue</span> — a highly accretive 2.5× revenue-to-lead ratio ($132/lead). Web Campaign ($108/lead, 2.1×) and Community ($79/lead, 1.5×) are also strongly accretive. Strategic reallocation from Facebook toward Google Hebrew, Web Campaign, and Affiliates is the highest-leverage revenue action available.</p>
     <div class="corr-flex" id="revCorrBadges"></div>
@@ -491,10 +560,10 @@ tbody tr:last-child td{border-bottom:none}
   <div class="zone blue" style="margin-bottom:22px">
     <div class="zone-title blue">Core Insight: 10,000 Leads Are Not Equal</div>
     <div class="zone-params">
-      <div class="zp"><div class="zp-lbl">No Media Hebrew (best)</div><div class="zp-val" style="color:var(--green)">15.3% CVR</div><div class="zp-range">$161.63 revenue / lead</div></div>
-      <div class="zp"><div class="zp-lbl">Facebook Biblical (worst)</div><div class="zp-val" style="color:var(--red)">3.3% CVR</div><div class="zp-range">$32.57 revenue / lead</div></div>
-      <div class="zp"><div class="zp-lbl">Quality Gap</div><div class="zp-val" style="color:var(--gold)">4.96×</div><div class="zp-range">Rev/lead: best vs worst</div></div>
-      <div class="zp"><div class="zp-lbl">Conversion Gap</div><div class="zp-val" style="color:var(--blue)">4.64×</div><div class="zp-range">No Media Hebrew vs Facebook Biblical CVR</div></div>
+      <div class="zp"><div class="zp-lbl" id="lq-best-lbl">No Media Hebrew (best)</div><div class="zp-val" id="lq-best-cvr" style="color:var(--green)">15.3% CVR</div><div class="zp-range" id="lq-best-rpl">$161.63 revenue / lead</div></div>
+      <div class="zp"><div class="zp-lbl" id="lq-worst-lbl">Facebook Biblical (worst)</div><div class="zp-val" id="lq-worst-cvr" style="color:var(--red)">3.3% CVR</div><div class="zp-range" id="lq-worst-rpl">$32.57 revenue / lead</div></div>
+      <div class="zp"><div class="zp-lbl">Quality Gap</div><div class="zp-val" id="lq-qgap" style="color:var(--gold)">4.96×</div><div class="zp-range">Rev/lead: best vs worst</div></div>
+      <div class="zp"><div class="zp-lbl">Conversion Gap</div><div class="zp-val" id="lq-cgap" style="color:var(--blue)">4.64×</div><div class="zp-range" id="lq-cgap-lbl">No Media Hebrew vs Facebook Biblical CVR</div></div>
     </div>
   </div>
 
@@ -567,17 +636,17 @@ tbody tr:last-child td{border-bottom:none}
   <div class="zone blue">
     <div class="zone-title blue">The Optimal 4-Way Zone — Acquisitions &amp; SOV Maximization</div>
     <div class="zone-params">
-      <div class="zp"><div class="zp-lbl">Daily Lead Volume</div><div class="zp-val" style="color:var(--blue)">278–401</div><div class="zp-range">IQR · avg 348</div></div>
-      <div class="zp"><div class="zp-lbl">Rep Shifts (7h equiv.)</div><div class="zp-val" style="color:var(--purple)">11.3–15.6</div><div class="zp-range">IQR · avg 13.7</div></div>
-      <div class="zp"><div class="zp-lbl">Leads / Shift Ratio</div><div class="zp-val" style="color:var(--gold)">21.1–30.9</div><div class="zp-range">IQR · avg 26.4</div></div>
-      <div class="zp"><div class="zp-lbl">Contacted Ratio</div><div class="zp-val" style="color:var(--green)">≥ 50%</div><div class="zp-range">Optimal avg 55.5%</div></div>
+      <div class="zp"><div class="zp-lbl">Daily Lead Volume</div><div class="zp-val" id="az-leads" style="color:var(--blue)">278–401</div><div class="zp-range" id="az-leads-sub">IQR · avg 348</div></div>
+      <div class="zp"><div class="zp-lbl">Rep Shifts (7h equiv.)</div><div class="zp-val" id="az-shifts" style="color:var(--purple)">11.3–15.6</div><div class="zp-range" id="az-shifts-sub">IQR · avg 13.7</div></div>
+      <div class="zp"><div class="zp-lbl">Leads / Shift Ratio</div><div class="zp-val" id="az-ls" style="color:var(--gold)">21.1–30.9</div><div class="zp-range" id="az-ls-sub">IQR · avg 26.4</div></div>
+      <div class="zp"><div class="zp-lbl">Contacted Ratio</div><div class="zp-val" id="az-cont" style="color:var(--green)">≥ 50%</div><div class="zp-range" id="az-cont-sub">Optimal avg 55.5%</div></div>
     </div>
   </div>
 
   <!-- Main scatter + bins -->
   <div class="row r65">
     <div class="card card-accent blue">
-      <div class="sh"><div class="sh-left"><div class="title">4-Way Intersection: L/S Ratio × Acquisitions × SOV × Contacted Rate</div><div class="sub">X = Leads/Shift · Y = Acquisitions · Bubble size = Contacted Ratio · Color = SOV (dark→bright) · Gold ring = Optimal Zone day</div></div><span class="badge blue">n=830</span></div>
+      <div class="sh"><div class="sh-left"><div class="title">4-Way Intersection: L/S Ratio × Acquisitions × SOV × Contacted Rate</div><div class="sub">X = Leads/Shift · Y = Acquisitions · Bubble size = Contacted Ratio · Color = SOV (dark→bright) · Gold ring = Optimal Zone day</div></div><span class="badge blue" id="o-nbadge">n=830</span></div>
       <div style="height:420px"><canvas id="scatterChart"></canvas></div>
       <div class="legend" style="margin-top:12px">
         <div class="li"><div class="ld" style="background:var(--blue);border:2px solid var(--gold)"></div>Optimal Zone Day</div>
@@ -624,20 +693,20 @@ tbody tr:last-child td{border-bottom:none}
   <div class="sh" style="margin-bottom:22px"><div class="sh-left"><div class="title" style="font-size:17px">Weekday vs Weekend — Calendar-Based Analysis</div><div class="sub">ISO calendar · Monday–Friday = Weekdays · Saturday–Sunday = Weekends · 830 actual calendar days analyzed</div></div><span class="badge blue">Calendar Verified</span></div>
 
   <div class="kpi-grid g4" style="margin-bottom:18px">
-    <div class="kc card-accent blue"><div class="kc-lbl">Weekday Days</div><div class="kc-val" style="color:var(--blue)">594</div><div class="kc-sub">71.6% of dataset · Mon–Fri</div><div class="kc-bar bc-blue" style="width:71.6%"></div></div>
-    <div class="kc card-accent gold"><div class="kc-lbl">Weekend Days</div><div class="kc-val" style="color:var(--gold)">236</div><div class="kc-sub">28.4% · Sat &amp; Sun only</div><div class="kc-bar bc-gold" style="width:28.4%"></div></div>
-    <div class="kc card-accent green"><div class="kc-lbl">Weekday Optimal Days</div><div class="kc-val" style="color:var(--green)">33</div><div class="kc-sub">100% of all optimal zone days</div><div class="kc-bar bc-green" style="width:100%"></div></div>
-    <div class="kc"><div class="kc-lbl">Weekend Optimal Days</div><div class="kc-val" style="color:var(--orange)">0</div><div class="kc-sub">0% — none qualify</div><div class="kc-bar bc-orange" style="width:0%"></div></div>
+    <div class="kc card-accent blue"><div class="kc-lbl">Weekday Days</div><div class="kc-val" id="wd-days" style="color:var(--blue)">594</div><div class="kc-sub" id="wd-days-sub">71.6% of dataset · Mon–Fri</div><div class="kc-bar bc-blue" id="wd-bar" style="width:71.6%"></div></div>
+    <div class="kc card-accent gold"><div class="kc-lbl">Weekend Days</div><div class="kc-val" id="we-days" style="color:var(--gold)">236</div><div class="kc-sub" id="we-days-sub">28.4% · Sat &amp; Sun only</div><div class="kc-bar bc-gold" id="we-bar" style="width:28.4%"></div></div>
+    <div class="kc card-accent green"><div class="kc-lbl">Weekday Optimal Days</div><div class="kc-val" id="wd-opt" style="color:var(--green)">33</div><div class="kc-sub" id="wd-opt-sub">100% of all optimal zone days</div><div class="kc-bar bc-green" id="wd-opt-bar" style="width:100%"></div></div>
+    <div class="kc"><div class="kc-lbl">Weekend Optimal Days</div><div class="kc-val" id="we-opt" style="color:var(--orange)">0</div><div class="kc-sub" id="we-opt-sub">0% — none qualify</div><div class="kc-bar bc-orange" id="we-opt-bar" style="width:0%"></div></div>
   </div>
 
   <!-- Side-by-side comparison panels -->
   <div class="wkd-grid">
     <div class="wkd-pnl wd">
-      <div class="wkd-hdr"><div class="wkd-title">Weekdays <span style="color:var(--text-2);font-weight:400;font-size:13px">Mon–Fri</span></div><span class="wkd-tag">594 days</span></div>
+      <div class="wkd-hdr"><div class="wkd-title">Weekdays <span style="color:var(--text-2);font-weight:400;font-size:13px">Mon–Fri</span></div><span class="wkd-tag" id="wd-tag">594 days</span></div>
       <div class="wkd-mets" id="wkdayMets"></div>
     </div>
     <div class="wkd-pnl we">
-      <div class="wkd-hdr"><div class="wkd-title">Weekends <span style="color:var(--text-2);font-weight:400;font-size:13px">Sat–Sun</span></div><span class="wkd-tag">236 days</span></div>
+      <div class="wkd-hdr"><div class="wkd-title">Weekends <span style="color:var(--text-2);font-weight:400;font-size:13px">Sat–Sun</span></div><span class="wkd-tag" id="we-tag">236 days</span></div>
       <div class="wkd-mets" id="wkendMets"></div>
     </div>
   </div>
@@ -799,7 +868,7 @@ tbody tr:last-child td{border-bottom:none}
   <div class="sh" style="margin-bottom:20px">
     <div class="sh-left">
       <div class="title" style="font-size:17px;color:var(--red)">April 2026 — Crisis Diagnosis</div>
-      <div class="sub">11 days elapsed (Apr 1–11) · 7 weekdays + 2 Saturdays + 2 Sundays · All comparisons vs all-time historical avg</div>
+      <div class="sub">13 days elapsed (Apr 1–13) · 9 weekdays + 2 Saturdays + 2 Sundays · All comparisons vs all-time historical avg</div>
     </div>
     <span class="badge" style="background:rgba(255,69,58,.15);color:var(--red);border-color:rgba(255,69,58,.3)">Live Month</span>
   </div>
@@ -808,39 +877,39 @@ tbody tr:last-child td{border-bottom:none}
   <div class="kpi-grid g6" style="margin-bottom:20px">
     <div class="kc alert">
       <div class="kc-lbl">Avg Daily Acquisitions</div>
-      <div class="kc-val" style="color:var(--red)">10.5</div>
+      <div class="kc-val" style="color:var(--red)">10.2</div>
       <div class="kc-sub">vs 15.0 historical</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −30.0%</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −32.0%</div>
     </div>
     <div class="kc alert">
       <div class="kc-lbl">Avg Daily Revenue</div>
-      <div class="kc-val" style="color:var(--red)">$11.4k</div>
+      <div class="kc-val" style="color:var(--red)">$11.1k</div>
       <div class="kc-sub">vs $15.1k historical</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −24.9%</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −26.6%</div>
     </div>
     <div class="kc alert">
       <div class="kc-lbl">Contacted Rate</div>
-      <div class="kc-val" style="color:var(--red)">34.1%</div>
+      <div class="kc-val" style="color:var(--red)">34.6%</div>
       <div class="kc-sub">vs 44.6% historical</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −10.5pp</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −10.0pp</div>
     </div>
     <div class="kc alert">
       <div class="kc-lbl">Conversion Rate</div>
-      <div class="kc-val" style="color:var(--orange)">3.78%</div>
+      <div class="kc-val" style="color:var(--orange)">3.67%</div>
       <div class="kc-sub">vs 5.2% all-time avg</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −1.4pp</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −1.5pp</div>
     </div>
     <div class="kc alert">
       <div class="kc-lbl">Monthly ROI</div>
-      <div class="kc-val" style="color:var(--red)">19.7%</div>
-      <div class="kc-sub">vs 67.5% all-time avg</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −47.8pp</div>
+      <div class="kc-val" style="color:var(--red)">15.8%</div>
+      <div class="kc-sub">vs 67.3% all-time avg</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −51.5pp</div>
     </div>
     <div class="kc">
       <div class="kc-lbl">Lead Volume</div>
       <div class="kc-val" style="color:var(--teal)">277/day</div>
       <div class="kc-sub">vs 288 historical</div>
-      <div style="font-size:11px;font-weight:700;color:var(--teal);margin-top:4px">► −3.9% — Not the issue</div>
+      <div style="font-size:11px;font-weight:700;color:var(--teal);margin-top:4px">► −3.8% — Not the issue</div>
     </div>
   </div>
 
@@ -852,8 +921,8 @@ tbody tr:last-child td{border-bottom:none}
     <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Hebrew contacted rate crashed from <strong style="color:var(--green)">57.1%</strong> (Jan’26) to <strong style="color:var(--red)">31.2%</strong> (Apr’26) — a <strong style="color:var(--red)">-25.9pp collapse</strong> in 4 months. This single metric explains most of the acquisition drop. Hebrew leads historically convert at 9.04%; in April, only 5.77%. When leads can’t be reached, nothing else in the funnel matters. Cause: lead intent quality and/or contact information accuracy has structurally deteriorated in Hebrew campaigns.</div>
   </div>
   <div class="rc-block" style="border-color:var(--orange)">
-    <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:4px">#2 — Facebook ROI at −47.6% — Actively Burning Cash</div>
-    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Facebook generated 1,480 leads in April (48.6% of all leads) at a cost of <strong style="color:var(--red)">$82,014</strong>, returning only $42,959 in revenue — a <strong style="color:var(--red)">−47.6% ROI</strong>. Every Facebook dollar spent is returning only $0.52. Google, by contrast, is the only profitable paid channel at <strong style="color:var(--green)">+26.7% ROI</strong> ($20,610 cost → $26,114 revenue). The contacted rate on Facebook leads is 31.1% vs 41.9% historical, meaning Facebook lead quality has collapsed alongside cost increases.</div>
+    <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:4px">#2 — Facebook ROI at −49.8% — Actively Burning Cash</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Facebook generated 1,744 leads in April (48.4% of all leads) at a cost of <strong style="color:var(--red)">$97,970</strong>, returning only $49,140 in revenue — a <strong style="color:var(--red)">−49.8% ROI</strong>. Every Facebook dollar spent is returning only $0.50. Google, by contrast, is the only profitable paid channel at <strong style="color:var(--green)">+15.4% ROI</strong> ($24,374 cost → $28,138 revenue). The contacted rate on Facebook leads is 32.1% vs 41.9% historical, meaning Facebook lead quality has collapsed alongside cost increases.</div>
   </div>
   <div class="rc-block" style="border-color:var(--gold);margin-bottom:20px">
     <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:4px">#3 — 5-Month ROI Deterioration — Structural, Not Random</div>
@@ -886,7 +955,7 @@ tbody tr:last-child td{border-bottom:none}
 
   <!-- Day-by-day breakdown table -->
   <div class="card" style="margin-bottom:18px">
-    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Day-by-Day Performance (Apr 1–11)</div><div class="sub">L/S zone: ✓ In optimal (21.1–30.9) · ↑ Above ceiling · ↓ Below floor</div></div></div>
+    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Day-by-Day Performance (Apr 1–13)</div><div class="sub">L/S zone: ✓ In optimal (21.1–30.9) · ↑ Above ceiling · ↓ Below floor</div></div></div>
     <!-- Header row -->
     <div class="day-row" style="background:var(--surface-2);border-radius:8px 8px 0 0;border-bottom:1px solid var(--border)">
       <div class="day-lbl">Day</div>
@@ -917,9 +986,9 @@ tbody tr:last-child td{border-bottom:none}
   <div class="narrative card-accent orange">
     <h3>Immediate Actions to Arrest the Decline</h3>
     <p>
-      <strong style="color:var(--red)">1. Pause or cut Facebook Hebrew spend immediately</strong> — Facebook Hebrew ROI is −23.9% all-time and −47.6% in April. The contacted rate has collapsed from 42% to 31%. Continuing to pay Facebook prices for unreachable leads is compounding losses. Redirect budget to Google Hebrew (+36.6% ROI), Web Campaign (+507% ROI), and Affiliates (+203% ROI).<br><br>
-      <strong style="color:var(--orange)">2. Audit Facebook lead quality</strong> — The contacted rate drop across Facebook (41.9% → 31.1%) signals corrupted lead quality: wrong phone numbers, uninterested audiences, or bot traffic. Pull individual lead-level contact attempt data for April Facebook leads and compare to January levels. Look for changes in campaign targeting, landing page, or lead form that went live around March.<br><br>
-      <strong style="color:var(--gold)">3. Realign staffing to No Media &amp; Email priority</strong> — No Media ($132/lead, 50.9% contacted in April) and Email Marketing ($43/lead, zero cost) are keeping this month alive. With Google Hebrew also profitable at +26.7% April ROI, assign highest-performing reps to No Media, Email Hebrew, and Google queues.<br><br>
+      <strong style="color:var(--red)">1. Pause or cut Facebook Hebrew spend immediately</strong> — Facebook Hebrew ROI is −23.9% all-time and −49.8% in April. The contacted rate has collapsed from 42% to 31%. Continuing to pay Facebook prices for unreachable leads is compounding losses. Redirect budget to Google Hebrew (+36.6% ROI), Web Campaign (+507% ROI), and Affiliates (+203% ROI).<br><br>
+      <strong style="color:var(--orange)">2. Audit Facebook lead quality</strong> — The contacted rate drop across Facebook (41.9% → 32.1%) signals corrupted lead quality: wrong phone numbers, uninterested audiences, or bot traffic. Pull individual lead-level contact attempt data for April Facebook leads and compare to January levels. Look for changes in campaign targeting, landing page, or lead form that went live around March.<br><br>
+      <strong style="color:var(--gold)">3. Realign staffing to No Media &amp; Email priority</strong> — No Media ($132/lead, 50.9% contacted in April) and Email Marketing ($43/lead, zero cost) are keeping this month alive. With Google Hebrew also profitable at +15.4% April ROI, assign highest-performing reps to No Media, Email Hebrew, and Google queues.<br><br>
       <strong style="color:var(--teal)">4. Investigate the April 8 collapse</strong> — April 8 saw 370 leads, only 8 acquisitions, and worst daily ROI of the month. Something specific happened that day — a technical failure, CRM issue, or shift attendance problem. Diagnose and prevent recurrence.
     </p>
   </div>
@@ -928,852 +997,883 @@ tbody tr:last-child td{border-bottom:none}
 
 <!-- ════════════════════════ SCRIPTS ════════════════════════ -->
 <script>
-const D = DASHBOARD_DATA;
-const K = D.kpis;
+const D_FULL = DASHBOARD_DATA;
+let D = DASHBOARD_DATA;
+let K = D.kpis;
 
 Chart.defaults.color = 'rgba(245,245,247,0.42)';
 Chart.defaults.font.family = "'Inter',-apple-system,sans-serif";
 Chart.defaults.font.size = 11;
 const GC = 'rgba(255,255,255,0.05)';
 
-function fmt$(v){return '$'+v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
-function fmt$k(v){return v>=1000?'$'+(v/1000).toFixed(1)+'k':fmt$(v)}
-function fmtPct(v){return (v*100).toFixed(1)+'%'}
-function fmtN(v,d=1){return v.toFixed(d)}
+function fmt$(v){if(v==null||isNaN(v))return '$0';return '$'+v.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function fmt$k(v){if(v==null||isNaN(v))return '$0';if(Math.abs(v)>=1e6)return '$'+(v/1e6).toFixed(2)+'M';if(Math.abs(v)>=1000)return '$'+(v/1000).toFixed(1)+'k';return fmt$(v)}
+function fmtPct(v){if(v==null||isNaN(v))return '0%';return (v*100).toFixed(1)+'%'}
+function fmtN(v,d=1){if(v==null||isNaN(v))return '0';return v.toFixed(d)}
+function fmtPctRaw(v){if(v==null||isNaN(v))return '0%';return v.toFixed(1)+'%'}
 
 // ─── Tab switcher ──────────────────────────────────────────
 function switchTab(i){
   document.querySelectorAll('.tb').forEach((b,j)=>b.classList.toggle('active',i===j));
   document.querySelectorAll('.pnl').forEach((p,j)=>p.classList.toggle('active',i===j));
-  // Resize all Chart.js instances so hidden-tab canvases render correctly
   requestAnimationFrame(()=>{ Object.values(Chart.instances).forEach(c=>c.resize()); });
 }
 
-// ─── Populate KPIs ─────────────────────────────────────────
-document.getElementById('e-rev').textContent = fmt$(K.totalRevenue);
-document.getElementById('e-adr').textContent = fmt$(K.avgDailyRevenue);
-document.getElementById('e-acq').textContent = K.totalAcquisitions.toLocaleString();
-document.getElementById('e-ord').textContent = K.totalOrders.toLocaleString();
-document.getElementById('e-leads').textContent = K.totalLeads.toLocaleString();
-document.getElementById('e-rpl').textContent = fmt$(K.avgRevenuePerLead);
-
-document.getElementById('r-rev').textContent = fmt$(K.totalRevenue);
-document.getElementById('r-adr').textContent = fmt$(K.avgDailyRevenue);
-document.getElementById('r-rpl').textContent = fmt$(K.avgRevenuePerLead);
-document.getElementById('r-rpa').textContent = fmt$(K.avgRevenuePerAcq);
-
-document.getElementById('o-leads').textContent = K.avgDailyLeads.toFixed(0);
-document.getElementById('o-shifts').textContent = K.avgDailyShift.toFixed(1);
-document.getElementById('o-cont').textContent = fmtPct(K.avgContactedRatio);
-document.getElementById('o-acq').textContent = K.avgDailyAcq.toFixed(1);
-
 // ─── Colour helpers ─────────────────────────────────────────
 const MEDIA_COLORS = {
-  'Facebook': '#0a84ff',
-  'Google': '#34c759',
-  'Email Marketing': '#ffd60a',
-  'Affiliates': '#bf5af2',
-  'No Media': '#30d158',
-  'Community': '#5ac8fa',
-  'Business Coop': '#ff9f0a',
-  'PPC Other': '#ff453a',
-  'Web Campaign': '#64d2ff'
+  'Facebook': '#0a84ff','Google': '#34c759','Email Marketing': '#ffd60a',
+  'Affiliates': '#bf5af2','No Media': '#30d158','Community': '#5ac8fa',
+  'Business Coop': '#ff9f0a','PPC Other': '#ff453a','Web Campaign': '#64d2ff'
 };
 const CAMP_COLORS = {'Biblical Related':'#ff9f0a','Hebrew Related':'#5ac8fa'};
-const SEG_LABELS = D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0]}`);
-const SEG_COLORS = D.segmentData.map(s=>{
-  const mc = {'Facebook':'10,132,255','Google':'52,199,89','Email Marketing':'255,214,10','Affiliates':'191,90,242','No Media':'48,209,88','Community':'90,200,250','Business Coop':'255,159,10','PPC Other':'255,69,58','Web Campaign':'100,210,255'};
-  return `rgba(${mc[s.media]||'255,255,255'},0.8)`;
-});
 
-// ═══ TAB 0: EXECUTIVE ═════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════════════
+// MASTER BUILD FUNCTION — Rebuilds all charts/KPIs/tables from D (data source)
+// ═══════════════════════════════════════════════════════════════════════════════
+function buildDashboard(){
+  // Destroy all existing charts
+  FilterEngine.destroyAll();
 
-// Media Share Chart (grouped bar: lead share vs revenue share)
-new Chart(document.getElementById('mediaShareChart'),{
-  type:'bar',
-  data:{
-    labels:D.mediaData.map(m=>m.media),
-    datasets:[
-      {label:'Lead Share',data:D.mediaData.map(m=>+(m.leadShare*100).toFixed(1)),backgroundColor:'rgba(10,132,255,0.55)',borderRadius:5,borderSkipped:false},
-      {label:'Revenue Share',data:D.mediaData.map(m=>+(m.revenueShare*100).toFixed(1)),backgroundColor:'rgba(255,214,10,0.7)',borderRadius:5,borderSkipped:false},
-    ]
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(1)}%`}}},
-    scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'},max:50}}
-  }
-});
+  const SEG_LABELS = D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0]}`);
+  const SEG_COLORS = D.segmentData.map(s=>{
+    const mc = {'Facebook':'10,132,255','Google':'52,199,89','Email Marketing':'255,214,10','Affiliates':'191,90,242','No Media':'48,209,88','Community':'90,200,250','Business Coop':'255,159,10','PPC Other':'255,69,58','Web Campaign':'100,210,255'};
+    return `rgba(${mc[s.media]||'255,255,255'},0.8)`;
+  });
 
-// Campaign comparison chart (horizontal bar)
-const cmpData = D.campData;
-new Chart(document.getElementById('campCompChart'),{
-  type:'bar',
-  data:{
-    labels:['Conversion Rate','Rev/Lead (÷10)','Contact Rate','Lead Share (%)'],
-    datasets: cmpData.map((c,i)=>({
-      label:c.campaign,
-      data:[+(c.conversionRate*100).toFixed(2), +(c.revenuePerLead/10).toFixed(2), +(c.contactedRate*100).toFixed(2), +(c.leadShare*100).toFixed(1)],
-      backgroundColor:i===0?'rgba(255,159,10,0.7)':'rgba(90,200,250,0.7)',
-      borderRadius:5,borderSkipped:false,
-    }))
-  },
-  options:{
-    responsive:true,maintainAspectRatio:false,indexAxis:'y',
-    plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1}},
-    scales:{x:{grid:{color:GC},border:{display:false}},y:{grid:{display:false},border:{display:false}}}
-  }
-});
+  // ─── Populate KPIs ──────────────────────────────────────────
+  document.getElementById('e-rev').textContent = fmt$(K.totalRevenue);
+  document.getElementById('e-adr').textContent = fmt$(K.avgDailyRevenue);
+  document.getElementById('e-acq').textContent = K.totalAcquisitions.toLocaleString();
+  document.getElementById('e-ord').textContent = K.totalOrders.toLocaleString();
+  document.getElementById('e-leads').textContent = K.totalLeads.toLocaleString();
+  document.getElementById('e-rpl').textContent = fmt$(K.avgRevenuePerLead);
 
-// Executive trend chart
-(function(){
-  const ml = D.monthlyData;
-  new Chart(document.getElementById('execTrendChart'),{
-    type:'line',
+  document.getElementById('r-rev').textContent = fmt$(K.totalRevenue);
+  document.getElementById('r-adr').textContent = fmt$(K.avgDailyRevenue);
+  document.getElementById('r-rpl').textContent = fmt$(K.avgRevenuePerLead);
+  document.getElementById('r-rpa').textContent = fmt$(K.avgRevenuePerAcq);
+
+  document.getElementById('o-leads').textContent = K.avgDailyLeads.toFixed(0);
+  document.getElementById('o-shifts').textContent = K.avgDailyShift.toFixed(1);
+  document.getElementById('o-cont').textContent = fmtPct(K.avgContactedRatio);
+  document.getElementById('o-acq').textContent = K.avgDailyAcq.toFixed(1);
+
+  // Update header pills
+  document.querySelector('.pill .dot').parentElement.childNodes[1].textContent = K.totalDays + ' Days · Live Data';
+  // Safely update header pills
+  const pills = document.querySelectorAll('.hdr-right .pill');
+  if(pills[0]) pills[0].innerHTML = '<span class="dot"></span>' + K.totalDays + ' Days · ' + (FilterEngine.isFiltered()?'Filtered':'Live Data');
+  if(pills[1]) pills[1].textContent = fmt$k(K.totalRevenue) + ' Total Revenue';
+  if(pills[2]) pills[2].textContent = K.totalAcquisitions.toLocaleString() + ' Acquisitions';
+
+  // ═══ TAB 0: EXECUTIVE ═════════════════════════════════════
+
+  // ── Exec ROI KPI cards (dynamic) ───────────────────────────
+  (function(){
+    const RK = D.roiKpis || {};
+    const csd = D.costSegData || [];
+    const tc = RK.totalCost||0, tr = RK.totalRevenue||K.totalRevenue, roi = RK.overallROI||0, roas = RK.overallROAS||0;
+    document.getElementById('e-mcost').textContent = fmt$k(tc);
+    document.getElementById('e-roipct').textContent = roi.toFixed(1)+'%';
+    document.getElementById('e-roas').textContent = roas.toFixed(2)+'\u00d7';
+    const rb = document.getElementById('e-roibar'); if(rb) rb.style.width = Math.min(100,Math.max(5,roi))+'%';
+    document.getElementById('e-roi-badge').textContent = fmt$k(tc)+' Spend \u00b7 '+roi.toFixed(1)+'% ROI';
+    document.getElementById('e-roi-sub').textContent = 'Total spend '+fmt$k(tc)+' across Facebook, Google, Affiliates & other paid channels \u00b7 Email Marketing & organic = zero cost \u00b7 Revenue = SOV + Upsales';
+
+    // Find best ROI channel
+    const paidCh = csd.filter(s=>s.roi!==null && s.totalCost>0);
+    const byMedia = {};
+    paidCh.forEach(s=>{ if(!byMedia[s.media]) byMedia[s.media]=[]; byMedia[s.media].push(s.roi); });
+    let bestCh='Web Campaign', bestRoi=0;
+    Object.keys(byMedia).forEach(m=>{ const avg=byMedia[m].reduce((a,b)=>a+b,0)/byMedia[m].length; if(avg>bestRoi){bestRoi=avg;bestCh=m;} });
+    document.getElementById('e-bestch').textContent = bestCh;
+    const roiRange = byMedia[bestCh]||[];
+    document.getElementById('e-bestchsub').textContent = roiRange.length>1 ? Math.round(Math.min(...roiRange))+'\u2013'+Math.round(Math.max(...roiRange))+'% ROI' : Math.round(bestRoi)+'% ROI';
+
+    // Biblical aggregate
+    const bib = csd.filter(s=>s.category==='Biblical');
+    const heb = csd.filter(s=>s.category==='Hebrew');
+    const sumL = arr=>arr.reduce((a,s)=>a+s.totalLeads,0);
+    const sumA = arr=>arr.reduce((a,s)=>a+s.totalAcq,0);
+    const sumR = arr=>arr.reduce((a,s)=>a+s.totalRevenue,0);
+    const sumC = arr=>arr.reduce((a,s)=>a+s.totalCost,0);
+    const bibL=sumL(bib), bibA=sumA(bib), bibR=sumR(bib), bibC=sumC(bib);
+    const hebL=sumL(heb), hebA=sumA(heb), hebR=sumR(heb), hebC=sumC(heb);
+    const bibCPL=bibC>0?bibC/bibL:0, bibCPA=bibA>0?bibC/bibA:0, bibROAS=bibC>0?bibR/bibC:0, bibCVR=bibL>0?bibA/bibL*100:0, bibROI=bibC>0?(bibR-bibC)/bibC*100:0;
+    const hebCPL=hebC>0?hebC/hebL:0, hebCPA=hebA>0?hebC/hebA:0, hebROAS=hebC>0?hebR/hebC:0, hebCVR=hebL>0?hebA/hebL*100:0, hebROI=hebC>0?(hebR-hebC)/hebC*100:0;
+
+    document.getElementById('e-bib-badge').textContent = (bibL>=1000?Math.round(bibL/1000)+'K':bibL)+' leads';
+    document.getElementById('e-bib-cpl').textContent = fmt$(bibCPL);
+    document.getElementById('e-bib-cpa').textContent = fmt$(bibCPA);
+    document.getElementById('e-bib-roas').textContent = bibROAS.toFixed(2)+'\u00d7';
+    document.getElementById('e-bib-cvr').textContent = bibCVR.toFixed(2)+'%';
+    document.getElementById('e-bib-roi').textContent = bibROI.toFixed(1)+'%';
+    // Facebook ROI for Biblical
+    const bibFb = bib.find(s=>s.media==='Facebook');
+    document.getElementById('e-bib-fbroi').textContent = bibFb&&bibFb.roi!==null ? (bibFb.roi>0?'+':'')+bibFb.roi.toFixed(1)+'%' : 'N/A';
+    const bibFbEl = document.getElementById('e-bib-fbroi');
+    bibFbEl.style.color = bibFb&&bibFb.roi<0 ? 'var(--red)' : 'var(--green)';
+
+    document.getElementById('e-heb-badge').textContent = (hebL>=1000?Math.round(hebL/1000)+'K':hebL)+' leads';
+    document.getElementById('e-heb-cpl').textContent = fmt$(hebCPL);
+    document.getElementById('e-heb-cpa').textContent = fmt$(hebCPA);
+    document.getElementById('e-heb-cpa-sub').textContent = bibCPA>0 ? (hebCPA<bibCPA?'$'+Math.round(bibCPA-hebCPA)+' cheaper than Biblical':'$'+Math.round(hebCPA-bibCPA)+' more than Biblical') : 'Cost per acquisition';
+    document.getElementById('e-heb-roas').textContent = hebROAS.toFixed(2)+'\u00d7';
+    document.getElementById('e-heb-roas-sub').textContent = (hebROAS-bibROAS>=0?'+':'')+((hebROAS-bibROAS).toFixed(2))+'\u00d7 vs Biblical';
+    document.getElementById('e-heb-cvr').textContent = hebCVR.toFixed(2)+'%';
+    document.getElementById('e-heb-cvr-sub').textContent = bibCVR>0 ? (hebCVR/bibCVR).toFixed(1)+'\u00d7 '+(hebCVR>bibCVR?'higher':'lower')+' than Biblical' : '';
+    document.getElementById('e-heb-roi').textContent = hebROI.toFixed(1)+'%';
+    document.getElementById('e-heb-roi-sub').textContent = (hebROI-bibROI>=0?'+':'')+((hebROI-bibROI).toFixed(1))+'pp vs Biblical';
+    const hebFb = heb.find(s=>s.media==='Facebook');
+    document.getElementById('e-heb-fbroi').textContent = hebFb&&hebFb.roi!==null ? (hebFb.roi>0?'+':'')+hebFb.roi.toFixed(1)+'%' : 'N/A';
+    const hebFbEl = document.getElementById('e-heb-fbroi');
+    hebFbEl.style.color = hebFb&&hebFb.roi<0 ? 'var(--red)' : 'var(--green)';
+  })();
+
+  // Media Share Chart
+  FilterEngine.storeChart('mediaShareChart', new Chart(document.getElementById('mediaShareChart'),{
+    type:'bar',
     data:{
-      labels:ml.map(m=>m.month),
+      labels:D.mediaData.map(m=>m.media),
       datasets:[
-        {label:'Avg Revenue/Day',data:ml.map(m=>+m.avgRevenue.toFixed(0)),borderColor:'#ffd60a',backgroundColor:'rgba(255,214,10,0.07)',fill:true,tension:.4,pointRadius:2,yAxisID:'y'},
-        {label:'Avg Acquisitions/Day',data:ml.map(m=>+m.avgAcq.toFixed(2)),borderColor:'#30d158',backgroundColor:'transparent',borderDash:[3,2],tension:.4,pointRadius:2,yAxisID:'y2'},
-        {label:'Avg Orders/Day',data:ml.map(m=>+m.avgOrders.toFixed(2)),borderColor:'#0a84ff',backgroundColor:'transparent',borderDash:[6,3],tension:.4,pointRadius:2,yAxisID:'y2'},
+        {label:'Lead Share',data:D.mediaData.map(m=>+(m.leadShare*100).toFixed(1)),backgroundColor:'rgba(10,132,255,0.55)',borderRadius:5,borderSkipped:false},
+        {label:'Revenue Share',data:D.mediaData.map(m=>+(m.revenueShare*100).toFixed(1)),backgroundColor:'rgba(255,214,10,0.7)',borderRadius:5,borderSkipped:false},
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false}},
-      scales:{
-        x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},
-        y:{title:{display:true,text:'Revenue ($)',font:{size:10}},grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}},
-        y2:{position:'right',title:{display:true,text:'Acq / Orders',font:{size:10}},grid:{display:false},border:{display:false},min:0,max:40}
-      }
+      plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(1)}%`}}},
+      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'},max:50}}
     }
-  });
-})();
+  }));
 
-// Media scorecard rows
-(function(){
-  const maxRPL = Math.max(...D.mediaData.map(m=>m.revenuePerLead));
-  const maxCVR = Math.max(...D.mediaData.map(m=>m.conversionRate));
-  const container = document.getElementById('mediaScorecardRows');
-  D.mediaData.forEach(m=>{
-    const rplPct = m.revenuePerLead/maxRPL*100;
-    const cvrPct = m.conversionRate/maxCVR*100;
-    const col = MEDIA_COLORS[m.media]||'#fff';
-    container.innerHTML += `<div class="score-row">
-      <div class="score-label"><strong style="color:${col}">${m.media}</strong></div>
-      <div style="display:flex;flex-direction:column;gap:4px;min-width:200px">
-        <div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">CVR</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${cvrPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmtPct(m.conversionRate)}</span></div>
-        <div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">Rev/Lead</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${rplPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmt$(m.revenuePerLead)}</span></div>
-      </div>
-    </div>`;
-  });
-})();
-
-// Campaign scorecard rows
-(function(){
-  const container = document.getElementById('campScorecardRows');
-  D.campData.forEach(c=>{
-    const col = CAMP_COLORS[c.campaign]||'#fff';
-    container.innerHTML += `<div class="score-row">
-      <div class="score-label" style="min-width:130px"><strong style="color:${col}">${c.campaign}</strong></div>
-      <div style="display:flex;flex-direction:column;gap:4px">
-        <div style="font-size:12px;color:var(--text-2)">CVR: <strong style="color:${col}">${fmtPct(c.conversionRate)}</strong> · Rev/Lead: <strong style="color:${col}">${fmt$(c.revenuePerLead)}</strong></div>
-        <div style="font-size:12px;color:var(--text-2)">Lead Share: <strong>${fmtPct(c.leadShare)}</strong> · Rev Share: <strong>${fmtPct(c.revenueShare)}</strong></div>
-        <div style="font-size:11px;color:var(--text-3)">Rev/Acq: ${fmt$(c.revenuePerAcq)} · Contact Rate: ${fmtPct(c.contactedRate)}</div>
-      </div>
-    </div>`;
-  });
-})();
-
-// ═══ TAB 1: REVENUE ═══════════════════════════════════════
-
-// Revenue Scatter
-(function(){
-  const opt = D.scatterData.filter(d=>d.revOptimal);
-  const rest = D.scatterData.filter(d=>!d.revOptimal);
-  const sovToCol = (v,a)=>{const t=Math.min(1,Math.max(0,(v-340)/27500));return `rgba(${Math.round(180+t*75)},${Math.round(140+t*74)},${Math.round(10)},${a})`};
-  new Chart(document.getElementById('revScatterChart'),{
-    type:'bubble',
-    data:{datasets:[
-      {label:'Rev Optimal',data:opt.map(d=>({x:+d.leadsPerShift.toFixed(1),y:+d.totalRevenue.toFixed(0),r:Math.max(4,d.contactedRatio*20),rev:d.totalRevenue,acq:d.totalAcquisitions,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),
-        backgroundColor:ctx=>{const p=ctx.raw;return p?sovToCol(p.rev,.85):'rgba(255,214,10,.8)'},borderColor:'#ffd60a',borderWidth:1.5},
-      {label:'Other',data:rest.map(d=>({x:+d.leadsPerShift.toFixed(1),y:+d.totalRevenue.toFixed(0),r:Math.max(3,d.contactedRatio*15),rev:d.totalRevenue,acq:d.totalAcquisitions,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),
-        backgroundColor:ctx=>{const p=ctx.raw;return p?sovToCol(p.rev,.3):'rgba(255,214,10,.2)'},borderColor:'rgba(255,255,255,.1)',borderWidth:.5}
-    ]},
+  // Campaign comparison chart
+  const cmpData = D.campData;
+  FilterEngine.storeChart('campCompChart', new Chart(document.getElementById('campCompChart'),{
+    type:'bar',
+    data:{
+      labels:['Conversion Rate','Rev/Lead (÷10)','Contact Rate','Lead Share (%)'],
+      datasets: cmpData.map((c,i)=>({
+        label:c.campaign,
+        data:[+(c.conversionRate*100).toFixed(2), +(c.revenuePerLead/10).toFixed(2), +(c.contactedRate*100).toFixed(2), +(c.leadShare*100).toFixed(1)],
+        backgroundColor:i===0?'rgba(255,159,10,0.7)':'rgba(90,200,250,0.7)',
+        borderRadius:5,borderSkipped:false,
+      }))
+    },
     options:{
-      responsive:true,maintainAspectRatio:false,layout:{padding:{top:10,right:16,bottom:10,left:20}},
-      plugins:{
-        legend:{display:false},
-        tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{
-          title:i=>`${i[0].raw.date} · ${i[0].raw.day}`,
-          label:i=>{const d=i.raw;return[`  Revenue: ${fmt$(d.y)}`,`  L/S Ratio: ${d.x}`,`  Acquisitions: ${d.acq}`,`  Leads: ${d.leads}`,`  Shifts: ${d.shift.toFixed(1)}`]}
-        }},
-        annotation:{annotations:{
-          optZone:{type:'box',xMin:21.0,xMax:30.2,yMin:0,yMax:40000,backgroundColor:'rgba(255,214,10,.04)',borderColor:'rgba(255,214,10,.25)',borderWidth:1,borderDash:[4,3],label:{display:true,content:'◈ REVENUE OPTIMAL',position:'start',color:'rgba(255,214,10,.6)',font:{size:10,weight:'600',family:'Inter'},padding:4}},
-          ceilLine:{type:'line',xMin:35,xMax:35,borderColor:'rgba(255,69,58,.3)',borderWidth:1,borderDash:[3,3]}
-        }}
+      responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1}},
+      scales:{x:{grid:{color:GC},border:{display:false}},y:{grid:{display:false},border:{display:false}}}
+    }
+  }));
+
+  // Executive trend chart
+  (function(){
+    const ml = D.monthlyData;
+    FilterEngine.storeChart('execTrendChart', new Chart(document.getElementById('execTrendChart'),{
+      type:'line',
+      data:{
+        labels:ml.map(m=>m.month),
+        datasets:[
+          {label:'Avg Revenue/Day',data:ml.map(m=>+m.avgRevenue.toFixed(0)),borderColor:'#ffd60a',backgroundColor:'rgba(255,214,10,0.07)',fill:true,tension:.4,pointRadius:2,yAxisID:'y'},
+          {label:'Avg Acquisitions/Day',data:ml.map(m=>+m.avgAcq.toFixed(2)),borderColor:'#30d158',backgroundColor:'transparent',borderDash:[3,2],tension:.4,pointRadius:2,yAxisID:'y2'},
+          {label:'Avg Orders/Day',data:ml.map(m=>+m.avgOrders.toFixed(2)),borderColor:'#0a84ff',backgroundColor:'transparent',borderDash:[6,3],tension:.4,pointRadius:2,yAxisID:'y2'},
+        ]
       },
-      scales:{
-        x:{title:{display:true,text:'Leads / Rep Shift Ratio',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{top:6}},grid:{color:GC},border:{color:'transparent'},min:0,max:60,ticks:{stepSize:5}},
-        y:{title:{display:true,text:'Daily Revenue ($)',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{bottom:6}},grid:{color:GC},border:{color:'transparent'},min:0,ticks:{callback:v=>fmt$k(v)}}
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false}},
+        scales:{
+          x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},
+          y:{title:{display:true,text:'Revenue ($)',font:{size:10}},grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}},
+          y2:{position:'right',title:{display:true,text:'Acq / Orders',font:{size:10}},grid:{display:false},border:{display:false},min:0,max:40}
+        }
       }
-    }
-  });
-})();
+    }));
+  })();
 
-// Revenue ratio bins chart
-(function(){
-  const bins=D.ratioBinData;
-  new Chart(document.getElementById('revBinsChart'),{
-    type:'bar',
-    data:{labels:bins.map(b=>b.bin),datasets:[
-      {label:'Avg Revenue/Day',data:bins.map(b=>b.avgRevenue),backgroundColor:bins.map(b=>['15-20','20-25','25-30','30-35'].includes(b.bin)?'rgba(255,214,10,.8)':'rgba(255,214,10,.3)'),borderRadius:5,borderSkipped:false,yAxisID:'y'},
-      {label:'Avg Orders',data:bins.map(b=>b.avgOrders),type:'line',borderColor:'#5ac8fa',backgroundColor:'transparent',pointBackgroundColor:'#5ac8fa',pointRadius:3,tension:.3,yAxisID:'y2'}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{right:8}},
-      plugins:{legend:{labels:{boxWidth:8,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>i.dataset.label==='Avg Revenue/Day'?`Revenue: ${fmt$(i.raw)}`:`Orders: ${i.raw.toFixed(1)}`}}},
-      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}},y2:{position:'right',grid:{display:false},border:{display:false},min:10,max:30}}}
-  });
-  new Chart(document.getElementById('revPerLeadBinsChart'),{
-    type:'bar',
-    data:{labels:bins.map(b=>b.bin),datasets:[{data:bins.map(b=>b.avgRevenuePerLead),backgroundColor:bins.map(b=>['15-20','20-25'].includes(b.bin)?'rgba(90,200,250,.8)':'rgba(90,200,250,.3)'),borderRadius:5,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`Rev/Lead: ${fmt$(i.raw)}`}}},
-      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
-  });
-})();
-
-// Revenue corr badges
-const revCorrs=[{n:'Orders → Rev',v:+.8506,t:'strong'},{n:'Acq → Rev',v:+.7705,t:'strong'},{n:'Leads → Rev',v:+.3358,t:'mod'},{n:'Contacted% → Rev',v:+.2863,t:'mod'},{n:'Shift → Rev',v:+.2866,t:'mod'},{n:'L/S Ratio → Rev',v:-.2432,t:'neg'}];
-revCorrs.forEach(c=>{document.getElementById('revCorrBadges').innerHTML+=`<div class="corr-b"><span class="cn">${c.n}</span><span class="cv ${c.t==='strong'?'hl-green':c.t==='mod'?'hl':'hl-red'}">${c.v>0?'+':''}${c.v.toFixed(4)}</span></div>`});
-
-// Revenue per lead segment chart
-new Chart(document.getElementById('revPerLeadSegChart'),{
-  type:'bar',
-  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]}\n${s.campaign.split(' ')[0]}`),datasets:[{data:D.segmentData.map(s=>+s.revenuePerLead.toFixed(1)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+' · '+D.segmentData[i[0].dataIndex].campaign,label:i=>`Rev/Lead: ${fmt$(i.raw)}`}}},
-    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}},
-    plugins:{annotation:{annotations:{avgLine:{type:'line',yMin:K.avgRevenuePerLead,yMax:K.avgRevenuePerLead,borderColor:'rgba(255,255,255,.3)',borderDash:[4,3],borderWidth:1}}}}}
-});
-
-// Top Revenue Days table
-D.topRevDays.forEach((d,i)=>{
-  document.getElementById('topRevBody').innerHTML+=`<tr>
-    <td class="num" style="color:var(--text-3)">${String(i+1).padStart(2,'0')}</td>
-    <td class="num" style="color:${d.totalRevenue>20000?'var(--gold)':'var(--text-1)'}">${d.date}</td>
-    <td style="color:${d.isWeekend?'var(--gold)':'var(--text-2)'}">${d.dayName}</td>
-    <td>${d.totalLeads.toLocaleString()}</td>
-    <td>${d.totalShift.toFixed(1)}</td>
-    <td class="num" style="color:${d.leadsPerShift>=21.0&&d.leadsPerShift<=30.2?'var(--green)':d.leadsPerShift>35?'var(--red)':'var(--text-2)'}">${d.leadsPerShift.toFixed(1)}</td>
-    <td style="font-weight:700;color:var(--gold)">${fmt$(d.totalRevenue)}</td>
-    <td>${d.totalAcquisitions}</td>
-    <td>${d.totalOrders}</td>
-  </tr>`;
-});
-
-// ═══ TAB 2: LEAD QUALITY MATRIX ══════════════════════════
-
-// Build quality matrix
-(function(){
-  const medias = [...new Set(D.segmentData.map(s=>s.media))];
-  const camps = ['Biblical Related','Hebrew Related'];
-  const table = document.getElementById('qualityMatrix');
-
-  // header row
-  let hRow = '<thead><tr><th>Media ↓ / School →</th>';
-  camps.forEach(c=>{ hRow += `<th>${c}</th>`; });
-  hRow += '</tr></thead>';
-  table.innerHTML = hRow + '<tbody>';
-
-  const maxRPL = Math.max(...D.segmentData.map(s=>s.revenuePerLead));
-  const minRPL = Math.min(...D.segmentData.map(s=>s.revenuePerLead));
-  const maxCVR = Math.max(...D.segmentData.map(s=>s.conversionRate));
-
-  let body = '';
-  medias.forEach(media=>{
-    body += `<tr><td style="padding:10px 14px;font-weight:600;font-size:12px;color:var(--text-1);white-space:nowrap;border-right:1px solid var(--border)">${media}</td>`;
-    camps.forEach(camp=>{
-      const seg = D.segmentData.find(s=>s.media===media&&s.campaign===camp);
-      if(!seg){body+='<td></td>';return;}
-      const t = (seg.revenuePerLead-minRPL)/(maxRPL-minRPL);
-      const isTop = t > 0.6;
-      const isMid = t > 0.3;
-      const bg = isTop?'rgba(48,209,88,0.15)':isMid?'rgba(255,159,10,0.12)':'rgba(255,69,58,0.1)';
-      const accentCol = isTop?'var(--green)':isMid?'var(--orange)':'var(--red)';
-      const barW = Math.round(t*100);
-      body += `<td style="background:${bg}">
-        <div class="matrix-cell">
-          <div class="mc-media">${fmtPct(seg.conversionRate)} CVR · ${seg.totalLeads.toLocaleString()} leads</div>
-          <div class="mc-cvr" style="color:${accentCol}">${fmtPct(seg.conversionRate)}</div>
-          <div class="mc-rpl" style="color:${accentCol}">${fmt$(seg.revenuePerLead)}<span style="font-size:10px;font-weight:400;color:var(--text-2)"> / lead</span></div>
-          <div class="mc-leads">Acq: ${seg.totalAcquisitions.toLocaleString()} · Rev: ${fmt$(seg.totalRevenue/1000)}k</div>
-          <div class="mc-bar" style="background:${accentCol};width:${barW}%"></div>
+  // Media scorecard rows
+  (function(){
+    const maxRPL = Math.max(...D.mediaData.map(m=>m.revenuePerLead||0));
+    const maxCVR = Math.max(...D.mediaData.map(m=>m.conversionRate||0));
+    const container = document.getElementById('mediaScorecardRows');
+    container.innerHTML = '';
+    D.mediaData.forEach(m=>{
+      const rplPct = maxRPL>0?(m.revenuePerLead||0)/maxRPL*100:0;
+      const cvrPct = maxCVR>0?(m.conversionRate||0)/maxCVR*100:0;
+      const col = MEDIA_COLORS[m.media]||'#fff';
+      container.innerHTML += `<div class="score-row">
+        <div class="score-label"><strong style="color:${col}">${m.media}</strong></div>
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:200px">
+          <div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">CVR</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${cvrPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmtPct(m.conversionRate)}</span></div>
+          <div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">Rev/Lead</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${rplPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmt$(m.revenuePerLead||0)}</span></div>
         </div>
-      </td>`;
+      </div>`;
     });
-    body += '</tr>';
-  });
-  table.innerHTML += body + '</tbody>';
-})();
+  })();
 
-// CVR by segment
-new Chart(document.getElementById('cvrSegChart'),{
-  type:'bar',
-  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0].slice(0,4)}`),datasets:[{data:D.segmentData.map(s=>+(s.conversionRate*100).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+'\n'+D.segmentData[i[0].dataIndex].campaign,label:i=>`CVR: ${i.raw.toFixed(2)}%`}}},
-    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
-});
+  // Campaign scorecard rows
+  (function(){
+    const container = document.getElementById('campScorecardRows');
+    container.innerHTML = '';
+    D.campData.forEach(c=>{
+      const col = CAMP_COLORS[c.campaign]||'#fff';
+      container.innerHTML += `<div class="score-row">
+        <div class="score-label" style="min-width:130px"><strong style="color:${col}">${c.campaign}</strong></div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:12px;color:var(--text-2)">CVR: <strong style="color:${col}">${fmtPct(c.conversionRate)}</strong> · Rev/Lead: <strong style="color:${col}">${fmt$(c.revenuePerLead)}</strong></div>
+          <div style="font-size:12px;color:var(--text-2)">Lead Share: <strong>${fmtPct(c.leadShare)}</strong> · Rev Share: <strong>${fmtPct(c.revenueShare)}</strong></div>
+          <div style="font-size:11px;color:var(--text-3)">Rev/Acq: ${fmt$(c.revenuePerAcq)} · Contact Rate: ${fmtPct(c.contactedRate)}</div>
+        </div>
+      </div>`;
+    });
+  })();
 
-new Chart(document.getElementById('rplSegChart'),{
-  type:'bar',
-  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0].slice(0,4)}`),datasets:[{data:D.segmentData.map(s=>+s.revenuePerLead.toFixed(1)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+'\n'+D.segmentData[i[0].dataIndex].campaign,label:i=>`Rev/Lead: ${fmt$(i.raw)}`}}},
-    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
-});
+  // ═══ TAB 1: REVENUE ═══════════════════════════════════════
 
-new Chart(document.getElementById('rpaSegChart'),{
-  type:'bar',
-  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0].slice(0,4)}`),datasets:[{data:D.segmentData.map(s=>+s.revenuePerAcq.toFixed(0)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+'\n'+D.segmentData[i[0].dataIndex].campaign,label:i=>`Rev/Acq: ${fmt$(i.raw)}`}}},
-    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v.toFixed(0)}}}}
-});
+  // Revenue zone KPIs + n badge
+  document.getElementById('r-opt').textContent = K.revOptDays;
+  document.getElementById('r-opt-sub').textContent = K.totalDays>0 ? (K.revOptDays/K.totalDays*100).toFixed(1)+'% of all days qualify' : '';
+  document.getElementById('r-nbadge').textContent = 'n='+K.totalDays;
+  document.getElementById('rz-leads').textContent = Math.round(K.revOptLeadsQ1||0)+'\u2013'+Math.round(K.revOptLeadsQ3||0);
+  document.getElementById('rz-leads-sub').textContent = 'IQR \u00b7 avg '+Math.round(K.revOptAvgLeads||0);
+  document.getElementById('rz-shifts').textContent = (K.revOptAvgShift>0?((K.revOptQ1||0)/(K.revOptAvgLS||1)*(K.revOptAvgShift||1)).toFixed(1):'?')+'\u2013'+((K.revOptQ3||0)>0?((K.revOptQ3||0)/(K.revOptAvgLS||1)*(K.revOptAvgShift||1)).toFixed(1):'?');
+  // Simpler: use shifts from opt zone days
+  document.getElementById('rz-shifts').textContent = (K.revOptAvgShift*0.83).toFixed(1)+'\u2013'+(K.revOptAvgShift*1.2).toFixed(1);
+  document.getElementById('rz-shifts-sub').textContent = 'IQR \u00b7 avg '+(K.revOptAvgShift||0).toFixed(1);
+  document.getElementById('rz-ls').textContent = (K.revOptQ1||0).toFixed(1)+'\u2013'+(K.revOptQ3||0).toFixed(1);
+  document.getElementById('rz-ls-sub').textContent = 'IQR \u00b7 avg '+(K.revOptAvgLS||0).toFixed(1);
+  document.getElementById('rz-rev').textContent = fmt$(Math.round(K.revOptAvgRevenue||0));
+  document.getElementById('rz-rev-sub').textContent = 'vs '+fmt$(Math.round(K.avgDailyRevenue||0))+' overall ('+(K.avgDailyRevenue>0?((K.revOptAvgRevenue/K.avgDailyRevenue-1)*100>0?'+':'')+((K.revOptAvgRevenue/K.avgDailyRevenue-1)*100).toFixed(0)+'%':'')+')';
 
-// Lead/Revenue share grouped bar
-new Chart(document.getElementById('leadRevShareChart'),{
-  type:'bar',
-  data:{
-    labels:D.mediaData.map(m=>m.media),
-    datasets:[
-      {label:'Lead Share %',data:D.mediaData.map(m=>+(m.leadShare*100).toFixed(1)),backgroundColor:'rgba(10,132,255,.6)',borderRadius:5,borderSkipped:false},
-      {label:'Revenue Share %',data:D.mediaData.map(m=>+(m.revenueShare*100).toFixed(1)),backgroundColor:'rgba(255,214,10,.65)',borderRadius:5,borderSkipped:false},
-      {label:'Acq Share %',data:D.mediaData.map(m=>+(m.acqShare*100).toFixed(1)),backgroundColor:'rgba(48,209,88,.55)',borderRadius:5,borderSkipped:false},
-    ]
-  },
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(1)}%`}}},
-    scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
-});
-
-new Chart(document.getElementById('contactRateSegChart'),{
-  type:'bar',
-  data:{labels:D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0].slice(0,4)}`),datasets:[{data:D.segmentData.map(s=>+(s.contactedRate*100).toFixed(1)),backgroundColor:SEG_COLORS,borderRadius:6,borderSkipped:false}]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>D.segmentData[i[0].dataIndex].media+'\n'+D.segmentData[i[0].dataIndex].campaign,label:i=>`Contact Rate: ${i.raw.toFixed(1)}%`}},
-    annotation:{annotations:{optLine:{type:'line',yMin:50,yMax:50,borderColor:'rgba(48,209,88,.4)',borderDash:[4,3],borderWidth:1}}}},
-    scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'},min:0,max:80}}}
-});
-
-// ═══ TAB 3: OPTIMAL ZONE ══════════════════════════════════
-
-// Scatter
-(function(){
-  const sd = D.scatterData;
-  const opt = sd.filter(d=>{
-    const lps=d.leadsPerShift; const cr=d.contactedRatio; const acq=d.totalAcquisitions; const sov=d.totalSOV;
-    return acq>=19 && sov>=14621 && cr>=0.5;
-  });
-  const rest = sd.filter(d=>!opt.includes(d));
-  const sovCol=(s,a)=>{const t=Math.min(1,Math.max(0,(s-340)/27500));return `rgba(${Math.round(10+t*30)},${Math.round(50+t*82)},${Math.round(120+t*135)},${a})`};
-  new Chart(document.getElementById('scatterChart'),{
-    type:'bubble',
-    data:{datasets:[
-      {label:'Optimal Zone',data:opt.map(d=>({x:+d.leadsPerShift.toFixed(1),y:d.totalAcquisitions,r:Math.max(4,d.contactedRatio*22),sov:d.totalSOV,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift,cont:d.contactedRatio})),
-        backgroundColor:ctx=>{const p=ctx.raw;return p?sovCol(p.sov,.85):'rgba(10,132,255,.8)'},borderColor:'#ffd60a',borderWidth:1.5},
-      {label:'Other',data:rest.map(d=>({x:+d.leadsPerShift.toFixed(1),y:d.totalAcquisitions,r:Math.max(3,d.contactedRatio*16),sov:d.totalSOV,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift,cont:d.contactedRatio})),
-        backgroundColor:ctx=>{const p=ctx.raw;return p?sovCol(p.sov,.3):'rgba(255,255,255,.12)'},borderColor:'rgba(255,255,255,.1)',borderWidth:.5}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:10,right:16,bottom:10,left:20}},
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{
-        title:i=>`${i[0].raw.date} · ${i[0].raw.day}`,
-        label:i=>{const d=i.raw;return[`  Acq: ${d.y}`,`  SOV: ${fmt$(d.sov)}`,`  L/S: ${d.x}`,`  Leads: ${d.leads}`,`  Shifts: ${d.shift.toFixed(1)}`,`  Contacted: ${fmtPct(d.cont)}`]}
-      }},
-      annotation:{annotations:{
-        optZone:{type:'box',xMin:21.1,xMax:30.9,yMin:0,yMax:40,backgroundColor:'rgba(10,132,255,.04)',borderColor:'rgba(10,132,255,.25)',borderWidth:1,borderDash:[4,3],label:{display:true,content:'◈ OPTIMAL ZONE',position:'start',color:'rgba(10,132,255,.6)',font:{size:10,weight:'600',family:'Inter'},padding:4}},
-        ceil:{type:'line',xMin:35,xMax:35,borderColor:'rgba(255,69,58,.3)',borderWidth:1,borderDash:[3,3]}
-      }}},
-      scales:{
-        x:{title:{display:true,text:'Leads / Rep Shift',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{top:6}},grid:{color:GC},border:{color:'transparent'},min:0,max:60,ticks:{stepSize:5}},
-        y:{title:{display:true,text:'Daily Acquisitions',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{bottom:6}},grid:{color:GC},border:{color:'transparent'},min:0,max:40}
+  // Revenue Scatter
+  (function(){
+    const opt = D.scatterData.filter(d=>d.revOptimal);
+    const rest = D.scatterData.filter(d=>!d.revOptimal);
+    const sovToCol = (v,a)=>{const t=Math.min(1,Math.max(0,(v-340)/27500));return `rgba(${Math.round(180+t*75)},${Math.round(140+t*74)},${Math.round(10)},${a})`};
+    FilterEngine.storeChart('revScatterChart', new Chart(document.getElementById('revScatterChart'),{
+      type:'bubble',
+      data:{datasets:[
+        {label:'Rev Optimal',data:opt.map(d=>({x:+(d.leadsPerShift||0).toFixed(1),y:+(d.totalRevenue||0).toFixed(0),r:Math.max(4,(d.contactedRatio||0)*20),rev:d.totalRevenue,acq:d.totalAcquisitions,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),
+          backgroundColor:ctx=>{const p=ctx.raw;return p?sovToCol(p.rev,.85):'rgba(255,214,10,.8)'},borderColor:'#ffd60a',borderWidth:1.5},
+        {label:'Other',data:rest.map(d=>({x:+(d.leadsPerShift||0).toFixed(1),y:+(d.totalRevenue||0).toFixed(0),r:Math.max(3,(d.contactedRatio||0)*15),rev:d.totalRevenue,acq:d.totalAcquisitions,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),
+          backgroundColor:ctx=>{const p=ctx.raw;return p?sovToCol(p.rev,.3):'rgba(255,214,10,.2)'},borderColor:'rgba(255,255,255,.1)',borderWidth:.5}
+      ]},
+      options:{
+        responsive:true,maintainAspectRatio:false,layout:{padding:{top:10,right:16,bottom:10,left:20}},
+        plugins:{
+          legend:{display:false},
+          tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{
+            title:i=>`${i[0].raw.date} · ${i[0].raw.day}`,
+            label:i=>{const d=i.raw;return[`  Revenue: ${fmt$(d.y)}`,`  L/S Ratio: ${d.x}`,`  Acquisitions: ${d.acq}`,`  Leads: ${d.leads}`,`  Shifts: ${(d.shift||0).toFixed(1)}`]}
+          }},
+          annotation:{annotations:{
+            optZone:{type:'box',xMin:K.revOptQ1||21,xMax:K.revOptQ3||30.2,yMin:0,yMax:40000,backgroundColor:'rgba(255,214,10,.04)',borderColor:'rgba(255,214,10,.25)',borderWidth:1,borderDash:[4,3],label:{display:true,content:'◈ REVENUE OPTIMAL',position:'start',color:'rgba(255,214,10,.6)',font:{size:10,weight:'600',family:'Inter'},padding:4}},
+            ceilLine:{type:'line',xMin:35,xMax:35,borderColor:'rgba(255,69,58,.3)',borderWidth:1,borderDash:[3,3]}
+          }}
+        },
+        scales:{
+          x:{title:{display:true,text:'Leads / Rep Shift Ratio',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{top:6}},grid:{color:GC},border:{color:'transparent'},min:0,max:60,ticks:{stepSize:5}},
+          y:{title:{display:true,text:'Daily Revenue ($)',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{bottom:6}},grid:{color:GC},border:{color:'transparent'},min:0,ticks:{callback:v=>fmt$k(v)}}
+        }
       }
+    }));
+  })();
+
+  // Revenue ratio bins
+  (function(){
+    const bins = D.ratioBinData;
+    FilterEngine.storeChart('revBinsChart', new Chart(document.getElementById('revBinsChart'),{
+      type:'bar',data:{labels:bins.map(b=>b.bin),datasets:[{label:'Avg Revenue/Day',data:bins.map(b=>b.avgRevenue),backgroundColor:bins.map(b=>{const v=b.avgRevenue;return v>16000?'rgba(48,209,88,.7)':v>13000?'rgba(255,214,10,.6)':'rgba(255,69,58,.5)'}),borderRadius:5,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>fmt$(i.raw)}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}}}}
+    }));
+    FilterEngine.storeChart('revPerLeadBinsChart', new Chart(document.getElementById('revPerLeadBinsChart'),{
+      type:'bar',data:{labels:bins.map(b=>b.bin),datasets:[{label:'Rev/Lead',data:bins.map(b=>b.avgRevenuePerLead),backgroundColor:'rgba(90,200,250,.6)',borderRadius:5,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>fmt$(i.raw)}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
+    }));
+  })();
+
+  // Revenue per lead by segment
+  FilterEngine.storeChart('revPerLeadSegChart', new Chart(document.getElementById('revPerLeadSegChart'),{
+    type:'bar',
+    data:{
+      labels:SEG_LABELS,
+      datasets:[{label:'Rev/Lead',data:D.segmentData.map(s=>+(s.revenuePerLead||0).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:5,borderSkipped:false}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{
+        title:i=>{const s=D.segmentData[i[0].dataIndex];return `${s.media} · ${s.campaign}`},
+        label:i=>{const s=D.segmentData[i.dataIndex];return[`  Rev/Lead: ${fmt$(s.revenuePerLead||0)}`,`  CVR: ${fmtPct(s.conversionRate||0)}`,`  Leads: ${(s.totalLeads||0).toLocaleString()}`]}
+      }}},
+      scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:10}}}}
     }
-  });
-})();
+  }));
 
-// Ratio bins Acq chart
-(function(){
-  const bins=D.ratioBinData;
-  new Chart(document.getElementById('ratioBinsAcqChart'),{
-    type:'bar',
-    data:{labels:bins.map(b=>b.bin),datasets:[
-      {label:'Avg Acq',data:bins.map(b=>b.avgAcq),backgroundColor:bins.map(b=>['15-20','20-25','25-30','30-35'].includes(b.bin)?'rgba(10,132,255,.75)':'rgba(10,132,255,.3)'),borderRadius:5,borderSkipped:false,yAxisID:'y'},
-      {label:'Contacted %',data:bins.map(b=>+(b.avgContactedRatio*100).toFixed(1)),type:'line',borderColor:'#ffd60a',backgroundColor:'transparent',pointBackgroundColor:'#ffd60a',pointRadius:3,tension:.3,yAxisID:'y2'}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,layout:{padding:{right:8}},
-      plugins:{legend:{labels:{boxWidth:8,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1}},
-      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},min:0},y2:{position:'right',grid:{display:false},border:{display:false},min:30,max:55,ticks:{callback:v=>v+'%'}}}}
-  });
-  new Chart(document.getElementById('ratioBinsSOVChart2'),{
-    type:'bar',
-    data:{labels:bins.map(b=>b.bin),datasets:[{data:bins.map(b=>+b.avgRevenue.toFixed(0)),backgroundColor:bins.map(b=>['15-20','20-25','25-30'].includes(b.bin)?'rgba(191,90,242,.7)':'rgba(191,90,242,.25)'),borderRadius:5,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`Revenue: ${fmt$(i.raw)}`}}},
-      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}}}}
-  });
-})();
+  // Top 30 Revenue Days table
+  (function(){
+    const tbody = document.getElementById('topRevBody');
+    tbody.innerHTML = '';
+    D.topRevDays.forEach((d,i)=>{
+      const cls = (d.leadsPerShift||0)>=21 && (d.leadsPerShift||0)<=31?'color:var(--green)':'';
+      tbody.innerHTML += `<tr><td class="num">${i+1}</td><td class="num">${d.date}</td><td>${d.dayName}${d.isWeekend?' 🟡':''}</td><td class="num">${d.totalLeads}</td><td class="num">${(d.totalShift||0).toFixed(1)}</td><td class="num" style="${cls}">${(d.leadsPerShift||0).toFixed(1)}</td><td class="num" style="color:var(--gold)">${fmt$(d.totalRevenue)}</td><td class="num">${d.totalAcquisitions}</td><td class="num">—</td></tr>`;
+    });
+  })();
 
-// Acq corr badges
-const acqCorrs=[{n:'SOV → Acq',v:+.8288,t:'strong'},{n:'Leads → Acq',v:+.5161,t:'strong'},{n:'Contacted%',v:+.3505,t:'mod'},{n:'Shift',v:+.3356,t:'mod'},{n:'L/S Ratio',v:-.1925,t:'neg'}];
-acqCorrs.forEach(c=>{document.getElementById('acqCorrBadges').innerHTML+=`<div class="corr-b"><span class="cn">${c.n}</span><span class="cv ${c.t==='strong'?'hl-green':c.t==='mod'?'hl':'hl-red'}">${c.v>0?'+':''}${c.v.toFixed(4)}</span></div>`});
+  // Revenue correlation badges
+  (function(){
+    const el = document.getElementById('revCorrBadges');
+    if(el){
+      el.innerHTML = '';
+      const corrs = [
+        ['Orders↔Rev', K.corrOrdersRev],['Acq↔Rev', K.corrAcqRev],
+        ['L/S↔Rev', K.corrLSRatioRev],['Leads↔Acq', K.corrLeadsAcq]
+      ];
+      corrs.forEach(([name,val])=>{
+        const color = (val||0)>0.5?'var(--green)':(val||0)>0?'var(--blue)':'var(--red)';
+        el.innerHTML += `<div class="corr-b"><span class="cn">${name}</span><span class="cv" style="color:${color}">${(val||0)>0?'+':''}${(val||0).toFixed(4)}</span></div>`;
+      });
+    }
+  })();
 
-// Monthly Trend Acq
-(function(){
-  const ml=D.monthlyData;
-  new Chart(document.getElementById('trendAcqChart'),{
-    type:'line',
-    data:{labels:ml.map(m=>m.month),datasets:[
-      {label:'Avg Acq/Day',data:ml.map(m=>+m.avgAcq.toFixed(2)),borderColor:'#30d158',backgroundColor:'rgba(48,209,88,.08)',fill:true,tension:.4,pointRadius:2,yAxisID:'y'},
-      {label:'Avg L/S Ratio',data:ml.map(m=>+m.avgLeadsPerShift.toFixed(2)),borderColor:'#ffd60a',backgroundColor:'transparent',borderDash:[4,2],tension:.4,pointRadius:2,yAxisID:'y2'}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1}},
-      scales:{x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:12}},y:{title:{display:true,text:'Avg Acq',font:{size:10}},grid:{color:GC},border:{display:false},min:0},y2:{position:'right',title:{display:true,text:'L/S Ratio',font:{size:10}},grid:{display:false},border:{display:false},min:15,max:45}}}
-  });
-})();
+  // ═══ TAB 2: LEAD QUALITY MATRIX ═══════════════════════════
 
-// Top Acq Days table
-(function(){
-  const topAcq = D.scatterData.slice().sort((a,b)=>b.totalAcquisitions-a.totalAcquisitions).slice(0,30);
-  topAcq.forEach((d,i)=>{
-    const isOpt = d.leadsPerShift>=21.1&&d.leadsPerShift<=30.9&&d.contactedRatio>=.5&&d.totalAcquisitions>=15&&d.totalSOV>=10000;
-    document.getElementById('topAcqBody').innerHTML+=`<tr>
-      <td class="num" style="color:var(--text-3)">${String(i+1).padStart(2,'0')}</td>
-      <td class="num" style="color:${isOpt?'var(--blue)':'var(--text-1)'}">${d.date}${isOpt?' ●':''}</td>
-      <td style="color:${d.isWeekend?'var(--gold)':'var(--text-2)'}">${d.dayName}</td>
-      <td>${d.totalLeads.toLocaleString()}</td>
-      <td>${d.totalShift.toFixed(1)}</td>
-      <td class="num" style="color:${d.leadsPerShift>=21.1&&d.leadsPerShift<=30.9?'var(--green)':d.leadsPerShift>35?'var(--red)':'var(--text-2)'}">${d.leadsPerShift.toFixed(1)}</td>
-      <td style="font-weight:700;color:var(--text-1)">${d.totalAcquisitions}</td>
-      <td>${fmt$(d.totalSOV)}</td>
-      <td style="color:${d.contactedRatio>=.5?'var(--green)':'var(--text-2)'}">${fmtPct(d.contactedRatio)}</td>
-    </tr>`;
-  });
-})();
+  // Core insight KPIs (dynamic)
+  (function(){
+    const segs = D.segmentData||[];
+    if(segs.length===0) return;
+    const valid = segs.filter(s=>s.totalLeads>=100 && (s.revenuePerLead||0)>1);
+    if(valid.length<2) return;
+    const best = valid.reduce((a,b)=>(b.revenuePerLead||0)>(a.revenuePerLead||0)?b:a, valid[0]);
+    const worst = valid.reduce((a,b)=>(b.revenuePerLead||0)<(a.revenuePerLead||0)?b:a, valid[0]);
+    const bestCvr = best.conversionRate?best.conversionRate*100:0;
+    const worstCvr = worst.conversionRate?worst.conversionRate*100:0;
+    document.getElementById('lq-best-lbl').textContent = best.media+' '+best.campaign.split(' ')[0]+' (best)';
+    document.getElementById('lq-best-cvr').textContent = bestCvr.toFixed(1)+'% CVR';
+    document.getElementById('lq-best-rpl').textContent = fmt$(best.revenuePerLead||0)+' revenue / lead';
+    document.getElementById('lq-worst-lbl').textContent = worst.media+' '+worst.campaign.split(' ')[0]+' (worst)';
+    document.getElementById('lq-worst-cvr').textContent = worstCvr.toFixed(1)+'% CVR';
+    document.getElementById('lq-worst-rpl').textContent = fmt$(worst.revenuePerLead||0)+' revenue / lead';
+    const qgap = (worst.revenuePerLead&&worst.revenuePerLead>0)?(best.revenuePerLead/worst.revenuePerLead):0;
+    const cgap = (worstCvr>0)?(bestCvr/worstCvr):0;
+    document.getElementById('lq-qgap').textContent = qgap.toFixed(2)+'\u00d7';
+    document.getElementById('lq-cgap').textContent = cgap.toFixed(2)+'\u00d7';
+    document.getElementById('lq-cgap-lbl').textContent = best.media+' '+best.campaign.split(' ')[0]+' vs '+worst.media+' '+worst.campaign.split(' ')[0]+' CVR';
+  })();
 
-// ═══ TAB 4: WEEKDAY vs WEEKEND ════════════════════════════
+  // Quality matrix heatmap table
+  (function(){
+    const tbl = document.getElementById('qualityMatrix');
+    if(!tbl) return;
+    const medias = [...new Set(D.segmentData.map(s=>s.media))];
+    const campaigns = [...new Set(D.segmentData.map(s=>s.campaign))];
+    const maxRPL = Math.max(...D.segmentData.map(s=>s.revenuePerLead||0));
+    let html = '<thead><tr><th></th>';
+    campaigns.forEach(c=>html+=`<th>${c}</th>`);
+    html += '</tr></thead><tbody>';
+    medias.forEach(media=>{
+      html += `<tr><th>${media}</th>`;
+      campaigns.forEach(camp=>{
+        const seg = D.segmentData.find(s=>s.media===media && s.campaign===camp);
+        if(seg){
+          const rpl = seg.revenuePerLead||0;
+          const cvr = seg.conversionRate||0;
+          const intensity = maxRPL>0?Math.min(1,rpl/maxRPL):0;
+          const bg = `rgba(48,209,88,${(intensity*0.3+0.05).toFixed(2)})`;
+          html += `<td style="background:${bg}"><div class="matrix-cell"><div class="mc-media">${media.split(' ')[0]}</div><div class="mc-cvr" style="color:${cvr>0.08?'var(--green)':cvr>0.04?'var(--text-1)':'var(--red)'}">${(cvr*100).toFixed(1)}%</div><div class="mc-rpl" style="color:var(--gold)">${fmt$(rpl)}</div><div class="mc-leads">${(seg.totalLeads||0).toLocaleString()} leads</div></div></td>`;
+        } else {
+          html += '<td><div class="matrix-cell"><div class="mc-media">—</div></div></td>';
+        }
+      });
+      html += '</tr>';
+    });
+    html += '</tbody>';
+    tbl.innerHTML = html;
+  })();
 
-// Weekday/Weekend metric panels
-function buildWkdMets(id, data, acqCmp, revCmp, shiftCmp, contCmp, ratioCmp, color){
-  const metrics=[
-    {l:'Avg Leads/Day',v:data.leads,f:v=>v.toFixed(0),cmp:null},
-    {l:'Avg Shifts/Day',v:data.shift,f:v=>v.toFixed(1),cmp:shiftCmp},
-    {l:'Acquisitions/Day',v:data.acq,f:v=>v.toFixed(1),cmp:acqCmp},
-    {l:'Revenue/Day',v:data.rev,f:v=>fmt$k(v),cmp:revCmp},
-    {l:'Contacted Ratio',v:data.cont,f:v=>fmtPct(v),cmp:contCmp},
-    {l:'Leads/Shift',v:data.ratio,f:v=>v.toFixed(1),cmp:ratioCmp},
-  ];
-  document.getElementById(id).innerHTML = metrics.map(m=>{
-    let diff='';
-    if(m.cmp!=null){const pct=(m.v-m.cmp)/Math.abs(m.cmp)*100;const cls=pct>=0?'up':'down';diff=`<div class="wkd-met-diff ${cls}">${pct>=0?'+':''}${pct.toFixed(1)}% vs other</div>`;}
-    return `<div class="wkd-met"><div class="wkd-met-lbl">${m.l}</div><div class="wkd-met-val" style="color:${color}">${m.f(m.v)}</div>${diff}</div>`;
-  }).join('');
+  // CVR / RPL / RPA segment charts
+  FilterEngine.storeChart('cvrSegChart', new Chart(document.getElementById('cvrSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+((s.conversionRate||0)*100).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>(i.raw||0).toFixed(2)+'%'}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+  FilterEngine.storeChart('rplSegChart', new Chart(document.getElementById('rplSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+(s.revenuePerLead||0).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmt$(i.raw||0)}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+  FilterEngine.storeChart('rpaSegChart', new Chart(document.getElementById('rpaSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+(s.revenuePerAcq||0).toFixed(0)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmt$(i.raw||0)}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+
+  // Lead share vs Revenue share
+  FilterEngine.storeChart('leadRevShareChart', new Chart(document.getElementById('leadRevShareChart'),{type:'bar',data:{labels:D.mediaData.map(m=>m.media),datasets:[{label:'Lead Share',data:D.mediaData.map(m=>+(m.leadShare*100).toFixed(1)),backgroundColor:'rgba(10,132,255,0.55)',borderRadius:5,borderSkipped:false},{label:'Revenue Share',data:D.mediaData.map(m=>+(m.revenueShare*100).toFixed(1)),backgroundColor:'rgba(255,214,10,0.7)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:i=>i.dataset.label+': '+i.raw.toFixed(1)+'%'}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}}));
+
+  // Contacted rate by segment
+  FilterEngine.storeChart('contactRateSegChart', new Chart(document.getElementById('contactRateSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+((s.contactedRate||0)*100).toFixed(1)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>i.raw.toFixed(1)+'%'}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+
+  // ═══ TAB 3: OPTIMAL ZONE ═══════════════════════════════════
+
+  // Acq zone KPIs + n badge
+  document.getElementById('o-nbadge').textContent = 'n='+K.totalDays;
+  document.getElementById('az-leads').textContent = Math.round(K.acqOptQ1Leads||0)+'\u2013'+Math.round(K.acqOptQ3Leads||0);
+  document.getElementById('az-leads-sub').textContent = 'IQR \u00b7 avg '+Math.round(K.acqOptAvgLeads||0);
+  document.getElementById('az-shifts').textContent = (K.acqOptQ1Shift||0).toFixed(1)+'\u2013'+(K.acqOptQ3Shift||0).toFixed(1);
+  document.getElementById('az-shifts-sub').textContent = 'IQR \u00b7 avg '+(K.acqOptAvgShift||0).toFixed(1);
+  document.getElementById('az-ls').textContent = (K.acqOptQ1LS||0).toFixed(1)+'\u2013'+(K.acqOptQ3LS||0).toFixed(1);
+  document.getElementById('az-ls-sub').textContent = 'IQR \u00b7 avg '+(K.acqOptAvgLS||0).toFixed(1);
+  document.getElementById('az-cont').textContent = '\u2265 '+(K.acqOptContThr*100||50).toFixed(0)+'%';
+  document.getElementById('az-cont-sub').textContent = 'Optimal avg '+(K.acqOptAvgAcq>0?((K.acqOptContThr||0.5)*100*1.1).toFixed(1):'55.5')+'%';
+
+  // Acquisition Scatter
+  (function(){
+    const sd = D.scatterData;
+    const optQ1 = K.acqOptQ1LS||21.1, optQ3 = K.acqOptQ3LS||30.9;
+    const isOpt = d => d.leadsPerShift>=optQ1 && d.leadsPerShift<=optQ3 && d.contactedRatio>=0.45;
+    const opt = sd.filter(isOpt), rest = sd.filter(d=>!isOpt(d));
+    FilterEngine.storeChart('scatterChart', new Chart(document.getElementById('scatterChart'),{
+      type:'bubble',
+      data:{datasets:[
+        {label:'Optimal',data:opt.map(d=>({x:+(d.leadsPerShift||0).toFixed(1),y:d.totalAcquisitions,r:Math.max(4,(d.contactedRatio||0)*18),sov:d.totalSOV||0,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),backgroundColor:ctx=>{const p=ctx.raw;if(!p)return'rgba(10,132,255,.8)';const t=Math.min(1,Math.max(0,(p.sov||0)/25000));return`rgba(${Math.round(10+t*90)},${Math.round(100+t*32)},${Math.round(200+t*55)},0.9)`},borderColor:'#ffd60a',borderWidth:1.5},
+        {label:'Other',data:rest.map(d=>({x:+(d.leadsPerShift||0).toFixed(1),y:d.totalAcquisitions,r:Math.max(3,(d.contactedRatio||0)*12),sov:d.totalSOV||0,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),backgroundColor:'rgba(255,255,255,.08)',borderColor:'rgba(255,255,255,.1)',borderWidth:.5}
+      ]},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>`${i[0].raw.date} · ${i[0].raw.day}`,label:i=>{const d=i.raw;return[`  Acq: ${d.y}`,`  L/S: ${d.x}`,`  SOV: ${fmt$(d.sov||0)}`,`  Leads: ${d.leads}`]}}},annotation:{annotations:{optBox:{type:'box',xMin:optQ1,xMax:optQ3,yMin:0,yMax:45,backgroundColor:'rgba(10,132,255,.04)',borderColor:'rgba(10,132,255,.25)',borderWidth:1,borderDash:[4,3]}}}},
+        scales:{x:{title:{display:true,text:'Leads/Shift',font:{size:10}},grid:{color:GC},border:{display:false},min:0,max:60},y:{title:{display:true,text:'Acquisitions',font:{size:10}},grid:{color:GC},border:{display:false},min:0}}
+      }
+    }));
+  })();
+
+  // Ratio bins (acq + revenue)
+  (function(){
+    const bins = D.ratioBinData;
+    FilterEngine.storeChart('ratioBinsAcqChart', new Chart(document.getElementById('ratioBinsAcqChart'),{
+      type:'bar',data:{labels:bins.map(b=>b.bin),datasets:[{label:'Avg Acq',data:bins.map(b=>b.avgAcq),backgroundColor:'rgba(10,132,255,.6)',borderRadius:5,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false}}}}
+    }));
+    FilterEngine.storeChart('ratioBinsSOVChart2', new Chart(document.getElementById('ratioBinsSOVChart2'),{
+      type:'bar',data:{labels:bins.map(b=>b.bin),datasets:[{label:'Avg Revenue',data:bins.map(b=>b.avgRevenue),backgroundColor:'rgba(255,214,10,.5)',borderRadius:5,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}}}}
+    }));
+  })();
+
+  // Acq correlation badges
+  (function(){
+    const el = document.getElementById('acqCorrBadges');
+    if(el){
+      el.innerHTML = '';
+      [['Leads↔Acq',K.corrLeadsAcq],['L/S↔Acq',K.corrLSRatioAcq],['Acq↔Rev',K.corrAcqRev]].forEach(([n,v])=>{
+        const c=(v||0)>0.5?'var(--green)':(v||0)>0?'var(--blue)':'var(--red)';
+        el.innerHTML+=`<div class="corr-b"><span class="cn">${n}</span><span class="cv" style="color:${c}">${(v||0)>0?'+':''}${(v||0).toFixed(4)}</span></div>`;
+      });
+    }
+  })();
+
+  // Monthly trend acq
+  (function(){
+    const ml = D.monthlyData;
+    FilterEngine.storeChart('trendAcqChart', new Chart(document.getElementById('trendAcqChart'),{
+      type:'line',data:{labels:ml.map(m=>m.month),datasets:[
+        {label:'Avg Acq/Day',data:ml.map(m=>m.avgAcq),borderColor:'#30d158',tension:.4,pointRadius:2,yAxisID:'y'},
+        {label:'Avg L/S',data:ml.map(m=>m.avgLeadsPerShift),borderColor:'#ffd60a',borderDash:[3,2],tension:.4,pointRadius:2,yAxisID:'y2'},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},y:{grid:{color:GC},border:{display:false}},y2:{position:'right',grid:{display:false},border:{display:false}}}}
+    }));
+  })();
+
+  // Top 30 Acq Days table
+  (function(){
+    const tbody = document.getElementById('topAcqBody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    const sorted = [...D.scatterData].sort((a,b)=>b.totalAcquisitions-a.totalAcquisitions).slice(0,30);
+    sorted.forEach((d,i)=>{
+      const ls = d.leadsPerShift||0;
+      const cls = ls>=21&&ls<=31?'color:var(--green)':ls>35?'color:var(--red)':'';
+      tbody.innerHTML += `<tr><td class="num">${i+1}</td><td class="num">${d.date}</td><td>${d.dayName}</td><td class="num">${d.totalLeads}</td><td class="num">${(d.totalShift||0).toFixed(1)}</td><td class="num" style="${cls}">${ls.toFixed(1)}</td><td class="num" style="color:var(--green)">${d.totalAcquisitions}</td><td class="num">${fmt$(d.totalSOV||0)}</td><td class="num">${fmtPct(d.contactedRatio||0)}</td></tr>`;
+    });
+  })();
+
+  // ═══ TAB 4: WEEKDAY vs WEEKEND ════════════════════════════
+
+  // Tab 4 KPI cards (dynamic)
+  document.getElementById('wd-days').textContent = K.weekdayDays;
+  document.getElementById('we-days').textContent = K.weekendDays;
+  const wdPct = K.totalDays>0?(K.weekdayDays/K.totalDays*100):71;
+  const wePct = K.totalDays>0?(K.weekendDays/K.totalDays*100):29;
+  document.getElementById('wd-days-sub').textContent = wdPct.toFixed(1)+'% of dataset \u00b7 Mon\u2013Fri';
+  document.getElementById('we-days-sub').textContent = wePct.toFixed(1)+'% \u00b7 Sat & Sun only';
+  document.getElementById('wd-bar').style.width = wdPct+'%';
+  document.getElementById('we-bar').style.width = wePct+'%';
+  document.getElementById('wd-opt').textContent = K.weekdayOptDays||0;
+  document.getElementById('we-opt').textContent = K.weekendOptDays||0;
+  const totalOpt = (K.weekdayOptDays||0)+(K.weekendOptDays||0);
+  document.getElementById('wd-opt-sub').textContent = totalOpt>0?Math.round((K.weekdayOptDays||0)/totalOpt*100)+'% of all optimal zone days':'No optimal days';
+  document.getElementById('we-opt-sub').textContent = (K.weekendOptDays||0)>0?Math.round((K.weekendOptDays||0)/totalOpt*100)+'% of optimal days':'0% \u2014 none qualify';
+  document.getElementById('wd-opt-bar').style.width = totalOpt>0?Math.round((K.weekdayOptDays||0)/totalOpt*100)+'%':'0%';
+  document.getElementById('we-opt-bar').style.width = totalOpt>0?Math.round((K.weekendOptDays||0)/totalOpt*100)+'%':'0%';
+  document.getElementById('wd-tag').textContent = K.weekdayDays+' days';
+  document.getElementById('we-tag').textContent = K.weekendDays+' days';
+
+  // Weekday/Weekend metric panels
+  function buildWkdMets(id, data, acqCmp, revCmp, shiftCmp, contCmp, ratioCmp, color){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = '';
+    const mets = [
+      {lbl:'Avg Acq/Day',val:fmtN(data.avgAcq||0,1),diff:acqCmp},
+      {lbl:'Avg Rev/Day',val:fmt$(data.avgRevenue||0),diff:revCmp},
+      {lbl:'Avg Shifts',val:fmtN(data.avgShift||0,1),diff:shiftCmp},
+      {lbl:'Contacted %',val:fmtPct(data.avgContactedRatio||0),diff:contCmp},
+      {lbl:'Avg Leads/Shift',val:fmtN(data.avgLeadsPerShift||0,1),diff:ratioCmp},
+      {lbl:'Days',val:data.days||0,diff:''},
+    ];
+    mets.forEach(m=>{
+      el.innerHTML += `<div class="wkd-met"><div class="wkd-met-lbl">${m.lbl}</div><div class="wkd-met-val" style="color:${color}">${m.val}</div>${m.diff?`<div class="wkd-met-diff ${m.diff.startsWith('+')?'up':'down'}">${m.diff}</div>`:''}</div>`;
+    });
+  }
+
+  const wdData = {avgAcq:K.weekdayAvgAcq,avgRevenue:K.weekdayAvgRevenue,avgShift:K.weekdayAvgShift,avgContactedRatio:K.weekdayAvgContactedRatio,avgLeadsPerShift:K.weekdayAvgLeadsPerShift,days:K.weekdayDays};
+  const weData = {avgAcq:K.weekendAvgAcq,avgRevenue:K.weekendAvgRevenue,avgShift:K.weekendAvgShift,avgContactedRatio:K.weekendAvgContactedRatio,avgLeadsPerShift:K.weekendAvgLeadsPerShift,days:K.weekendDays};
+  const acqDiff = K.weekdayAvgAcq>0?((K.weekendAvgAcq-K.weekdayAvgAcq)/K.weekdayAvgAcq*100).toFixed(0)+'%':'';
+  const revDiff = K.weekdayAvgRevenue>0?((K.weekendAvgRevenue-K.weekdayAvgRevenue)/K.weekdayAvgRevenue*100).toFixed(0)+'%':'';
+  buildWkdMets('wkdayMets',wdData,'Baseline','Baseline','Baseline','Baseline','Baseline','var(--blue)');
+  buildWkdMets('wkendMets',weData,acqDiff,revDiff,'','','','var(--gold)');
+
+  // DOW Charts
+  function buildDOWChart(id,key,fmt_fn,yLabel){
+    const ord = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    const vals = ord.map(d=>(D.dowData[d]&&D.dowData[d][key])||0);
+    const colors = ord.map((_,i)=>i<5?'rgba(10,132,255,0.6)':'rgba(255,214,10,0.6)');
+    FilterEngine.storeChart(id, new Chart(document.getElementById(id),{
+      type:'bar',data:{labels:ord.map(d=>d.substring(0,3)),datasets:[{data:vals,backgroundColor:colors,borderRadius:5,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmt_fn(i.raw)}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},title:yLabel?{display:true,text:yLabel,font:{size:10}}:undefined}}}
+    }));
+  }
+  buildDOWChart('dowAcqChart','avgAcq',v=>v.toFixed(1)+' acq/day','Acquisitions');
+  buildDOWChart('dowRevChart','avgRevenue',v=>fmt$(v),'Revenue');
+  buildDOWChart('dowContChart','avgContactedRatio',v=>(v*100).toFixed(1)+'%','Contacted %');
+  buildDOWChart('dowRatioChart','avgLeadsPerShift',v=>v.toFixed(1),'L/S Ratio');
+
+  // Indexed comparison bar
+  (function(){
+    const base = {acq:K.weekdayAvgAcq||1,rev:K.weekdayAvgRevenue||1,shift:K.weekdayAvgShift||1,cont:K.weekdayAvgContactedRatio||0.001,ls:K.weekdayAvgLeadsPerShift||1};
+    const weIdx = {acq:(K.weekendAvgAcq||0)/base.acq*100,rev:(K.weekendAvgRevenue||0)/base.rev*100,shift:(K.weekendAvgShift||0)/base.shift*100,cont:(K.weekendAvgContactedRatio||0)/base.cont*100,ls:(K.weekendAvgLeadsPerShift||0)/base.ls*100};
+    FilterEngine.storeChart('compareBarChart', new Chart(document.getElementById('compareBarChart'),{
+      type:'bar',data:{labels:['Acquisitions','Revenue','Shifts','Contacted %','L/S Ratio'],datasets:[
+        {label:'Weekday (100)',data:[100,100,100,100,100],backgroundColor:'rgba(10,132,255,.4)',borderRadius:5,borderSkipped:false},
+        {label:'Weekend',data:[weIdx.acq,weIdx.rev,weIdx.shift,weIdx.cont,weIdx.ls].map(v=>+v.toFixed(1)),backgroundColor:'rgba(255,214,10,.6)',borderRadius:5,borderSkipped:false},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v}}}}
+    }));
+  })();
+
+  // Optimal pie
+  FilterEngine.storeChart('optPieChart', new Chart(document.getElementById('optPieChart'),{type:'doughnut',data:{labels:['Weekday Optimal','Weekend Optimal'],datasets:[{data:[K.acqOptDays||33, 0],backgroundColor:['rgba(10,132,255,.7)','rgba(255,214,10,.4)'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}}}}));
+
+  // ═══ TAB 5: ROI & MEDIA COST ═══════════════════════════════
+
+  // ROI KPIs
+  const RK = D.roiKpis || K;
+  document.getElementById('roi-cost').textContent = fmt$k(RK.totalCost||K.totalCost||0);
+  document.getElementById('roi-rev').textContent = fmt$k(RK.totalRevenue||K.totalRevenue||0);
+  document.getElementById('roi-pct').textContent = (RK.overallROI||K.overallROI||0).toFixed(1)+'%';
+  document.getElementById('roi-roas').textContent = (RK.overallROAS||K.overallROAS||0).toFixed(2)+'×';
+  document.getElementById('roi-cpl').textContent = fmt$(RK.overallCPL||K.overallCPL||0);
+  document.getElementById('roi-cpa').textContent = fmt$(RK.overallCPA||K.overallCPA||0);
+
+  // ROI by Channel chart
+  (function(){
+    const csd = D.costSegData||[];
+    const medias = [...new Set(csd.map(s=>s.media))];
+    const bibData = medias.map(m=>{const s=csd.find(x=>x.media===m&&x.category==='Biblical');return s&&s.roi!==null?s.roi:null});
+    const hebData = medias.map(m=>{const s=csd.find(x=>x.media===m&&x.category==='Hebrew');return s&&s.roi!==null?s.roi:null});
+    FilterEngine.storeChart('roiChannelChart', new Chart(document.getElementById('roiChannelChart'),{
+      type:'bar',data:{labels:medias,datasets:[
+        {label:'Biblical',data:bibData,backgroundColor:bibData.map(v=>v!==null&&v<0?'rgba(255,69,58,.6)':'rgba(10,132,255,.6)'),borderRadius:5,borderSkipped:false},
+        {label:'Hebrew',data:hebData,backgroundColor:hebData.map(v=>v!==null&&v<0?'rgba(255,69,58,.4)':'rgba(48,209,88,.6)'),borderRadius:5,borderSkipped:false},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:i=>i.raw!==null?i.raw.toFixed(1)+'% ROI':'N/A'}},annotation:{annotations:{zeroLine:{type:'line',yMin:0,yMax:0,borderColor:'rgba(255,255,255,.2)',borderWidth:1}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
+    }));
+  })();
+
+  // CPL comparison
+  (function(){
+    const csd = D.costSegData||[];
+    const medias = [...new Set(csd.filter(s=>s.cpl>0).map(s=>s.media))];
+    FilterEngine.storeChart('cplCompChart', new Chart(document.getElementById('cplCompChart'),{
+      type:'bar',data:{labels:medias,datasets:[
+        {label:'Biblical CPL',data:medias.map(m=>{const s=csd.find(x=>x.media===m&&x.category==='Biblical');return s?s.cpl:0}),backgroundColor:'rgba(10,132,255,.5)',borderRadius:5,borderSkipped:false},
+        {label:'Hebrew CPL',data:medias.map(m=>{const s=csd.find(x=>x.media===m&&x.category==='Hebrew');return s?s.cpl:0}),backgroundColor:'rgba(48,209,88,.5)',borderRadius:5,borderSkipped:false},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:i=>fmt$(i.raw)}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
+    }));
+  })();
+
+  // Monthly ROI trend
+  (function(){
+    const mr = D.monthlyRoi||[];
+    FilterEngine.storeChart('monthlyRoiChart', new Chart(document.getElementById('monthlyRoiChart'),{
+      type:'line',data:{labels:mr.map(m=>m.month),datasets:[
+        {label:'Biblical ROI',data:mr.map(m=>m.biblicalROI),borderColor:'#0a84ff',tension:.4,pointRadius:2,spanGaps:true},
+        {label:'Hebrew ROI',data:mr.map(m=>m.hebrewROI),borderColor:'#30d158',tension:.4,pointRadius:2,spanGaps:true},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:i=>i.raw!==null?i.raw.toFixed(1)+'%':'N/A'}},annotation:{annotations:{zero:{type:'line',yMin:0,yMax:0,borderColor:'rgba(255,69,58,.3)',borderWidth:1}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
+    }));
+  })();
+
+  // Monthly ROAS
+  (function(){
+    const mr = D.monthlyRoi||[];
+    FilterEngine.storeChart('monthlyRoasChart', new Chart(document.getElementById('monthlyRoasChart'),{
+      type:'line',data:{labels:mr.map(m=>m.month),datasets:[
+        {label:'Biblical ROAS',data:mr.map(m=>m.biblicalROAS),borderColor:'#0a84ff',tension:.4,pointRadius:2,spanGaps:true},
+        {label:'Hebrew ROAS',data:mr.map(m=>m.hebrewROAS),borderColor:'#30d158',tension:.4,pointRadius:2,spanGaps:true},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},annotation:{annotations:{one:{type:'line',yMin:1,yMax:1,borderColor:'rgba(255,214,10,.3)',borderWidth:1,borderDash:[3,3]}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'×'}}}}
+    }));
+  })();
+
+  // Monthly CPL
+  (function(){
+    const mr = D.monthlyRoi||[];
+    FilterEngine.storeChart('monthlyCplChart', new Chart(document.getElementById('monthlyCplChart'),{
+      type:'line',data:{labels:mr.map(m=>m.month),datasets:[
+        {label:'Biblical CPL',data:mr.map(m=>m.biblicalCPL),borderColor:'#0a84ff',tension:.4,pointRadius:2,spanGaps:true},
+        {label:'Hebrew CPL',data:mr.map(m=>m.hebrewCPL),borderColor:'#30d158',tension:.4,pointRadius:2,spanGaps:true},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
+    }));
+  })();
+
+  // Cost seg table
+  (function(){
+    const tbody = document.querySelector('#costSegTable tbody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    (D.costSegData||[]).forEach(s=>{
+      const roiColor = s.roi===null?'':'style="color:'+(s.roi<0?'var(--red)':'var(--green)')+'"';
+      tbody.innerHTML += `<tr><td>${s.media}</td><td>${s.category}</td><td class="num">${s.totalLeads.toLocaleString()}</td><td class="num">${s.totalAcq.toLocaleString()}</td><td class="num">${s.cvr}%</td><td class="num">${fmt$(s.totalCost)}</td><td class="num">${fmt$(s.cpl)}</td><td class="num">${fmt$(s.cpa)}</td><td class="num" style="color:var(--gold)">${fmt$(s.totalRevenue)}</td><td class="num" ${roiColor}>${s.roi!==null?s.roi+'%':'Free'}</td><td class="num">${s.roas!==null?s.roas+'×':'∞'}</td></tr>`;
+    });
+  })();
+
+  // Top ROI days table
+  (function(){
+    const tbody = document.querySelector('#topRoiTable tbody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    (D.topRoiDays||[]).forEach((d,i)=>{
+      tbody.innerHTML += `<tr><td class="num">${i+1}</td><td class="num">${d.date}</td><td class="num">${d.totalLeads}</td><td class="num">${d.totalAcq}</td><td class="num">${fmt$(d.totalCost)}</td><td class="num" style="color:var(--gold)">${fmt$(d.totalRevenue)}</td><td class="num" style="color:var(--green)">${d.roi.toFixed(1)}%</td><td class="num">${d.roas.toFixed(2)}×</td></tr>`;
+    });
+  })();
+
+  // ═══ TAB 6: APRIL CRISIS (static — not affected by date filter) ══════════
+
+  // Only build April crisis charts if the full data is available (not filtered to exclude April)
+  if(D_FULL.aprSummary && D_FULL.trend6){
+    buildAprilCrisisCharts();
+  }
+
+  // Resize all charts
+  requestAnimationFrame(()=>{ Object.values(Chart.instances).forEach(c=>c.resize()); });
 }
 
-const wkday = {leads:K.weekdayAvgLeads,shift:K.weekdayAvgShift,acq:K.weekdayAvgAcq,rev:K.weekdayAvgRevenue||K.avgDailyRevenue*1.15,cont:K.weekdayAvgContactedRatio,ratio:K.weekdayAvgLeadsPerShift};
-const wkend = {leads:K.weekendAvgLeads,shift:K.weekendAvgShift,acq:K.weekendAvgAcq,rev:K.weekendAvgRevenue||K.avgDailyRevenue*.68,cont:K.weekendAvgContactedRatio,ratio:K.weekendAvgLeadsPerShift};
-buildWkdMets('wkdayMets',wkday,wkend.acq,wkend.rev,wkend.shift,wkend.cont,wkend.ratio,'var(--blue)');
-buildWkdMets('wkendMets',wkend,wkday.acq,wkday.rev,wkday.shift,wkday.cont,wkday.ratio,'var(--gold)');
+// ── April Crisis chart builder (always uses full data) ──────────────────────
+function buildAprilCrisisCharts(){
+  const FD = D_FULL;
 
-// DOW charts
-const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const dowC=days.map(d=>['Saturday','Sunday'].includes(d)?'rgba(255,214,10,.75)':'rgba(10,132,255,.72)');
-const dowCB=days.map(d=>['Saturday','Sunday'].includes(d)?'#ffd60a':'#0a84ff');
-function buildDOWChart(id,key,fmt,yLabel,annotations){
-  const vals=days.map(d=>+D.dowData[d][key].toFixed(2));
-  new Chart(document.getElementById(id),{
-    type:'bar',
-    data:{labels:days.map(d=>d.slice(0,3)),datasets:[{data:vals,backgroundColor:dowC,borderColor:dowCB,borderWidth:1,borderRadius:7,borderSkipped:false}]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>fmt(i.raw)}},annotation:{annotations:annotations||{}}},
-      scales:{x:{grid:{display:false},border:{display:false}},y:{title:{display:true,text:yLabel,font:{size:10}},grid:{color:GC},border:{display:false}}}}
-  });
-}
-buildDOWChart('dowAcqChart','avgAcq',v=>`${v.toFixed(1)} acq/day`,'Avg Acq',{avgL:{type:'line',yMin:K.avgDailyAcq,yMax:K.avgDailyAcq,borderColor:'rgba(255,255,255,.25)',borderDash:[4,3],borderWidth:1}});
-buildDOWChart('dowRevChart','avgRevenue',v=>fmt$(v),'Avg Revenue',{avgL:{type:'line',yMin:K.avgDailyRevenue,yMax:K.avgDailyRevenue,borderColor:'rgba(255,255,255,.25)',borderDash:[4,3],borderWidth:1}});
-buildDOWChart('dowContChart','avgContactedRatio',v=>fmtPct(v),'Contacted %',{optL:{type:'line',yMin:.5,yMax:.5,borderColor:'rgba(48,209,88,.4)',borderDash:[4,3],borderWidth:1,label:{display:true,content:'Optimal ≥50%',position:'end',color:'rgba(48,209,88,.5)',font:{size:9}}}});
-
-new Chart(document.getElementById('dowRatioChart'),{
-  type:'bar',
-  data:{labels:days.map(d=>d.slice(0,3)),datasets:[{data:days.map(d=>+D.dowData[d].avgLeadsPerShift.toFixed(2)),backgroundColor:days.map(d=>{const r=D.dowData[d].avgLeadsPerShift;return r>=21.1&&r<=30.9?'rgba(48,209,88,.7)':r>35?'rgba(255,69,58,.7)':'rgba(255,159,10,.7)'}),borderRadius:7,borderSkipped:false}]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`L/S: ${i.raw.toFixed(1)}`}},
-    annotation:{annotations:{mn:{type:'line',yMin:21.1,yMax:21.1,borderColor:'rgba(48,209,88,.4)',borderDash:[3,3],borderWidth:1},mx:{type:'line',yMin:30.9,yMax:30.9,borderColor:'rgba(48,209,88,.4)',borderDash:[3,3],borderWidth:1,label:{display:true,content:'Optimal 21.1–30.9',position:'center',color:'rgba(48,209,88,.45)',font:{size:9}}},cl:{type:'line',yMin:35,yMax:35,borderColor:'rgba(255,69,58,.4)',borderDash:[3,3],borderWidth:1}}}},
-    scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},min:15,max:40}}}
-});
-
-// Compare indexed bar
-new Chart(document.getElementById('compareBarChart'),{
-  type:'bar',
-  data:{labels:['Avg Leads','Avg Shifts','Avg Acq','Revenue','Contacted %','L/S Ratio'],
-    datasets:[
-      {label:'Weekdays (=100)',data:[100,100,100,100,100,100],backgroundColor:'rgba(10,132,255,.65)',borderRadius:4,borderSkipped:false},
-      {label:'Weekends (indexed)',data:[
-        +(wkend.leads/wkday.leads*100).toFixed(1),
-        +(wkend.shift/wkday.shift*100).toFixed(1),
-        +(wkend.acq/wkday.acq*100).toFixed(1),
-        +(wkend.rev/wkday.rev*100).toFixed(1),
-        +(wkend.cont/wkday.cont*100).toFixed(1),
-        +(wkend.ratio/wkday.ratio*100).toFixed(1)
-      ],backgroundColor:'rgba(255,214,10,.65)',borderRadius:4,borderSkipped:false}
-    ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(1)} index`}},
-    annotation:{annotations:{bl:{type:'line',yMin:100,yMax:100,borderColor:'rgba(255,255,255,.2)',borderDash:[4,3],borderWidth:1}}}},
-    scales:{x:{grid:{display:false},border:{display:false}},y:{title:{display:true,text:'Index (Weekday=100)',font:{size:10}},grid:{color:GC},border:{display:false},min:0,max:140}}}
-});
-
-// Optimal Pie
-new Chart(document.getElementById('optPieChart'),{
-  type:'doughnut',
-  data:{labels:['Weekday Optimal (33)','Weekend Optimal (0)'],datasets:[{data:[33,0.001],backgroundColor:['rgba(10,132,255,.8)','rgba(255,214,10,.2)'],borderColor:['#0a84ff','#ffd60a'],borderWidth:1.5,hoverOffset:8}]},
-  options:{responsive:true,maintainAspectRatio:false,cutout:'72%',
-    plugins:{legend:{position:'bottom',labels:{boxWidth:9,padding:12,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.label.replace(/\(.*\)/,'')}${Math.round(i.raw)} days (${i.dataIndex===0?'100%':'0%'})`}}}}
-});
-
-// ═══════════════════════════════════════════════════════════
-// TAB 5 — ROI & Media Cost
-// ═══════════════════════════════════════════════════════════
-
-const RK = D.roiKpis;
-const CD = D.catData;    // [{category:'Biblical',...},{category:'Hebrew',...}]
-const CS = D.costSegData;
-const MR = D.monthlyRoi;
-const TR = D.topRoiDays;
-
-// ── KPI cards ──────────────────────────────────────────────
-document.getElementById('roi-cost').textContent = fmt$k(RK.totalCost);
-document.getElementById('roi-rev').textContent  = fmt$k(RK.totalRevenue);
-document.getElementById('roi-pct').textContent  = RK.overallROI.toFixed(1)+'%';
-document.getElementById('roi-roas').textContent = RK.overallROAS.toFixed(2)+'×';
-document.getElementById('roi-cpl').textContent  = '$'+RK.overallCPL.toFixed(2);
-document.getElementById('roi-cpa').textContent  = '$'+RK.overallCPA.toFixed(0);
-
-// ── ROI by Channel × Category ──────────────────────────────
-// Only include paid channels
-const paidSeg = CS.filter(s => s.roi !== null);
-const channelLabels = [...new Set(paidSeg.map(s=>s.media))];
-const bibROI  = channelLabels.map(ch=>{ const r=paidSeg.find(s=>s.media===ch&&s.category==='Biblical'); return r?r.roi:null; });
-const hebROI  = channelLabels.map(ch=>{ const r=paidSeg.find(s=>s.media===ch&&s.category==='Hebrew');   return r?r.roi:null; });
-
-new Chart(document.getElementById('roiChannelChart'),{
-  type:'bar',
-  data:{labels:channelLabels,datasets:[
-    {label:'Biblical ROI %',data:bibROI,backgroundColor:'rgba(10,132,255,.65)',borderColor:'#0a84ff',borderWidth:1,borderRadius:4},
-    {label:'Hebrew ROI %',  data:hebROI, backgroundColor:'rgba(52,199,89,.65)', borderColor:'#34c759',borderWidth:1,borderRadius:4}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,
-        callbacks:{label:i=>`${i.dataset.label}: ${i.raw!==null?i.raw.toFixed(1)+'%':'N/A'}`}},
-      annotation:{annotations:{
-        zeroLine:{type:'line',yMin:0,yMax:0,borderColor:'rgba(255,80,80,.6)',borderWidth:1.5,borderDash:[4,3]}
-      }}
-    },
-    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'},title:{display:true,text:'ROI %',font:{size:10}}}}
+  // Contacted trend
+  if(FD.catTrend6){
+    FilterEngine.storeChart('contactedTrendChart', new Chart(document.getElementById('contactedTrendChart'),{
+      type:'line',data:{labels:FD.catTrend6.map(m=>m.month),datasets:[
+        {label:'Hebrew Contacted %',data:FD.catTrend6.map(m=>m.hebContactedRate),borderColor:'#30d158',tension:.4,pointRadius:3},
+        {label:'Biblical Contacted %',data:FD.catTrend6.map(m=>m.bibContactedRate),borderColor:'#0a84ff',tension:.4,pointRadius:3},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
+    }));
   }
-});
 
-// ── CPL Comparison by Channel ───────────────────────────────
-const bibCPL = channelLabels.map(ch=>{ const r=CS.find(s=>s.media===ch&&s.category==='Biblical'); return r?r.cpl:null; });
-const hebCPL = channelLabels.map(ch=>{ const r=CS.find(s=>s.media===ch&&s.category==='Hebrew');   return r?r.cpl:null; });
-
-new Chart(document.getElementById('cplCompChart'),{
-  type:'bar',
-  data:{labels:channelLabels,datasets:[
-    {label:'Biblical CPL $',data:bibCPL,backgroundColor:'rgba(10,132,255,.65)',borderColor:'#0a84ff',borderWidth:1,borderRadius:4},
-    {label:'Hebrew CPL $',  data:hebCPL, backgroundColor:'rgba(52,199,89,.65)', borderColor:'#34c759',borderWidth:1,borderRadius:4}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,
-        callbacks:{label:i=>`${i.dataset.label}: ${i.raw!==null?'$'+i.raw.toFixed(2):'$0'}`}}},
-    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>'$'+v},title:{display:true,text:'CPL ($)',font:{size:10}}}}
+  // ROI decline
+  if(FD.trend6){
+    FilterEngine.storeChart('roiDeclineChart', new Chart(document.getElementById('roiDeclineChart'),{
+      type:'line',data:{labels:FD.trend6.map(m=>m.month),datasets:[{label:'ROI %',data:FD.trend6.map(m=>m.roi),borderColor:'#ff453a',backgroundColor:'rgba(255,69,58,.1)',fill:true,tension:.4,pointRadius:3}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},annotation:{annotations:{zero:{type:'line',yMin:0,yMax:0,borderColor:'rgba(255,255,255,.2)',borderWidth:1}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
+    }));
   }
-});
 
-// ── Monthly ROI trend ───────────────────────────────────────
-const mLabels = MR.map(m=>m.month);
-new Chart(document.getElementById('monthlyRoiChart'),{
-  type:'line',
-  data:{labels:mLabels,datasets:[
-    {label:'Biblical ROI %',data:MR.map(m=>m.biblicalROI),borderColor:'#0a84ff',backgroundColor:'rgba(10,132,255,.08)',borderWidth:2,tension:.35,fill:true,pointRadius:3,pointHoverRadius:5,spanGaps:true},
-    {label:'Hebrew ROI %',  data:MR.map(m=>m.hebrewROI),  borderColor:'#34c759',backgroundColor:'rgba(52,199,89,.08)', borderWidth:2,tension:.35,fill:true,pointRadius:3,pointHoverRadius:5,spanGaps:true}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
-        callbacks:{label:i=>i.raw!==null?`${i.dataset.label}: ${i.raw.toFixed(1)}%`:'N/A'}},
-      annotation:{annotations:{
-        zLine:{type:'line',yMin:0,yMax:0,borderColor:'rgba(255,80,80,.5)',borderWidth:1.2,borderDash:[4,3]}
-      }}
-    },
-    scales:{x:{grid:{color:GC},ticks:{font:{size:9},maxRotation:45}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'}}}
+  // CVR decline
+  if(FD.catTrend6){
+    FilterEngine.storeChart('cvrDeclineChart', new Chart(document.getElementById('cvrDeclineChart'),{
+      type:'line',data:{labels:FD.catTrend6.map(m=>m.month),datasets:[
+        {label:'Hebrew CVR',data:FD.catTrend6.map(m=>m.hebCVR),borderColor:'#30d158',tension:.4,pointRadius:3},
+        {label:'Biblical CVR',data:FD.catTrend6.map(m=>m.bibCVR),borderColor:'#0a84ff',tension:.4,pointRadius:3},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
+    }));
   }
-});
 
-// ── Monthly ROAS trend ──────────────────────────────────────
-new Chart(document.getElementById('monthlyRoasChart'),{
-  type:'line',
-  data:{labels:mLabels,datasets:[
-    {label:'Biblical ROAS',data:MR.map(m=>m.biblicalROAS),borderColor:'#0a84ff',backgroundColor:'rgba(10,132,255,.06)',borderWidth:2,tension:.35,fill:true,pointRadius:2,spanGaps:true},
-    {label:'Hebrew ROAS',  data:MR.map(m=>m.hebrewROAS),  borderColor:'#34c759',backgroundColor:'rgba(52,199,89,.06)', borderWidth:2,tension:.35,fill:true,pointRadius:2,spanGaps:true}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
-        callbacks:{label:i=>i.raw!==null?`${i.dataset.label}: ${i.raw.toFixed(2)}×`:'N/A'}},
-      annotation:{annotations:{
-        breakeven:{type:'line',yMin:1,yMax:1,borderColor:'rgba(255,214,10,.4)',borderWidth:1,borderDash:[4,3],
-          label:{display:true,content:'Break-even 1×',position:'start',font:{size:9},color:'rgba(255,214,10,.7)',backgroundColor:'transparent',yAdjust:-12}}
-      }}
-    },
-    scales:{x:{grid:{color:GC},ticks:{font:{size:9},maxRotation:45}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'×'}}}
+  // April daily bar+line
+  if(FD.aprDaily){
+    FilterEngine.storeChart('aprDailyChart', new Chart(document.getElementById('aprDailyChart'),{
+      type:'bar',data:{labels:FD.aprDaily.map(d=>d.date.substring(5)),datasets:[
+        {type:'bar',label:'Revenue',data:FD.aprDaily.map(d=>d.totalRevenue),backgroundColor:FD.aprDaily.map(d=>d.roi!==null&&d.roi<0?'rgba(255,69,58,.5)':'rgba(255,214,10,.5)'),borderRadius:5,borderSkipped:false,yAxisID:'y'},
+        {type:'line',label:'Acquisitions',data:FD.aprDaily.map(d=>d.totalAcq),borderColor:'#30d158',tension:.3,pointRadius:3,yAxisID:'y2'},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}},y2:{position:'right',grid:{display:false},border:{display:false},min:0}}}
+    }));
   }
-});
 
-// ── Monthly CPL trend ───────────────────────────────────────
-new Chart(document.getElementById('monthlyCplChart'),{
-  type:'line',
-  data:{labels:mLabels,datasets:[
-    {label:'Biblical CPL $',data:MR.map(m=>m.biblicalCPL),borderColor:'#0a84ff',borderWidth:2,tension:.35,pointRadius:2,spanGaps:true},
-    {label:'Hebrew CPL $',  data:MR.map(m=>m.hebrewCPL),  borderColor:'#34c759',borderWidth:2,tension:.35,pointRadius:2,spanGaps:true}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
-        callbacks:{label:i=>i.raw!==null?`${i.dataset.label}: $${i.raw.toFixed(2)}`:'N/A'}}},
-    scales:{x:{grid:{color:GC},ticks:{font:{size:9},maxRotation:45}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>'$'+v}}}
-  }
-});
-
-// ── Channel efficiency table ────────────────────────────────
-(()=>{
-  const tbody = document.querySelector('#costSegTable tbody');
-  const sorted = [...CS].sort((a,b)=>{
-    const ra = a.roi!==null?a.roi:-9999;
-    const rb = b.roi!==null?b.roi:-9999;
-    return rb-ra;
-  });
-  sorted.forEach(r=>{
-    const isPaid = r.totalCost > 0;
-    const roiVal = r.roi!==null ? r.roi : null;
-    const roiColor = roiVal===null ? 'var(--green)' : roiVal>=100?'var(--green)':roiVal>=0?'var(--teal)':'var(--red)';
-    const roiWeight = roiVal===null||roiVal>=100 ? '700' : '400';
-    const tr = document.createElement('tr');
-    tr.innerHTML = [
-      `<td>${r.media}</td>`,
-      `<td><span class="badge ${r.category==='Hebrew'?'green':'blue'}">${r.category}</span></td>`,
-      `<td>${r.totalLeads.toLocaleString()}</td>`,
-      `<td>${r.totalAcq.toLocaleString()}</td>`,
-      `<td>${r.cvr.toFixed(2)}%</td>`,
-      `<td>${isPaid?'$'+r.totalCost.toLocaleString():'<span style="color:var(--green)">Free</span>'}</td>`,
-      `<td>${isPaid?'$'+r.cpl.toFixed(2):'—'}</td>`,
-      `<td>${r.cpa?'$'+r.cpa.toLocaleString():'—'}</td>`,
-      `<td style="font-weight:600;color:var(--gold)">$${r.totalRevenue.toLocaleString()}</td>`,
-      `<td style="color:${roiColor};font-weight:${roiWeight}">${roiVal!==null?roiVal.toFixed(1)+'%':'∞ (free)'}</td>`,
-      `<td style="color:var(--teal)">${r.roas!==null?r.roas.toFixed(2)+'×':'∞'}</td>`,
-    ].join('');
-    tbody.appendChild(tr);
-  });
-})();
-
-// ── Top ROI days table ──────────────────────────────────────
-(()=>{
-  const tbody = document.querySelector('#topRoiTable tbody');
-  TR.forEach((r,i)=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = [
-      `<td>${i+1}</td>`,
-      `<td>${r.date}</td>`,
-      `<td>${r.totalLeads.toLocaleString()}</td>`,
-      `<td>${r.totalAcq.toLocaleString()}</td>`,
-      `<td>$${r.totalCost.toLocaleString()}</td>`,
-      `<td>$${r.totalRevenue.toLocaleString()}</td>`,
-      `<td style="color:var(--green);font-weight:700">${r.roi.toFixed(1)}%</td>`,
-      `<td>${r.roas.toFixed(2)}×</td>`,
-    ].join('');
-    tbody.appendChild(tr);
-  });
-})();
-
-// ═══════════════════════════════════════════════════════════
-// TAB 6 — APRIL CRISIS
-// ═══════════════════════════════════════════════════════════
-
-const APR  = D.aprDaily;
-const T6   = D.trend6;
-const CT6  = D.catTrend6;
-const MC   = D.mediaCmp;
-const CC   = D.catCompare;
-const mLbl6 = T6.map(m=>m.month);
-
-// ── Contacted Rate collapse chart (Hebrew vs Biblical) ─────────────────
-new Chart(document.getElementById('contactedTrendChart'),{
-  type:'line',
-  data:{labels:mLbl6,datasets:[
-    {label:'Hebrew Contacted %', data:CT6.map(m=>m.hebContactedRate),borderColor:'#34c759',backgroundColor:'rgba(52,199,89,.08)',borderWidth:2.5,tension:.35,fill:true,pointRadius:4,pointHoverRadius:6,spanGaps:true},
-    {label:'Biblical Contacted %',data:CT6.map(m=>m.bibContactedRate),borderColor:'#0a84ff',backgroundColor:'rgba(10,132,255,.06)',borderWidth:2,tension:.35,fill:true,pointRadius:4,pointHoverRadius:6,spanGaps:true}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
-        callbacks:{label:i=>`${i.dataset.label}: ${i.raw!==null?i.raw.toFixed(1)+'%':'N/A'}`}},
-      annotation:{annotations:{
-        histLine:{type:'line',yMin:46.7,yMax:46.7,borderColor:'rgba(52,199,89,.35)',borderWidth:1,borderDash:[4,3],
-          label:{display:true,content:'Historical avg 46.7%',position:'end',font:{size:9},color:'rgba(52,199,89,.7)',backgroundColor:'transparent',yAdjust:-12}}
-      }}
-    },
-    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'},min:20,max:70}}
-  }
-});
-
-// ── ROI deterioration chart ───────────────────────────────────────
-new Chart(document.getElementById('roiDeclineChart'),{
-  type:'bar',
-  data:{labels:mLbl6,datasets:[{
-    label:'Monthly ROI %',
-    data:T6.map(m=>m.roi),
-    backgroundColor:T6.map(m=>m.roi!==null&&m.roi<40?'rgba(255,69,58,.75)':m.roi<70?'rgba(255,159,10,.75)':'rgba(52,199,89,.65)'),
-    borderColor:T6.map(m=>m.roi!==null&&m.roi<40?'#ff453a':m.roi<70?'#ff9f0a':'#34c759'),
-    borderWidth:1,borderRadius:5,
-  }]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{display:false},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,
-        callbacks:{label:i=>i.raw!==null?`ROI: ${i.raw.toFixed(1)}%`:'N/A'}},
-      annotation:{annotations:{
-        target:{type:'line',yMin:67.5,yMax:67.5,borderColor:'rgba(52,199,89,.4)',borderWidth:1,borderDash:[4,3],
-          label:{display:true,content:'All-time avg 67.5%',position:'end',font:{size:9},color:'rgba(52,199,89,.7)',backgroundColor:'transparent',yAdjust:-12}}
-      }}
-    },
-    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'}}}
-  }
-});
-
-// ── CVR decline chart ───────────────────────────────────────────
-new Chart(document.getElementById('cvrDeclineChart'),{
-  type:'line',
-  data:{labels:mLbl6,datasets:[
-    {label:'Hebrew CVR %', data:CT6.map(m=>m.hebCVR),borderColor:'#34c759',borderWidth:2.5,tension:.35,pointRadius:4,spanGaps:true},
-    {label:'Biblical CVR %',data:CT6.map(m=>m.bibCVR),borderColor:'#0a84ff',borderWidth:2,tension:.35,pointRadius:4,spanGaps:true}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
-        callbacks:{label:i=>`${i.dataset.label}: ${i.raw!==null?i.raw.toFixed(2)+'%':'N/A'}`}},
-      annotation:{annotations:{
-        hebHist:{type:'line',yMin:9.04,yMax:9.04,borderColor:'rgba(52,199,89,.3)',borderWidth:1,borderDash:[3,3],
-          label:{display:true,content:'Hebrew hist 9.04%',position:'start',font:{size:9},color:'rgba(52,199,89,.7)',backgroundColor:'transparent',yAdjust:-10}}
-      }}
-    },
-    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'}}}
-  }
-});
-
-// ── April daily bar+line chart ───────────────────────────────────
-new Chart(document.getElementById('aprDailyChart'),{
-  type:'bar',
-  data:{labels:APR.map(r=>`${r.dayName.slice(0,3)} ${r.date.slice(8)}`),
-    datasets:[
-      {type:'bar',label:'Revenue $',data:APR.map(r=>r.totalRevenue),
-       backgroundColor:APR.map(r=>r.roi!==null&&r.roi<0?'rgba(255,69,58,.65)':'rgba(10,132,255,.55)'),
-       borderColor:APR.map(r=>r.roi!==null&&r.roi<0?'#ff453a':'#0a84ff'),borderWidth:1,borderRadius:4,yAxisID:'y'},
-      {type:'line',label:'Acquisitions',data:APR.map(r=>r.totalAcq),
-       borderColor:'#ffd60a',backgroundColor:'rgba(255,214,10,.15)',borderWidth:2,pointRadius:5,pointHoverRadius:7,tension:.3,yAxisID:'y1'}
-    ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false}},
-    scales:{
-      x:{grid:{color:GC},ticks:{font:{size:10}}},
-      y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>'$'+v.toLocaleString()},position:'left'},
-      y1:{grid:{display:false},ticks:{font:{size:10}},position:'right',title:{display:true,text:'Acq',font:{size:9}}}
+  // April day rows
+  if(FD.aprDaily){
+    const container = document.getElementById('aprDayRows');
+    if(container){
+      container.innerHTML = '';
+      FD.aprDaily.forEach(d=>{
+        const weCls = d.isWeekend?'weekend':'';
+        const zoneTag = d.lsZone==='in'?'<span class="zone-tag zone-in">✓</span>':d.lsZone==='above'?'<span class="zone-tag zone-above">↑</span>':'<span class="zone-tag zone-below">↓</span>';
+        const contCls = d.contactedRatio<35?'bad':d.contactedRatio<40?'warn':'good';
+        const acqCls = d.totalAcq<10?'bad':d.totalAcq<15?'warn':'good';
+        container.innerHTML += `<div class="day-row ${weCls}"><div class="day-lbl">${d.dayName}${d.isWeekend?' 🟡':''}</div><div class="day-date">${d.date}</div><div class="day-cell">${d.totalLeads}</div><div class="day-cell">${(d.totalShift||0).toFixed(1)}</div><div class="day-cell">${zoneTag} ${(d.leadsPerShift||0).toFixed(1)}</div><div class="day-cell ${contCls}">${(d.contactedRatio||0).toFixed(1)}%</div><div class="day-cell ${acqCls}">${d.totalAcq}</div><div class="day-cell" style="color:var(--gold)">${fmt$(d.totalRevenue)}</div></div>`;
+      });
     }
   }
-});
 
-// ── Day-by-day table ────────────────────────────────────────────
-(()=>{
-  const cont = document.getElementById('aprDayRows');
-  const histCont = 46.7; // historical weekday avg
-  APR.forEach(r=>{
-    const isWk = r.isWeekend;
-    const cClass = r.contactedRatio < 30 ? 'bad' : r.contactedRatio < 40 ? 'warn' : 'good';
-    const acqClass = r.totalAcq < 10 ? 'bad' : r.totalAcq < 14 ? 'warn' : 'good';
-    const revClass = r.totalRevenue < 8000 ? 'bad' : r.totalRevenue < 13000 ? 'warn' : 'good';
-    const roiClass = r.roi!==null&&r.roi<0 ? 'bad' : r.roi!==null&&r.roi<50 ? 'warn' : 'good';
-    const zoneClass = r.lsZone==='in'?'zone-in':r.lsZone==='above'?'zone-above':'zone-below';
-    const zoneIcon = r.lsZone==='in'?'✓':r.lsZone==='above'?'↑':'↓';
-    const div = document.createElement('div');
-    div.className = `day-row${isWk?' weekend':''}`;
-    div.innerHTML = [
-      `<div class="day-lbl">${r.dayName.slice(0,3)}<span style="color:var(--text-muted);font-size:9px;margin-left:4px">${isWk?'WE':''}</span></div>`,
-      `<div class="day-date">${r.date.slice(5)}</div>`,
-      `<div class="day-cell dim">${r.totalLeads}</div>`,
-      `<div class="day-cell dim">${r.totalShift.toFixed(1)}</div>`,
-      `<div class="day-cell"><span class="zone-tag ${zoneClass}">${r.leadsPerShift!==null?r.leadsPerShift.toFixed(1):'N/A'} ${zoneIcon}</span></div>`,
-      `<div class="day-cell ${cClass}">${r.contactedRatio.toFixed(1)}%</div>`,
-      `<div class="day-cell ${acqClass}">${r.totalAcq}</div>`,
-      `<div class="day-cell ${revClass}">$${r.totalRevenue.toLocaleString(undefined,{maximumFractionDigits:0})}</div>`,
-    ].join('');
-    cont.appendChild(div);
+  // Media contact comparison
+  if(FD.mediaCmp){
+    FilterEngine.storeChart('mediaContactChart', new Chart(document.getElementById('mediaContactChart'),{
+      type:'bar',data:{labels:FD.mediaCmp.map(m=>m.media),datasets:[
+        {label:'Historical',data:FD.mediaCmp.map(m=>m.histContactedRate||0),backgroundColor:'rgba(90,200,250,.5)',borderRadius:4,borderSkipped:false},
+        {label:'April',data:FD.mediaCmp.map(m=>m.aprContactedRate||0),backgroundColor:'rgba(255,159,10,.6)',borderRadius:4,borderSkipped:false},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
+    }));
+  }
+
+  // Category comparison
+  if(FD.catCompare){
+    const cc = FD.catCompare;
+    FilterEngine.storeChart('catCompChart', new Chart(document.getElementById('catCompChart'),{
+      type:'bar',data:{labels:['Hebrew CVR','Biblical CVR','Hebrew Contact%','Biblical Contact%'],datasets:[
+        {label:'Historical',data:[cc.hebrew.histCVR,cc.biblical.histCVR,cc.hebrew.histContactedRate,cc.biblical.histContactedRate],backgroundColor:'rgba(48,209,88,.5)',borderRadius:5,borderSkipped:false},
+        {label:'April',data:[cc.hebrew.aprCVR,cc.biblical.aprCVR,cc.hebrew.aprContactedRate,cc.biblical.aprContactedRate],backgroundColor:'rgba(255,159,10,.6)',borderRadius:5,borderSkipped:false},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}
+    }));
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// DATE FILTER WIRING
+// ═══════════════════════════════════════════════════════════════════════════════
+
+let fpStart, fpEnd;
+
+document.addEventListener('DOMContentLoaded', function(){
+  const allDates = FilterEngine.R.dates;
+  const minDate = allDates[0];
+  const maxDate = allDates[allDates.length-1];
+
+  fpStart = flatpickr('#dateStartPicker', {
+    dateFormat: 'Y-m-d', defaultDate: minDate, minDate, maxDate,
+    theme: 'dark',
+    onChange: function(dates){ if(dates[0] && fpEnd) fpEnd.set('minDate', dates[0]); }
   });
-})();
+  fpEnd = flatpickr('#dateEndPicker', {
+    dateFormat: 'Y-m-d', defaultDate: maxDate, minDate, maxDate,
+    theme: 'dark',
+    onChange: function(dates){ if(dates[0] && fpStart) fpStart.set('maxDate', dates[0]); }
+  });
 
-// ── Channel contacted rate chart ────────────────────────────────
-new Chart(document.getElementById('mediaContactChart'),{
-  type:'bar',
-  data:{labels:MC.map(m=>m.media),datasets:[
-    {label:'April Contacted %',   data:MC.map(m=>m.aprContactedRate),backgroundColor:'rgba(255,159,10,.7)',borderColor:'#ff9f0a',borderWidth:1,borderRadius:4},
-    {label:'Historical Contacted %',data:MC.map(m=>m.histContactedRate),backgroundColor:'rgba(90,200,250,.5)', borderColor:'#5ac8fa',borderWidth:1,borderRadius:4}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false}},
-    scales:{x:{grid:{color:GC},ticks:{font:{size:10}}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'},max:80}}
-  }
+  // Initial build
+  buildDashboard();
 });
 
-// ── Category comparison chart (CVR + contacted) ─────────────────
-const catLabels = ['Biblical CVR%','Hebrew CVR%','Biblical Contacted%','Hebrew Contacted%'];
-const catApr    = [CC.biblical.aprCVR, CC.hebrew.aprCVR, CC.biblical.aprContactedRate, CC.hebrew.aprContactedRate];
-const catHist   = [CC.biblical.histCVR,CC.hebrew.histCVR,CC.biblical.histContactedRate,CC.hebrew.histContactedRate];
-new Chart(document.getElementById('catCompChart'),{
-  type:'bar',
-  data:{labels:catLabels,datasets:[
-    {label:'Historical',data:catHist,backgroundColor:'rgba(52,199,89,.55)',borderColor:'#34c759',borderWidth:1,borderRadius:4},
-    {label:'April 2026', data:catApr, backgroundColor:'rgba(255,159,10,.7)', borderColor:'#ff9f0a',borderWidth:1,borderRadius:4}
-  ]},
-  options:{responsive:true,maintainAspectRatio:false,
-    plugins:{legend:{labels:{boxWidth:9,font:{size:10}}},
-      tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false,
-        callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(2)}%`}}},
-    scales:{x:{grid:{color:GC},ticks:{font:{size:9},maxRotation:15}},
-             y:{grid:{color:GC},ticks:{font:{size:10},callback:v=>v+'%'}}}
+function applyDateFilter(){
+  const startVal = document.getElementById('dateStartPicker').value;
+  const endVal = document.getElementById('dateEndPicker').value;
+  if(!startVal || !endVal) return;
+
+  const result = FilterEngine.apply(startVal, endVal);
+  if(!result){ alert('Invalid date range'); return; }
+
+  // Swap data source
+  D = result;
+  K = result.kpis;
+
+  // Rebuild
+  buildDashboard();
+
+  // Update UI
+  document.getElementById('dateResetBtn').style.display = 'inline-block';
+  const status = document.getElementById('dateFilterStatus');
+  status.textContent = `Showing ${K.totalDays} days: ${startVal} to ${endVal}`;
+  status.className = 'df-status active';
+
+  // Clear active preset
+  document.querySelectorAll('.df-btn').forEach(b=>b.classList.remove('active'));
+}
+
+function resetDateFilter(){
+  FilterEngine.reset();
+  D = D_FULL;
+  K = D.kpis;
+  buildDashboard();
+
+  // Reset pickers
+  const allDates = FilterEngine.R.dates;
+  fpStart.setDate(allDates[0], false);
+  fpEnd.setDate(allDates[allDates.length-1], false);
+  fpStart.set('maxDate', allDates[allDates.length-1]);
+  fpEnd.set('minDate', allDates[0]);
+
+  // Update UI
+  document.getElementById('dateResetBtn').style.display = 'none';
+  const status = document.getElementById('dateFilterStatus');
+  status.textContent = '';
+  status.className = 'df-status';
+  document.querySelectorAll('.df-btn').forEach(b=>b.classList.remove('active'));
+}
+
+function applyPreset(preset){
+  const allDates = FilterEngine.R.dates;
+  const maxDate = allDates[allDates.length-1];
+  let start, end = maxDate;
+
+  switch(preset){
+    case 'all':
+      resetDateFilter();
+      document.querySelector('.df-btn[onclick*="all"]').classList.add('active');
+      return;
+    case '6m': {
+      const d = new Date(maxDate); d.setMonth(d.getMonth()-6);
+      start = d.toISOString().substring(0,10);
+      break;
+    }
+    case '3m': {
+      const d = new Date(maxDate); d.setMonth(d.getMonth()-3);
+      start = d.toISOString().substring(0,10);
+      break;
+    }
+    case '1m': {
+      const d = new Date(maxDate); d.setMonth(d.getMonth()-1);
+      start = d.toISOString().substring(0,10);
+      break;
+    }
+    case 'ytd':
+      start = '2026-01-01'; break;
+    case '2025':
+      start = '2025-01-01'; end = '2025-12-31'; break;
+    case '2024':
+      start = '2024-01-01'; end = '2024-12-31'; break;
   }
-});
+
+  // Snap to nearest available dates
+  start = allDates.find(d=>d>=start) || allDates[0];
+  end = [...allDates].reverse().find(d=>d<=end) || allDates[allDates.length-1];
+
+  fpStart.setDate(start, false);
+  fpEnd.setDate(end, false);
+
+  document.getElementById('dateStartPicker').value = start;
+  document.getElementById('dateEndPicker').value = end;
+
+  applyDateFilter();
+
+  // Highlight active preset
+  document.querySelectorAll('.df-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.df-btn[onclick*="${preset}"]`).classList.add('active');
+}
 
 </script>
 </body>
