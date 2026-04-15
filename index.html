@@ -649,7 +649,7 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
   <div class="sh" style="margin-bottom:20px">
     <div class="sh-left">
       <div class="title" style="font-size:17px;color:var(--red)">April 2026 — Crisis Diagnosis</div>
-      <div class="sub">13 days elapsed (Apr 1–13) · 9 weekdays + 2 Saturdays + 2 Sundays · All comparisons vs all-time historical avg</div>
+      <div class="sub" id="apr-sub">Loading April data...</div>
     </div>
     <span class="badge" style="background:rgba(255,69,58,.15);color:var(--red);border-color:rgba(255,69,58,.3)">Live Month</span>
   </div>
@@ -736,7 +736,7 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
 
   <!-- Day-by-day breakdown table -->
   <div class="card" style="margin-bottom:18px">
-    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Day-by-Day Performance (Apr 1–13)</div><div class="sub">L/S zone: ✓ In optimal zone · ↑ Above ceiling · ↓ Below floor</div></div></div>
+    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title" id="apr-table-title">Day-by-Day Performance</div><div class="sub">L/S zone: ✓ In optimal zone · ↑ Above ceiling · ↓ Below floor</div></div></div>
     <!-- Header row -->
     <div class="day-row" style="background:var(--surface-2);border-radius:8px 8px 0 0;border-bottom:1px solid var(--border)">
       <div class="day-lbl">Day</div>
@@ -1236,6 +1236,20 @@ function buildDashboard(){
 
 function buildAprilCrisisCharts(){
   const FD = D_FULL;
+
+  // Dynamic April subtitle
+  if(FD.aprDaily && FD.aprDaily.length > 0){
+    const nDays = FD.aprDaily.length;
+    const lastDay = FD.aprDaily[nDays-1].date.substring(8);
+    const dayNames = FD.aprDaily.map(d => new Date(d.date).getDay());
+    const wkd = dayNames.filter(d=>d>=1&&d<=5).length;
+    const sat = dayNames.filter(d=>d===6).length;
+    const sun = dayNames.filter(d=>d===0).length;
+    const subEl = document.getElementById('apr-sub');
+    if(subEl) subEl.textContent = nDays+' days elapsed (Apr 1\u2013'+parseInt(lastDay)+') \u00b7 '+wkd+' weekdays + '+sat+' Saturdays + '+sun+' Sundays \u00b7 All comparisons vs all-time historical avg';
+    const ttlEl = document.getElementById('apr-table-title');
+    if(ttlEl) ttlEl.textContent = 'Day-by-Day Performance (Apr 1\u2013'+parseInt(lastDay)+')';
+  }
 
   // Contacted trend
   if(FD.catTrend6){
