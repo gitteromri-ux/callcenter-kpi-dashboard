@@ -363,14 +363,17 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
 <!-- ════════════ TAB NAV ════════════ -->
 <nav class="tab-nav">
   <button class="tb active" onclick="switchTab(0)">📊 Executive Summary <span class="tb-num blue">Manager</span></button>
-  <button class="tb" onclick="switchTab(1)">⚡ Staffing &amp; Optimal Zone <span class="tb-num gold">Operations</span></button>
-  <button class="tb" onclick="switchTab(2)">💲 Lead Quality &amp; ROI <span class="tb-num teal">Media</span></button>
-  <button class="tb" onclick="switchTab(3)">🚨 April Crisis <span class="tb-num red">Live</span></button>
+  <button class="tb" onclick="switchTab(1)">💰 Revenue Intelligence <span class="tb-num gold">New</span></button>
+  <button class="tb" onclick="switchTab(2)">🎯 Lead Quality Matrix <span class="tb-num teal">New</span></button>
+  <button class="tb" onclick="switchTab(3)">◈ Optimal Zone <span class="tb-num purple">4-Way</span></button>
+  <button class="tb" onclick="switchTab(4)">◷ Weekday vs Weekend <span class="tb-num green">Calendar</span></button>
+  <button class="tb" onclick="switchTab(5)">💲 ROI &amp; Media Cost <span class="tb-num orange">New</span></button>
+  <button class="tb" onclick="switchTab(6)">🚨 April Crisis <span class="tb-num red">Live</span></button>
 </nav>
 
-<!-- ══════════════════════════════════════════════════════════════
-     TAB 0 — EXECUTIVE SUMMARY (All key insights consolidated)
-══════════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════
+     TAB 0 — EXECUTIVE SUMMARY
+══════════════════════════════════════════════════════ -->
 <section class="pnl active" id="tab-0">
 
   <!-- Top KPIs -->
@@ -378,56 +381,88 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
     <div class="kc card-accent blue"><div class="kc-lbl">Total Revenue (2yr)</div><div class="kc-val" style="color:var(--gold)" id="e-rev">—</div><div class="kc-sub">SOV + Upsales</div><div class="kc-bar bc-gold" style="width:100%"></div></div>
     <div class="kc"><div class="kc-lbl">Avg Daily Revenue</div><div class="kc-val" id="e-adr">—</div><div class="kc-sub">Per calendar day</div><div class="kc-bar bc-gold" style="width:65%"></div></div>
     <div class="kc"><div class="kc-lbl">Total Acquisitions</div><div class="kc-val" style="color:var(--green)" id="e-acq">—</div><div class="kc-sub">New students enrolled</div><div class="kc-bar bc-green" style="width:78%"></div></div>
+    <div class="kc"><div class="kc-lbl">Total Orders</div><div class="kc-val" id="e-ord">—</div><div class="kc-sub">All confirmed orders</div><div class="kc-bar bc-blue" style="width:85%"></div></div>
     <div class="kc"><div class="kc-lbl">Total Leads</div><div class="kc-val" id="e-leads">—</div><div class="kc-sub">Across all media</div><div class="kc-bar bc-purple" style="width:60%"></div></div>
-    <div class="kc card-accent green"><div class="kc-lbl">Overall ROI</div><div class="kc-val" id="e-roipct" style="color:var(--green)">1.67×</div><div class="kc-sub">Revenue / Cost</div><div class="kc-bar bc-green" id="e-roibar" style="width:84%"></div></div>
     <div class="kc card-accent gold"><div class="kc-lbl">Revenue per Lead</div><div class="kc-val" id="e-rpl">—</div><div class="kc-sub">Overall avg quality</div><div class="kc-bar bc-teal" style="width:45%"></div></div>
   </div>
 
-  <!-- April Crisis Alert Banner (condensed) -->
-  <div class="card" style="border-color:rgba(255,69,58,.35);background:rgba(255,69,58,.06);margin-bottom:18px;padding:16px 20px">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-      <div>
-        <div style="font-size:14px;font-weight:700;color:var(--red);margin-bottom:4px">⚠ April 2026 Alert — Revenue down 26.6%, Acquisitions down 32%</div>
-        <div style="font-size:12px;color:var(--text-2)">Root causes: Hebrew contacted rate collapsed (57%→31%), Facebook ROI at 0.50×, 5-month structural decline. See <strong style="cursor:pointer;color:var(--red);text-decoration:underline" onclick="switchTab(3)">April Crisis tab</strong> for full diagnosis.</div>
+  <!-- Recommendations -->
+  <div class="sh"><div class="sh-left"><div class="title">Strategic Recommendations</div><div class="sub">Based on 834-day statistical analysis · Ranked by revenue impact potential</div></div><span class="badge blue">Data-Driven</span></div>
+  <div class="rec-grid">
+    <div class="rec card-accent gold"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🔀</div><div class="rec-title">Rebalance Lead Mix Toward Hebrew Category</div><div class="rec-body">Hebrew leads convert at <strong style="color:var(--green)">9.0%</strong> vs Biblical's 3.9% — <strong>2.3× higher</strong>. Revenue per lead: <strong style="color:var(--gold)">$92.44</strong> vs $38.68. Shifting 10–15% of Facebook budget toward Web Campaign, Google Hebrew, and Affiliates adds significant effective annual revenue without increasing total spend.</div></div>
+    <div class="rec card-accent green"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🌿</div><div class="rec-title">Scale No Media &amp; Web Campaign (Highest Lead Value)</div><div class="rec-body">No Media drives 7.5% of leads but produces <strong style="color:var(--gold)">$132/lead</strong> vs Facebook's $41.47. No Media Hebrew is the star at <strong style="color:var(--green)">$162/lead</strong>. Web Campaign Hebrew delivers $112/lead at 6.07× ROI — scale these channels aggressively.</div></div>
+    <div class="rec card-accent blue"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">⚡</div><div class="rec-title">Operate in the Revenue-Optimal L/S Window</div><div class="rec-body">The revenue-optimal L/S ratio of <strong style="color:var(--gold)" id="rec-ls-range">18.9–26.2</strong> captures days producing <strong style="color:var(--green)">+15% above-average daily revenue</strong>. Days above 35 ratio see revenue collapse — maintain staffing to keep L/S within this band.</div></div>
+    <div class="rec card-accent purple"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📅</div><div class="rec-title">Increase Weekend Staffing to 11–12 Shifts</div><div class="rec-body">Weekend L/S ratio is 32.1 — above the ceiling. Adding 3–4 shifts on weekends would bring it into the optimal range, potentially unlocking <strong style="color:var(--gold)">+$2.1k/day</strong> in weekend revenue (+30%).</div></div>
+    <div class="rec card-accent teal"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📧</div><div class="rec-title">Audit Email Biblical Lead Quality</div><div class="rec-body">Email Marketing drives 21% of Biblical leads but only 3.8% conversion — half the rate of No Media channels. Contact rate is acceptable at 40%. The issue is lead intent quality at the top of funnel. A/B test copy and audience targeting.</div></div>
+    <div class="rec card-accent orange"><div class="rec-priority pri-lo">LOW</div><div class="rec-icon">📈</div><div class="rec-title">Leverage Thursday–Tuesday Staffing Peak</div><div class="rec-body">Thursday leads weekday acquisitions (avg 16.9/day) while Tuesday shows highest revenue efficiency. Avoid over-scheduling Friday afternoon as the contacted ratio begins declining. Plan shift peaks for Tue–Thu.</div></div>
+  </div>
+
+  <!-- ─── ROI & Media Cost Intelligence ─────────────────────── -->
+  <div class="sh" style="margin-top:8px;margin-bottom:12px">
+    <div class="sh-left"><div class="title">Media Cost &amp; ROI Intelligence</div><div class="sub" id="e-roi-sub">Total spend $7.52M across Facebook, Google, Affiliates &amp; other paid channels · Email Marketing &amp; organic = zero cost · Revenue = SOV + Upsales</div></div>
+    <span class="badge orange" id="e-roi-badge">$7.52M Spend · 1.67× ROI</span>
+  </div>
+
+  <!-- ROI KPI row -->
+  <div class="kpi-grid g3" style="margin-bottom:14px">
+    <div class="kc card-accent gold"><div class="kc-lbl">Total Media Cost</div><div class="kc-val" id="e-mcost" style="color:var(--orange)">$7.52M</div><div class="kc-sub">All paid channels</div><div class="kc-bar bc-orange" style="width:60%"></div></div>
+    <div class="kc card-accent green"><div class="kc-lbl">Overall ROI</div><div class="kc-val" id="e-roipct" style="color:var(--green)">1.67×</div><div class="kc-sub">Revenue / Cost</div><div class="kc-bar bc-green" id="e-roibar" style="width:84%"></div></div>
+    <div class="kc card-accent blue"><div class="kc-lbl">Best ROI Channel</div><div class="kc-val" id="e-bestch" style="color:var(--green)">Web Campaign</div><div class="kc-sub" id="e-bestchsub">4.21–6.07× ROI · scale immediately</div><div class="kc-bar bc-green" style="width:100%"></div></div>
+  </div>
+
+  <!-- Hebrew vs Biblical ROI comparison -->
+  <div class="row r2" style="margin-bottom:14px">
+    <div class="card card-accent blue">
+      <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Biblical Related — Cost Efficiency</div><div class="sub">High volume · lower CPL · lower conversion</div></div><span class="badge blue" id="e-bib-badge">177K leads</span></div>
+      <div class="kpi-grid g3">
+        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" id="e-bib-cpl" style="color:var(--blue)">$24.29</div><div class="kc-sub">Cost per lead</div></div>
+        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" id="e-bib-cpa" style="color:var(--orange)">$624</div><div class="kc-sub">Cost per acquisition</div></div>
+        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" id="e-bib-roi" style="color:var(--gold)">1.59×</div><div class="kc-sub">Revenue / Cost</div></div>
+        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val" id="e-bib-cvr">3.89%</div><div class="kc-sub">Lead → Acq</div></div>
+        <div class="kc"><div class="kc-lbl">Facebook ROI</div><div class="kc-val" id="e-bib-fbroi" style="color:var(--red)">0.86×</div><div class="kc-sub">Largest drag channel</div></div>
       </div>
-      <div style="display:flex;gap:10px;flex-shrink:0">
-        <div class="kc" style="min-width:100px;padding:8px 12px"><div class="kc-lbl" style="font-size:9px">APR ROI</div><div class="kc-val" style="color:var(--red);font-size:18px" id="e-apr-roi">1.16×</div></div>
-        <div class="kc" style="min-width:100px;padding:8px 12px"><div class="kc-lbl" style="font-size:9px">APR ACQ/DAY</div><div class="kc-val" style="color:var(--red);font-size:18px">10.2</div></div>
-        <div class="kc" style="min-width:100px;padding:8px 12px"><div class="kc-lbl" style="font-size:9px">CONTACTED</div><div class="kc-val" style="color:var(--red);font-size:18px">34.6%</div></div>
+    </div>
+    <div class="card card-accent green">
+      <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Hebrew Related — Cost Efficiency</div><div class="sub">Higher CPL · 2.3× CVR · net ROI winner</div></div><span class="badge green" id="e-heb-badge">61K leads</span></div>
+      <div class="kpi-grid g3">
+        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" id="e-heb-cpl" style="color:var(--orange)">$51.64</div><div class="kc-sub">Cost per lead</div></div>
+        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" id="e-heb-cpa" style="color:var(--green)">$574</div><div class="kc-sub" id="e-heb-cpa-sub">$50 cheaper than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" id="e-heb-roi" style="color:var(--green)">1.79×</div><div class="kc-sub" id="e-heb-roi-sub">+0.20× vs Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val" id="e-heb-cvr" style="color:var(--green)">9.00%</div><div class="kc-sub" id="e-heb-cvr-sub">2.3× higher than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">Facebook ROI</div><div class="kc-val" id="e-heb-fbroi" style="color:var(--red)">0.76×</div><div class="kc-sub">Worst performing channel</div></div>
       </div>
     </div>
   </div>
 
-  <!-- Strategic Recommendations (consolidated from all tabs) -->
-  <div class="sh"><div class="sh-left"><div class="title">Strategic Recommendations</div><div class="sub">Consolidated insights from all analyses · Ranked by revenue impact</div></div><span class="badge blue">Data-Driven</span></div>
-  <div class="rec-grid">
-    <div class="rec card-accent gold"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🔀</div><div class="rec-title">Shift Budget from Facebook to High-ROI Channels</div><div class="rec-body">Facebook ROI is 0.76–0.86× (losing money). Web Campaign delivers <strong style="color:var(--green)">4.21–6.07× ROI</strong>, Affiliates <strong style="color:var(--green)">3.03–6.30×</strong>, Google Hebrew <strong style="color:var(--green)">1.37×</strong>. Reallocating 20% of Facebook's $5.2M spend adds significant profitable revenue immediately.</div></div>
-    <div class="rec card-accent green"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">⚡</div><div class="rec-title">Operate in the Revenue-Optimal L/S Window</div><div class="rec-body">L/S ratio of <strong style="color:var(--gold)" id="rec-ls-range">18.9–26.2</strong> produces <strong style="color:var(--green)">+15% above-average daily revenue</strong>. Days above 35 see revenue collapse. Hebrew leads convert at <strong style="color:var(--green)">9.0%</strong> vs Biblical's 3.9% — prioritize Hebrew allocation within this band.</div></div>
-    <div class="rec card-accent blue"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🚨</div><div class="rec-title">Pause Facebook Hebrew Spend Immediately</div><div class="rec-body">Facebook Hebrew ROI collapsed to <strong style="color:var(--red)">0.50× in April</strong> (was 0.76× all-time). Contacted rate crashed from 42%→31%. Every dollar spent returns $0.50. Redirect to Google Hebrew, Web Campaign, and Affiliates.</div></div>
-    <div class="rec card-accent purple"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📅</div><div class="rec-title">Increase Weekend Staffing to 11–12 Shifts</div><div class="rec-body">Weekend L/S ratio is 32.1 — above the ceiling. Adding 3–4 shifts brings it into the optimal range, unlocking <strong style="color:var(--gold)">+$2.1k/day</strong> in weekend revenue (+30%). <strong style="color:var(--green)">0% of weekend days</strong> currently hit the optimal zone.</div></div>
-    <div class="rec card-accent teal"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📧</div><div class="rec-title">Audit Email Biblical Lead Quality</div><div class="rec-body">Email Marketing drives 21% of Biblical leads but only 3.8% conversion — half the rate of No Media. A/B test copy and audience targeting. Email Hebrew at 7.3% CVR and $73/lead remains undervalued.</div></div>
-    <div class="rec card-accent orange"><div class="rec-priority pri-lo">LOW</div><div class="rec-icon">📈</div><div class="rec-title">Leverage Thursday–Tuesday Staffing Peak</div><div class="rec-body">Thursday leads acquisitions (avg 16.9/day), Tuesday shows highest revenue efficiency. Avoid over-scheduling Friday afternoon as contacted ratio declines. Plan shift peaks for Tue–Thu.</div></div>
+  <!-- ROI Verdict narrative -->
+  <div class="narrative card-accent green" style="margin-bottom:22px">
+    <h3>Budget Verdict: Hebrew ROI Wins Despite Higher CPL</h3>
+    <p>Hebrew leads cost <span class="tag r">$51.64 CPL</span> vs Biblical's <span class="tag gr">$24.29</span> — but this is a misleading surface signal. Hebrew's <span class="hl-green">9.0% CVR</span> (vs Biblical's 3.89%) collapses the CPA gap: Hebrew CPA is <span class="tag gr">$574</span> vs Biblical's <span class="tag r">$624</span>. Every Hebrew dollar returns <span class="hl-gold">$1.79 in revenue (1.79× ROI)</span> vs Biblical's $1.59 — a <strong>+12.6% revenue-per-dollar advantage</strong>.</p>
+    <h3 style="margin-top:12px">Channel-Level ROI Breakdown (Granular)</h3>
+    <p><strong>Facebook</strong> is the largest cost center ($5.2M total) running at <span class="tag r">0.86× ROI (Biblical)</span> and <span class="tag r">0.76× ROI (Hebrew)</span> — returning less than $1 for every $1 spent. <strong>Google Hebrew</strong> is profitable at <span class="tag gr">1.37× ROI</span>, but Google Biblical is below breakeven at <span class="tag r">0.84×</span>. <strong>Web Campaign</strong> delivers extraordinary returns: <span class="hl-green">4.21× (Biblical) and 6.07× (Hebrew) ROI</span> — scale immediately. <strong>Affiliates</strong> remain the highest-ROI channel at <span class="hl-green">3.03–6.30× ROI</span>. <strong>Email Marketing, No Media &amp; Community</strong> are zero-cost channels generating $4.1M in free revenue. <strong>Action:</strong> shift Facebook budget toward Web Campaign, Affiliates, and Google Hebrew — the three proven profitable paid channels.</p>
   </div>
 
   <!-- Summary Charts Row -->
   <div class="row r2">
+    <!-- Revenue by Media Donut -->
     <div class="card card-accent blue">
-      <div class="sh"><div class="sh-left"><div class="title">Revenue vs Lead Share by Media</div><div class="sub">Gap reveals lead quality: No Media & Web Campaign punch far above their lead weight.</div></div></div>
+      <div class="sh"><div class="sh-left"><div class="title">Revenue Share vs Lead Share by Media</div><div class="sub">The gap between bars reveals lead quality. No Media &amp; Web Campaign punch far above their lead weight.</div></div></div>
       <div style="height:260px"><canvas id="mediaShareChart"></canvas></div>
     </div>
+    <!-- Campaign Category Comparison -->
     <div class="card card-accent gold">
-      <div class="sh"><div class="sh-left"><div class="title">Hebrew vs Biblical — Quality Gap</div><div class="sub">Hebrew leads 2.3× more likely to convert, 2.4× more revenue per lead.</div></div></div>
+      <div class="sh"><div class="sh-left"><div class="title">Hebrew vs Biblical — Quality Gap</div><div class="sub">Hebrew Related leads are 2.3× more likely to convert and worth 2.4× more revenue per lead.</div></div></div>
       <div style="height:260px"><canvas id="campCompChart"></canvas></div>
     </div>
   </div>
 
-  <!-- Monthly Performance Trend -->
+  <!-- Monthly Revenue Trend -->
   <div class="card card-accent green" style="margin-bottom:22px">
-    <div class="sh"><div class="sh-left"><div class="title">Monthly Performance Trend — Revenue, Acquisitions, Orders</div><div class="sub">28-month rolling daily averages.</div></div><span class="badge green" id="e-trend-badge">Jan 2024 – Apr 2026</span></div>
+    <div class="sh"><div class="sh-left"><div class="title">Monthly Performance Trend — Revenue, Acquisitions, Orders</div><div class="sub">28-month rolling daily averages. Revenue trend is the north-star KPI.</div></div><span class="badge green">Jan 2024 – Apr 2026</span></div>
     <div style="height:280px"><canvas id="execTrendChart"></canvas></div>
   </div>
 
-  <!-- Scorecards -->
+  <!-- Performance Scorecard -->
   <div class="score-grid">
     <div class="score-card card-accent blue">
       <div class="sc-title">Media Channel Scorecard</div>
@@ -441,22 +476,20 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
 
 </section>
 
-<!-- ══════════════════════════════════════════════════════════════
-     TAB 1 — STAFFING & OPTIMAL ZONE (Merged: Rev Intel + Optimal Zone + Weekday/Weekend)
-══════════════════════════════════════════════════════════════ -->
+<!-- ══════════════════════════════════════════════════════
+     TAB 1 — REVENUE INTELLIGENCE
+══════════════════════════════════════════════════════ -->
 <section class="pnl" id="tab-1">
 
-  <!-- KPIs -->
-  <div class="kpi-grid g6">
-    <div class="kc card-accent gold"><div class="kc-lbl">Avg Daily Revenue</div><div class="kc-val" id="r-adr" style="color:var(--gold)">—</div><div class="kc-sub">Per calendar day</div><div class="kc-bar bc-gold" style="width:65%"></div></div>
-    <div class="kc"><div class="kc-lbl">Avg Daily Leads</div><div class="kc-val" id="o-leads">—</div><div class="kc-sub">All days combined</div><div class="kc-bar bc-blue"></div></div>
-    <div class="kc"><div class="kc-lbl">Avg Daily Shifts</div><div class="kc-val" id="o-shifts">—</div><div class="kc-sub">7h rep-equivalents</div><div class="kc-bar bc-purple"></div></div>
-    <div class="kc"><div class="kc-lbl">Avg Contacted Ratio</div><div class="kc-val" id="o-cont">—</div><div class="kc-sub">Contacted ÷ Leads</div><div class="kc-bar bc-orange"></div></div>
-    <div class="kc"><div class="kc-lbl">Avg Daily Acq</div><div class="kc-val" id="o-acq">—</div><div class="kc-sub">New students/day</div><div class="kc-bar bc-green"></div></div>
-    <div class="kc card-accent green"><div class="kc-lbl">Revenue Optimal Days</div><div class="kc-val" style="color:var(--green)" id="o-revopt">337</div><div class="kc-sub" id="o-revopt-sub">40.4% in revenue zone</div><div class="kc-bar bc-green" id="o-revopt-bar" style="width:40.4%"></div></div>
+  <div class="kpi-grid g5">
+    <div class="kc card-accent gold"><div class="kc-lbl">Total Revenue</div><div class="kc-val" style="color:var(--gold)" id="r-rev">—</div><div class="kc-sub">SOV + Upsales combined</div><div class="kc-bar bc-gold" style="width:100%"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Daily Revenue</div><div class="kc-val" id="r-adr">—</div><div class="kc-sub">All 830 days</div><div class="kc-bar bc-gold" style="width:65%"></div></div>
+    <div class="kc"><div class="kc-lbl">Revenue / Lead</div><div class="kc-val" id="r-rpl">—</div><div class="kc-sub">Overall blended rate</div><div class="kc-bar bc-teal" style="width:40%"></div></div>
+    <div class="kc"><div class="kc-lbl">Revenue / Acquisition</div><div class="kc-val" id="r-rpa">—</div><div class="kc-sub">Avg per enrolled student</div><div class="kc-bar bc-purple" style="width:70%"></div></div>
+    <div class="kc card-accent green"><div class="kc-lbl">Rev Optimal Zone Days</div><div class="kc-val" style="color:var(--green)" id="r-opt">337</div><div class="kc-sub" id="r-opt-sub">40.4% of all days qualify</div><div class="kc-bar bc-green" style="width:40.4%"></div></div>
   </div>
 
-  <!-- Revenue Optimal Zone Banner -->
+  <!-- Revenue Optimal Zone -->
   <div class="zone gold">
     <div class="zone-title gold">Revenue Optimal Zone — Best Lead/Shift Ratio for Maximum Revenue</div>
     <div class="zone-params">
@@ -467,27 +500,172 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
     </div>
   </div>
 
-  <!-- Revenue Scatter + Bins -->
+  <!-- Revenue Scatter + Ratio Bins -->
   <div class="row r65">
     <div class="card card-accent gold">
-      <div class="sh"><div class="sh-left"><div class="title">4-Way: L/S Ratio × Revenue × Contacted Rate × Acquisitions</div><div class="sub">Each bubble = 1 day · Size = contacted ratio · Color intensity = revenue · Gold ring = optimal zone day</div></div><span class="badge gold" id="r-nbadge">n=830</span></div>
+      <div class="sh"><div class="sh-left"><div class="title">Revenue vs Leads/Shift Ratio — Daily Scatter</div><div class="sub">Each bubble = 1 day · Size = contacted ratio · Color intensity = acquisition count · Gold ring = Revenue optimal zone day</div></div><span class="badge gold" id="r-nbadge">n=830</span></div>
       <div style="height:400px"><canvas id="revScatterChart"></canvas></div>
+      <div class="legend" style="margin-top:12px">
+        <div class="li"><div class="ld" style="background:var(--gold);border:1px solid var(--gold)"></div>Revenue Optimal Day</div>
+        <div class="li"><div class="ld" style="background:rgba(255,214,10,.5)"></div>High Revenue (>$20k)</div>
+        <div class="li"><div class="ld" style="background:rgba(255,214,10,.2)"></div>Below Average</div>
+      </div>
     </div>
+    <!-- Ratio Bins Revenue -->
     <div class="card">
-      <div class="sh"><div class="sh-left"><div class="title">Revenue &amp; Acq by L/S Ratio Band</div><div class="sub">Sweet spot: 15–35 · Above 35, revenue collapses</div></div></div>
-      <div style="height:160px"><canvas id="revBinsChart"></canvas></div>
+      <div class="sh"><div class="sh-left"><div class="title">Revenue by L/S Ratio Band</div><div class="sub">Sweet spot: 15–35 · Above 35, revenue collapses to $11.3k/day average</div></div></div>
+      <div style="height:200px"><canvas id="revBinsChart"></canvas></div>
       <div class="divider"></div>
-      <div class="title" style="font-size:13px;font-weight:600;margin-bottom:4px">Acquisitions by Ratio Band</div>
-      <div style="height:140px"><canvas id="ratioBinsAcqChart"></canvas></div>
+      <div class="title" style="font-size:13px;font-weight:600;margin-bottom:4px">Revenue per Lead by Ratio Band</div>
+      <div style="font-size:11.5px;color:var(--text-2);margin-bottom:12px">As ratio rises above 25, revenue extraction per lead falls sharply — reps have less time per contact.</div>
+      <div style="height:150px"><canvas id="revPerLeadBinsChart"></canvas></div>
     </div>
   </div>
 
-  <!-- Optimal Zone Narrative -->
+  <!-- Revenue Narrative -->
+  <div class="narrative card-accent gold">
+    <h3>Revenue Architecture: SOV + Upsales Deep Dive</h3>
+    <p>Total 2-year revenue of <span class="tag g">$12,579,844</span> is composed of <strong>Course SOV (primary)</strong> and <strong>Upsales (secondary)</strong>. The two components are highly correlated with acquisitions (r = <span class="tag b">+0.77</span>) and even more strongly with orders (r = <span class="tag gr">+0.85</span>), confirming that <span class="hl-gold">orders are the single strongest daily revenue predictor.</span></p>
+    <p>The <span class="hl-gold">Revenue Optimal Zone</span> (L/S ratio within the IQR band) aligns closely with the Acquisition Optimal Zone. Revenue maximization requires a ratio above 21 — below 15 leads/shift, reps are over-resourced and revenue production plateaus. The ceiling at 35 is clear: days above 35 average just <span class="tag r">$11,893/day</span> vs <span class="tag g">$16,129</span> in the optimal zone — a 26% drop.</p>
+    <p>The lead quality decomposition reveals that <span class="hl">Facebook generates 43.2% of total leads but only 34.1% of revenue</span> — a dilutive 0.79× ratio. In contrast, <span class="hl-green">No Media generates 7.5% of leads and 18.9% of revenue</span> — a highly accretive 2.5× revenue-to-lead ratio ($132/lead). Web Campaign ($108/lead, 2.1×) and Community ($79/lead, 1.5×) are also strongly accretive. Strategic reallocation from Facebook toward Google Hebrew, Web Campaign, and Affiliates is the highest-leverage revenue action available.</p>
+    <div class="corr-flex" id="revCorrBadges"></div>
+  </div>
+
+  <!-- Revenue by segment -->
+  <div class="row r2">
+    <div class="card card-accent teal">
+      <div class="sh"><div class="sh-left"><div class="title">Revenue per Lead by Segment</div><div class="sub">The quality gap is massive: No Media Hebrew produces 5.0× the revenue per lead of Facebook Biblical</div></div></div>
+      <div style="height:280px"><canvas id="revPerLeadSegChart"></canvas></div>
+    </div>
+    <div class="card card-accent purple">
+      <div class="sh"><div class="sh-left"><div class="title">Top 30 Days by Revenue</div><div class="sub">Highest revenue days and their operational parameters</div></div><span class="badge gold">All-Time Best</span></div>
+      <div class="tbl-wrap" style="max-height:320px">
+        <table><thead><tr><th>#</th><th>Date</th><th>Day</th><th>Leads</th><th>Shift</th><th>L/S</th><th>Revenue</th><th>Acq</th><th>Orders</th></tr></thead>
+        <tbody id="topRevBody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB 2 — LEAD QUALITY MATRIX
+══════════════════════════════════════════════════════ -->
+<section class="pnl" id="tab-2">
+
+  <!-- Top banner insight -->
+  <div class="zone blue" style="margin-bottom:22px">
+    <div class="zone-title blue">Core Insight: 10,000 Leads Are Not Equal</div>
+    <div class="zone-params">
+      <div class="zp"><div class="zp-lbl" id="lq-best-lbl">No Media Hebrew (best)</div><div class="zp-val" id="lq-best-cvr" style="color:var(--green)">15.3% CVR</div><div class="zp-range" id="lq-best-rpl">$161.63 revenue / lead</div></div>
+      <div class="zp"><div class="zp-lbl" id="lq-worst-lbl">Facebook Biblical (worst)</div><div class="zp-val" id="lq-worst-cvr" style="color:var(--red)">3.3% CVR</div><div class="zp-range" id="lq-worst-rpl">$32.57 revenue / lead</div></div>
+      <div class="zp"><div class="zp-lbl">Quality Gap</div><div class="zp-val" id="lq-qgap" style="color:var(--gold)">4.96×</div><div class="zp-range">Rev/lead: best vs worst</div></div>
+      <div class="zp"><div class="zp-lbl">Conversion Gap</div><div class="zp-val" id="lq-cgap" style="color:var(--blue)">4.64×</div><div class="zp-range" id="lq-cgap-lbl">No Media Hebrew vs Facebook Biblical CVR</div></div>
+    </div>
+  </div>
+
+  <!-- Lead Quality Matrix (heatmap table) -->
+  <div class="card card-accent teal" style="margin-bottom:22px">
+    <div class="sh">
+      <div class="sh-left"><div class="title">Lead Quality Matrix — Conversion Rate × Revenue per Lead</div><div class="sub">Each cell shows: Conversion Rate (large) · Revenue/Lead (medium) · Total lead volume (small). Color = quality score. Darker green = higher value per lead.</div></div>
+      <span class="badge teal">8 Segments</span>
+    </div>
+    <div class="matrix-wrap"><table class="matrix" id="qualityMatrix"></table></div>
+  </div>
+
+  <!-- Chart row -->
+  <div class="row r3">
+    <!-- Conversion Rate by Segment -->
+    <div class="card card-accent green">
+      <div class="sh"><div class="sh-left"><div class="title">Conversion Rate by Segment</div><div class="sub">Acquisitions ÷ Total Leads</div></div></div>
+      <div style="height:240px"><canvas id="cvrSegChart"></canvas></div>
+    </div>
+    <!-- Revenue per Lead by segment -->
+    <div class="card card-accent gold">
+      <div class="sh"><div class="sh-left"><div class="title">Revenue per Lead by Segment</div><div class="sub">True lead value in dollars</div></div></div>
+      <div style="height:240px"><canvas id="rplSegChart"></canvas></div>
+    </div>
+    <!-- Revenue per Acquisition -->
+    <div class="card card-accent purple">
+      <div class="sh"><div class="sh-left"><div class="title">Revenue per Acquisition</div><div class="sub">Avg student value per channel</div></div></div>
+      <div style="height:240px"><canvas id="rpaSegChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Lead Volume vs Revenue Volume comparison -->
+  <div class="row r2">
+    <div class="card card-accent blue">
+      <div class="sh"><div class="sh-left"><div class="title">Lead Share vs Revenue Share — By Media</div><div class="sub">The gap between the two bars reveals over/under-performance vs lead volume expectations. No Media outperforms its lead weight by 2.5×. Web Campaign also strongly accretive.</div></div></div>
+      <div style="height:270px"><canvas id="leadRevShareChart"></canvas></div>
+    </div>
+    <div class="card card-accent teal">
+      <div class="sh"><div class="sh-left"><div class="title">Contacted Rate by Segment</div><div class="sub">How reachable are leads from each source? High contacted rate = better lead intent or call center scheduling alignment.</div></div></div>
+      <div style="height:270px"><canvas id="contactRateSegChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Deep narrative -->
+  <div class="narrative card-accent blue">
+    <h3>Lead Efficiency Analysis: Why Volume Alone Is a Misleading KPI</h3>
+    <p>The data exposes a fundamental strategic trap: measuring success by lead count creates a <span class="hl">false sense of scale while obscuring quality erosion</span>. Facebook Biblical delivers 82,989 leads (34.8% of total volume) at a conversion rate of <span class="tag r">3.3%</span> and <span class="tag r">$32.57/lead</span>. Meanwhile, No Media Hebrew delivers 6,653 leads (2.8% of volume) at <span class="tag gr">15.3% conversion</span> and <span class="tag gr">$161.63/lead</span>. The 5.0× revenue-per-lead gap means you need 5 Facebook Biblical leads to equal the value of 1 No Media Hebrew lead.</p>
+    <p>The <span class="hl-gold">Hebrew category consistently outperforms Biblical across every media channel</span>. The Hebrew contacted rate is <span class="tag gr">54.9%</span> vs Biblical's 40.9% — suggesting Hebrew leads have stronger intent, better data quality, or better demographic fit for the call center's scheduling capabilities. This 14-point gap in reachability alone accounts for a significant portion of the conversion differential.</p>
+    <p>The channel granularity reveals hidden winners: <span class="hl">Web Campaign Hebrew ($112/lead, 11.1% CVR, 6.07× ROI)</span> and <span class="hl">Google Hebrew ($98/lead, 1.37× ROI)</span> are the two most capital-efficient paid channels. Affiliates ($74/lead, 3.03–6.30× ROI) and Community ($79/lead, zero cost) are also strong. Email Marketing Hebrew ($73/lead, 7.3% CVR) is undervalued — a reachable, moderate-quality pool that benefits from nurture sequences before hand-off to the call center.</p>
+    <p><strong>Key Recommendation:</strong> Replace "total monthly leads" as a primary KPI with <span class="hl-gold">Revenue-Weighted Lead Volume (RWLV)</span> = Σ(leads per segment × revenue per lead for that segment). This single metric captures both quantity and quality, and will show that shifting mix toward Hebrew, No Media, and Web Campaign channels could increase effective revenue contribution by 25–40% without requiring more total leads.</p>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB 3 — OPTIMAL ZONE (4-WAY)
+══════════════════════════════════════════════════════ -->
+<section class="pnl" id="tab-3">
+
+  <div class="kpi-grid g6">
+    <div class="kc"><div class="kc-lbl">Total Days</div><div class="kc-val">830</div><div class="kc-sub">Jan 2024 – Apr 2026</div><div class="kc-bar bc-blue" style="width:100%"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Daily Leads</div><div class="kc-val" id="o-leads">—</div><div class="kc-sub">All days combined</div><div class="kc-bar bc-blue"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Daily Shifts</div><div class="kc-val" id="o-shifts">—</div><div class="kc-sub">7h rep-equivalents</div><div class="kc-bar bc-purple"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Contacted Ratio</div><div class="kc-val" id="o-cont">—</div><div class="kc-sub">Contacted ÷ Leads</div><div class="kc-bar bc-orange"></div></div>
+    <div class="kc"><div class="kc-lbl">Avg Daily Acq</div><div class="kc-val" id="o-acq">—</div><div class="kc-sub">New students/day</div><div class="kc-bar bc-green"></div></div>
+    <div class="kc card-accent gold"><div class="kc-lbl">Revenue Optimal Days</div><div class="kc-val" style="color:var(--gold)" id="o-revopt">337</div><div class="kc-sub" id="o-revopt-sub">40.4% in revenue zone</div><div class="kc-bar bc-gold" id="o-revopt-bar" style="width:40.4%"></div></div>
+  </div>
+
+  <!-- 4-way zone block -->
+  <div class="zone blue">
+    <div class="zone-title gold">The Revenue-Optimal Zone — L/S Ratio for Maximum Revenue</div>
+    <div class="zone-params">
+      <div class="zp"><div class="zp-lbl">Daily Lead Volume</div><div class="zp-val" id="az-leads" style="color:var(--blue)">278–401</div><div class="zp-range" id="az-leads-sub">IQR · avg 348</div></div>
+      <div class="zp"><div class="zp-lbl">Rep Shifts (7h equiv.)</div><div class="zp-val" id="az-shifts" style="color:var(--purple)">11.3–15.6</div><div class="zp-range" id="az-shifts-sub">IQR · avg 13.7</div></div>
+      <div class="zp"><div class="zp-lbl">Leads / Shift Ratio</div><div class="zp-val" id="az-ls" style="color:var(--gold)">21.1–30.9</div><div class="zp-range" id="az-ls-sub">IQR · avg 26.4</div></div>
+      <div class="zp"><div class="zp-lbl">Contacted Ratio</div><div class="zp-val" id="az-cont" style="color:var(--green)">≥ 50%</div><div class="zp-range" id="az-cont-sub">Optimal avg 55.5%</div></div>
+    </div>
+  </div>
+
+  <!-- Main scatter + bins -->
+  <div class="row r65">
+    <div class="card card-accent blue">
+      <div class="sh"><div class="sh-left"><div class="title">4-Way Intersection: L/S Ratio × Acquisitions × SOV × Contacted Rate</div><div class="sub">X = Leads/Shift · Y = Acquisitions · Bubble size = Contacted Ratio · Color = SOV (dark→bright) · Gold ring = Optimal Zone day</div></div><span class="badge blue" id="o-nbadge">n=830</span></div>
+      <div style="height:420px"><canvas id="scatterChart"></canvas></div>
+      <div class="legend" style="margin-top:12px">
+        <div class="li"><div class="ld" style="background:var(--blue);border:2px solid var(--gold)"></div>Optimal Zone Day</div>
+        <div class="li"><div class="ld" style="background:rgba(10,132,255,.5)"></div>High SOV</div>
+        <div class="li"><div class="ld" style="background:rgba(255,255,255,.1)"></div>Bubble = Contacted Ratio</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">Leads/Shift Bands — Acquisitions &amp; Contacted</div></div></div>
+      <div style="height:190px"><canvas id="ratioBinsAcqChart"></canvas></div>
+      <div class="divider"></div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px">Avg Revenue by Ratio Band</div>
+      <div style="height:155px"><canvas id="ratioBinsSOVChart2"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Analysis + Monthly Trend -->
   <div class="row r2">
     <div class="narrative">
-      <h3>Optimal Zone Analysis</h3>
-      <p>The revenue optimal zone defines the L/S ratio where daily revenue peaks. Leads in the <span class="tag b" id="nar-az-leads">235–351</span> range with shifts at <span class="tag p" id="nar-az-shifts">10.6–15.3</span> produce an L/S ratio of <span class="tag g" id="nar-az-ls">18.9–26.2</span> — the core operating target.</p>
-      <p><strong id="nar-az-count">337 of 834 days</strong> (<span id="nar-az-pct">40.4</span>%) qualify. Those days average <span class="tag gr" id="nar-az-avg-acq">$16,318/day revenue</span> vs <span class="tag gr" id="nar-az-avg-sov">$15,084 overall avg</span>.</p>
+      <h3>Optimal Zone Analysis: Revenue Maximization</h3>
+      <p>The revenue optimal zone defines the operating envelope where daily revenue peaks. Leads must be in the <span class="tag b" id="nar-az-leads">235–351</span> range — below this, there is insufficient pipeline for reps to generate volume; above this, rep capacity is insufficient. Shifts must stay in <span class="tag p" id="nar-az-shifts">10.6–15.3</span>: the ratio stabilizes in the accretive zone. The resulting L/S ratio of <span class="tag g" id="nar-az-ls">18.9–26.2</span> is the core operating target.</p>
+      <p><strong id="nar-az-count">337 of 834 days</strong> (<span id="nar-az-pct">40.4</span>%) fall within this revenue optimal zone. Those days average <span class="tag gr" id="nar-az-avg-acq">$16,318/day revenue</span> vs <span class="tag gr" id="nar-az-avg-sov">$15,084 overall avg</span> — a meaningful uplift that compounds over time.</p>
       <div class="corr-flex" id="acqCorrBadges"></div>
     </div>
     <div class="card card-accent green">
@@ -496,17 +674,29 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
     </div>
   </div>
 
-  <!-- Weekday vs Weekend Section -->
-  <div class="sh" style="margin-top:8px;margin-bottom:16px"><div class="sh-left"><div class="title" style="font-size:16px">Weekday vs Weekend Breakdown</div><div class="sub">ISO calendar · Monday–Friday vs Saturday–Sunday</div></div><span class="badge green">Calendar</span></div>
+  <!-- Top 30 Acq Days -->
+  <div class="card" style="margin-top:0">
+    <div class="sh"><div class="sh-left"><div class="title">Top 30 Acquisition Days</div><div class="sub">Blue dot = Optimal Zone · Red L/S = ratio exceeded ceiling · Green L/S = within optimal band</div></div><span class="badge gold">Best Ever</span></div>
+    <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Date</th><th>Day</th><th>Leads</th><th>Shifts</th><th>L/S Ratio</th><th>Acq</th><th>SOV</th><th>Contacted %</th></tr></thead><tbody id="topAcqBody"></tbody></table></div>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB 4 — WEEKDAY vs WEEKEND
+══════════════════════════════════════════════════════ -->
+<section class="pnl" id="tab-4">
+
+  <div class="sh" style="margin-bottom:22px"><div class="sh-left"><div class="title" style="font-size:17px">Weekday vs Weekend — Calendar-Based Analysis</div><div class="sub">ISO calendar · Monday–Friday = Weekdays · Saturday–Sunday = Weekends · 830 actual calendar days analyzed</div></div><span class="badge blue">Calendar Verified</span></div>
 
   <div class="kpi-grid g4" style="margin-bottom:18px">
     <div class="kc card-accent blue"><div class="kc-lbl">Weekday Days</div><div class="kc-val" id="wd-days" style="color:var(--blue)">594</div><div class="kc-sub" id="wd-days-sub">71.6% of dataset · Mon–Fri</div><div class="kc-bar bc-blue" id="wd-bar" style="width:71.6%"></div></div>
-    <div class="kc card-accent gold"><div class="kc-lbl">Weekend Days</div><div class="kc-val" id="we-days" style="color:var(--gold)">236</div><div class="kc-sub" id="we-days-sub">28.4% · Sat & Sun only</div><div class="kc-bar bc-gold" id="we-bar" style="width:28.4%"></div></div>
+    <div class="kc card-accent gold"><div class="kc-lbl">Weekend Days</div><div class="kc-val" id="we-days" style="color:var(--gold)">236</div><div class="kc-sub" id="we-days-sub">28.4% · Sat &amp; Sun only</div><div class="kc-bar bc-gold" id="we-bar" style="width:28.4%"></div></div>
     <div class="kc card-accent green"><div class="kc-lbl">Weekday Optimal Days</div><div class="kc-val" id="wd-opt" style="color:var(--green)">33</div><div class="kc-sub" id="wd-opt-sub">100% of all optimal zone days</div><div class="kc-bar bc-green" id="wd-opt-bar" style="width:100%"></div></div>
     <div class="kc"><div class="kc-lbl">Weekend Optimal Days</div><div class="kc-val" id="we-opt" style="color:var(--orange)">0</div><div class="kc-sub" id="we-opt-sub">0% — none qualify</div><div class="kc-bar bc-orange" id="we-opt-bar" style="width:0%"></div></div>
   </div>
 
-  <!-- Side-by-side panels -->
+  <!-- Side-by-side comparison panels -->
   <div class="wkd-grid">
     <div class="wkd-pnl wd">
       <div class="wkd-hdr"><div class="wkd-title">Weekdays <span style="color:var(--text-2);font-weight:400;font-size:13px">Mon–Fri</span></div><span class="wkd-tag" id="wd-tag">594 days</span></div>
@@ -518,65 +708,97 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
     </div>
   </div>
 
-  <!-- DOW Charts -->
+  <!-- Charts -->
   <div class="row r2">
-    <div class="card card-accent blue"><div class="sh"><div class="sh-left"><div class="title">Avg Daily Acquisitions by Day of Week</div><div class="sub">Blue = weekday · Gold = weekend</div></div></div><div style="height:250px"><canvas id="dowAcqChart"></canvas></div></div>
-    <div class="card"><div class="sh"><div class="sh-left"><div class="title">Avg Daily Revenue by Day of Week</div><div class="sub">Thursday shows strongest revenue efficiency</div></div></div><div style="height:250px"><canvas id="dowRevChart"></canvas></div></div>
+    <div class="card card-accent blue"><div class="sh"><div class="sh-left"><div class="title">Avg Daily Acquisitions by Day of Week</div><div class="sub">Blue = weekday · Gold = weekend · Dashed = overall avg</div></div></div><div style="height:280px"><canvas id="dowAcqChart"></canvas></div></div>
+    <div class="card"><div class="sh"><div class="sh-left"><div class="title">Avg Daily Revenue by Day of Week</div><div class="sub">Revenue mirrors acquisitions but Thursday shows strongest revenue efficiency</div></div></div><div style="height:280px"><canvas id="dowRevChart"></canvas></div></div>
   </div>
 
   <div class="row r2">
-    <div class="card"><div class="sh"><div class="sh-left"><div class="title">Contacted Ratio by Day of Week</div><div class="sub">Weekend drop = structural engagement gap</div></div></div><div style="height:230px"><canvas id="dowContChart"></canvas></div></div>
-    <div class="card card-accent gold"><div class="sh"><div class="sh-left"><div class="title">Full Metric Comparison — Indexed to Weekday Baseline</div><div class="sub">Weekday = 100. Weekend performance indexed.</div></div></div><div style="height:230px"><canvas id="compareBarChart"></canvas></div></div>
+    <div class="card"><div class="sh"><div class="sh-left"><div class="title">Contacted Ratio by Day of Week</div><div class="sub">Weekend drop exposes structural engagement gap</div></div></div><div style="height:260px"><canvas id="dowContChart"></canvas></div></div>
+    <div class="card"><div class="sh"><div class="sh-left"><div class="title">Leads/Shift Ratio by Day of Week</div><div class="sub">Weekend ratio (~32) exceeds the optimal ceiling — reps are over-leveraged</div></div></div><div style="height:260px"><canvas id="dowRatioChart"></canvas></div></div>
   </div>
 
-  <!-- Weekend Narrative -->
+  <!-- Narrative + Charts -->
   <div class="narrative card-accent blue">
     <h3>Weekend Structural Analysis</h3>
-    <p>Weekdays produce <span class="tag gr" id="wd-acq-tag">17.1 acquisitions/day</span> and <span class="tag gr" id="wd-rev-tag">$17,257/day revenue</span> vs weekend's <span class="tag r" id="we-acq-tag">9.7 acq/day</span> and <span class="tag r" id="we-rev-tag">$9,604/day</span>. The weekday revenue premium is <span class="hl-gold" id="wd-premium">79.7%</span>. Weekends run avg <span id="we-avg-shifts">7.8</span> shifts vs <span id="wd-avg-shifts">12.8</span> weekday, pushing L/S ratio to <span id="we-ls">33.2</span> — above the ceiling of <span id="wd-opt-ceil">26.2</span>.</p>
-    <p><span class="hl-green" id="we-opt-nar">80 of 416 revenue optimal zone days are weekends (19%)</span> despite weekends being <span id="we-pct-dataset">28.4</span>% of the dataset. Hit rates: weekday <span id="wd-hit-rate-nar">56.4%</span> vs weekend <span id="we-hit-rate-nar">33.6%</span>. Adding 3–4 weekend shifts drops the ratio to ~25–27, entering the optimal window. <strong>Expected gain: +$2,000–2,500/weekend day.</strong></p>
+    <p>Weekdays produce an average of <span class="tag gr" id="wd-acq-tag">17.1 acquisitions/day</span> and <span class="tag gr" id="wd-rev-tag">$17,257/day revenue</span> vs weekend's <span class="tag r" id="we-acq-tag">9.7 acq/day</span> and <span class="tag r" id="we-rev-tag">$9,604/day</span>. The weekday revenue premium is <span class="hl-gold" id="wd-premium">79.7%</span>. This is not a demand shortfall — weekend leads run at avg <span id="we-avg-leads">218</span>/day which is meaningful volume. The root cause is <span class="hl">staffing imbalance</span>: weekends run avg <span id="we-avg-shifts">7.8</span> shifts vs <span id="wd-avg-shifts">12.8</span> weekday, pushing L/S ratio to <span id="we-ls">33.2</span> — above the revenue optimal ceiling of <span id="wd-opt-ceil">26.2</span>.</p>
+    <p><span class="hl-green" id="we-opt-nar">80 of 416 revenue optimal zone days are weekends (19%)</span> despite weekends being <span id="we-pct-dataset">28.4</span>% of the dataset. The weekday optimal zone hit rate is <span id="wd-hit-rate-nar">56.4%</span> (336/596) vs weekend's <span id="we-hit-rate-nar">33.6%</span> (80/238). Sunday shows the highest weekend potential: avg acquisition rate 10.4/day (vs Saturday's 9.0) with L/S ratio of 31.9 vs Saturday's 32.4. If weekend staffing increases by 3–4 shifts, the ratio drops to ~25–27, entering the revenue optimal window. <strong>Expected revenue gain: +$2,000–2,500/weekend day</strong> based on optimal zone benchmarks.</p>
+  </div>
+
+  <div class="row r2">
+    <div class="card card-accent gold"><div class="sh"><div class="sh-left"><div class="title">Full Metric Comparison — Indexed to Weekday Baseline</div><div class="sub">Weekday = 100 baseline. Weekend performance indexed across all metrics.</div></div></div><div style="height:280px"><canvas id="compareBarChart"></canvas></div></div>
+    <div class="card">
+      <div class="sh"><div class="sh-left"><div class="title">Optimal Zone Distribution</div><div class="sub" id="opt-dist-sub">Revenue optimal zone split: weekday vs weekend</div></div></div>
+      <div style="height:200px"><canvas id="optPieChart"></canvas></div>
+      <div class="kpi-grid g2" style="margin-top:14px">
+        <div class="kc"><div class="kc-lbl">Weekday Hit Rate</div><div class="kc-val" style="color:var(--blue)" id="wd-hit-val">56.4%</div><div class="kc-sub" id="wd-hit-sub">336/596 weekdays qualify</div><div class="kc-bar bc-blue" id="wd-hit-bar" style="width:56.4%"></div></div>
+        <div class="kc"><div class="kc-lbl">Weekend Hit Rate</div><div class="kc-val" style="color:var(--gold)" id="we-hit-val">33.6%</div><div class="kc-sub" id="we-hit-sub">80/238 weekends qualify</div><div class="kc-bar bc-gold" id="we-hit-bar" style="width:33.6%"></div></div>
+      </div>
+    </div>
   </div>
 
 </section>
 
-<!-- ══════════════════════════════════════════════════════════════
-     TAB 2 — LEAD QUALITY & ROI (Merged: Lead Quality + ROI/Media Cost)
-══════════════════════════════════════════════════════════════ -->
-<section class="pnl" id="tab-2">
+<!-- ═══════════════════════ TAB 5 — ROI & MEDIA COST ═══════════════════════ -->
+<section class="pnl" id="tab-5">
+
+  <div class="sh" style="margin-bottom:22px">
+    <div class="sh-left">
+      <div class="title" style="font-size:17px">ROI &amp; Media Cost Analysis</div>
+      <div class="sub">Revenue = ActualStatCRMCourseSOV + UpsalesAmount · Cost = paid media spend (Facebook, Google, Affiliates, etc.) · Email &amp; organic channels treated as $0 cost</div>
+    </div>
+    <span class="badge orange">Budget Intelligence</span>
+  </div>
 
   <!-- KPI Row -->
   <div class="kpi-grid g6" style="margin-bottom:18px">
     <div class="kc card-accent blue"><div class="kc-lbl">Total Media Cost</div><div class="kc-val" id="roi-cost" style="color:var(--blue)">—</div><div class="kc-sub">All paid channels</div></div>
     <div class="kc card-accent green"><div class="kc-lbl">Total Revenue</div><div class="kc-val" id="roi-rev" style="color:var(--green)">—</div><div class="kc-sub">SOV + Upsales</div></div>
     <div class="kc card-accent gold"><div class="kc-lbl">Overall ROI</div><div class="kc-val" id="roi-pct" style="color:var(--gold)">—</div><div class="kc-sub">Revenue / Cost</div></div>
-    <div class="kc"><div class="kc-lbl">CPL (Paid)</div><div class="kc-val" id="roi-cpl">—</div><div class="kc-sub">Cost per lead</div></div>
-    <div class="kc"><div class="kc-lbl">CPA (Paid)</div><div class="kc-val" id="roi-cpa">—</div><div class="kc-sub">Cost per acquisition</div></div>
-    <div class="kc card-accent teal"><div class="kc-lbl">Best ROI Channel</div><div class="kc-val" id="e-bestch" style="color:var(--green)">Web Campaign</div><div class="kc-sub" id="e-bestchsub">4.21–6.07× ROI</div></div>
+    <div class="kc"><div class="kc-lbl">Cost per Lead (CPL)</div><div class="kc-val" id="roi-cpl">—</div><div class="kc-sub">Paid channels only</div></div>
+    <div class="kc"><div class="kc-lbl">Cost per Acq. (CPA)</div><div class="kc-val" id="roi-cpa">—</div><div class="kc-sub">Paid channels only</div></div>
   </div>
 
-  <!-- Core Insight Banner -->
-  <div class="zone blue" style="margin-bottom:22px">
-    <div class="zone-title blue">Core Insight: 10,000 Leads Are Not Equal</div>
-    <div class="zone-params">
-      <div class="zp"><div class="zp-lbl" id="lq-best-lbl">No Media Hebrew (best)</div><div class="zp-val" id="lq-best-cvr" style="color:var(--green)">15.3% CVR</div><div class="zp-range" id="lq-best-rpl">$161.63 revenue / lead</div></div>
-      <div class="zp"><div class="zp-lbl" id="lq-worst-lbl">Facebook Biblical (worst)</div><div class="zp-val" id="lq-worst-cvr" style="color:var(--red)">3.3% CVR</div><div class="zp-range" id="lq-worst-rpl">$32.57 revenue / lead</div></div>
-      <div class="zp"><div class="zp-lbl">Quality Gap</div><div class="zp-val" id="lq-qgap" style="color:var(--gold)">4.96×</div><div class="zp-range">Rev/lead: best vs worst</div></div>
-      <div class="zp"><div class="zp-lbl">Conversion Gap</div><div class="zp-val" id="lq-cgap" style="color:var(--blue)">4.64×</div><div class="zp-range" id="lq-cgap-lbl">No Media Hebrew vs Facebook Biblical CVR</div></div>
+  <!-- Hebrew vs Biblical Comparison -->
+  <div class="sh" style="margin-bottom:12px"><div class="sh-left"><div class="title">Hebrew vs Biblical — Budget Efficiency Breakdown</div><div class="sub">Despite Hebrew leads costing 2.1× more, Hebrew delivers superior ROI and lower CPA</div></div></div>
+
+  <div class="row r2" style="margin-bottom:18px">
+    <!-- Biblical card -->
+    <div class="card card-accent blue">
+      <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Biblical Related</div><div class="sub">High volume, lower CPL, lower CVR</div></div><span class="badge blue">177K leads</span></div>
+      <div class="kpi-grid g3">
+        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" style="color:var(--blue)">$24.29</div><div class="kc-sub">Cost per lead</div></div>
+        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val" style="color:var(--blue)">3.89%</div><div class="kc-sub">Lead→Acquisition</div></div>
+        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" style="color:var(--orange)">$624</div><div class="kc-sub">Cost per acquisition</div></div>
+        <div class="kc"><div class="kc-lbl">Revenue/Lead</div><div class="kc-val">$38.68</div><div class="kc-sub">Revenue generated</div></div>
+        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" style="color:var(--gold)">1.59×</div><div class="kc-sub">Revenue / Cost</div></div>
+      </div>
+    </div>
+    <!-- Hebrew card -->
+    <div class="card card-accent green">
+      <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Hebrew Related</div><div class="sub">Higher CPL but 2.3× better conversion — net ROI winner</div></div><span class="badge green">61K leads</span></div>
+      <div class="kpi-grid g3">
+        <div class="kc"><div class="kc-lbl">CPL</div><div class="kc-val" style="color:var(--orange)">$51.64</div><div class="kc-sub">2.1× more than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">CVR</div><div class="kc-val" style="color:var(--green)">9.00%</div><div class="kc-sub">2.3× higher than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">CPA</div><div class="kc-val" style="color:var(--green)">$574</div><div class="kc-sub">$50 cheaper than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">Revenue/Lead</div><div class="kc-val" style="color:var(--green)">$92.44</div><div class="kc-sub">2.4× more than Biblical</div></div>
+        <div class="kc"><div class="kc-lbl">ROI</div><div class="kc-val" style="color:var(--green)">1.79×</div><div class="kc-sub">+0.20× vs Biblical</div></div>
+      </div>
     </div>
   </div>
 
-  <!-- Lead Quality Matrix -->
-  <div class="card card-accent teal" style="margin-bottom:22px">
-    <div class="sh">
-      <div class="sh-left"><div class="title">Lead Quality Matrix — CVR × Revenue per Lead</div><div class="sub">Each cell: CVR (large) · Rev/Lead (medium) · Volume (small). Darker green = higher value.</div></div>
-      <span class="badge teal">8 Segments</span>
-    </div>
-    <div class="matrix-wrap"><table class="matrix" id="qualityMatrix"></table></div>
+  <!-- Strategic Verdict -->
+  <div class="narrative card-accent green" style="margin-bottom:18px">
+    <h3>Budget Allocation Verdict: Increase Hebrew Investment</h3>
+    <p>The higher CPL of Hebrew (<span class="tag r">$51.64 vs $24.29</span>) is a surface-level signal that can be misleading. When accounting for conversion rates, Hebrew leads convert at <span class="tag gr">9.0%</span> vs Biblical's <span class="tag r">3.89%</span> — a <span class="hl-green">2.3× efficiency advantage</span>. This collapses the CPA gap entirely: Hebrew CPA is <span class="tag gr">$574</span> vs Biblical's <span class="tag r">$624</span>. Each Hebrew dollar spent returns <span class="hl-green">$1.79 in revenue (1.79× ROI)</span> vs Biblical's $1.59 — a <strong>+12.6% revenue-per-dollar advantage</strong>. Revenue per lead reinforces this: Hebrew generates <span class="hl">$92.44/lead</span> vs Biblical's <span class="tag r">$38.68</span> — 2.4× more value from each lead acquired.</p>
+    <p><strong>Recommendation:</strong> <span class="hl-gold">Shift budget from Facebook (0.76–0.86× ROI) toward Web Campaign (4.21–6.07× ROI), Google Hebrew (1.37× ROI), and Affiliates (3.03–6.30× ROI).</span> Facebook is the largest cost center at $5.2M and is the biggest structural drag across both categories. Google Hebrew is the only PPC channel generating positive ROI. Web Campaign and Affiliates are by far the most capital-efficient paid channels. <strong>Scaling Web Campaign and Affiliates volume is the highest-priority budget action available.</strong></p>
   </div>
 
-  <!-- ROI by Channel + CPL Comparison -->
+  <!-- Charts row -->
   <div class="row r2" style="margin-bottom:18px">
     <div class="card card-accent blue">
-      <div class="sh"><div class="sh-left"><div class="title">ROI by Channel × Category</div><div class="sub">Blue = Biblical · Green = Hebrew · Red = negative ROI</div></div></div>
+      <div class="sh"><div class="sh-left"><div class="title">ROI by Channel × Category</div><div class="sub">Blue = Biblical · Green = Hebrew · Red zone = negative ROI</div></div></div>
       <div style="height:300px"><canvas id="roiChannelChart"></canvas></div>
     </div>
     <div class="card">
@@ -585,28 +807,22 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
     </div>
   </div>
 
-  <!-- Monthly ROI + CPL Trends -->
+  <!-- Monthly ROI trend -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="sh"><div class="sh-left"><div class="title">Monthly ROI Trend — Hebrew vs Biblical (2024–2026)</div><div class="sub">Hebrew (green) vs Biblical (blue) · ROI = Revenue / Media Cost</div></div><span class="badge teal">28 months</span></div>
+    <div style="height:300px"><canvas id="monthlyRoiChart"></canvas></div>
+  </div>
+
   <div class="row r2" style="margin-bottom:18px">
     <div class="card">
-      <div class="sh"><div class="sh-left"><div class="title">Monthly ROI Trend — Hebrew vs Biblical</div><div class="sub">ROI = Revenue / Media Cost</div></div><span class="badge teal">28 months</span></div>
-      <div style="height:280px"><canvas id="monthlyRoiChart"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="sh"><div class="sh-left"><div class="title">CPL Trend Over Time</div><div class="sub">Monthly cost per lead · Hebrew consistently higher but stable</div></div></div>
-      <div style="height:280px"><canvas id="monthlyCplChart"></canvas></div>
+      <div class="sh"><div class="sh-left"><div class="title">CPL Trend Over Time</div><div class="sub">Cost per lead monthly · Hebrew lead costs consistently higher but stable</div></div></div>
+      <div style="height:270px"><canvas id="monthlyCplChart"></canvas></div>
     </div>
   </div>
 
-  <!-- Budget Verdict Narrative -->
-  <div class="narrative card-accent green" style="margin-bottom:18px">
-    <h3>Budget Allocation Verdict</h3>
-    <p>Hebrew leads cost <span class="tag r">$51.64 CPL</span> vs Biblical's <span class="tag gr">$24.29</span> — but Hebrew's <span class="hl-green">9.0% CVR</span> (vs 3.89%) collapses the CPA gap: Hebrew CPA <span class="tag gr">$574</span> vs Biblical <span class="tag r">$624</span>. Every Hebrew dollar returns <span class="hl-gold">$1.79 (1.79× ROI)</span> vs Biblical's $1.59 — a <strong>+12.6% advantage</strong>.</p>
-    <p><strong>Facebook</strong> ($5.2M) runs at <span class="tag r">0.76–0.86× ROI</span> — returning less than $1 per $1 spent. <strong>Web Campaign</strong> delivers <span class="hl-green">4.21–6.07× ROI</span>. <strong>Affiliates</strong> at <span class="hl-green">3.03–6.30× ROI</span>. <strong>Action:</strong> shift Facebook budget toward Web Campaign, Affiliates, and Google Hebrew.</p>
-  </div>
-
-  <!-- Channel Efficiency Table -->
+  <!-- Channel efficiency table -->
   <div class="card" style="margin-bottom:18px">
-    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Channel × Category — Full Efficiency Matrix</div><div class="sub">Email Marketing, No Media, Community & Business Coop = $0 cost (free traffic)</div></div></div>
+    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Channel × Category — Full Efficiency Matrix</div><div class="sub">Email Marketing, No Media, Community &amp; Business Coop have $0 cost (free traffic) · ROI shown for paid channels only</div></div></div>
     <div style="overflow-x:auto">
       <table class="tbl" id="costSegTable">
         <thead><tr>
@@ -618,32 +834,24 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
     </div>
   </div>
 
-  <!-- Segment Charts Row -->
-  <div class="row r3">
-    <div class="card card-accent green">
-      <div class="sh"><div class="sh-left"><div class="title">CVR by Segment</div><div class="sub">Acquisitions ÷ Total Leads</div></div></div>
-      <div style="height:220px"><canvas id="cvrSegChart"></canvas></div>
+  <!-- Top ROI days -->
+  <div class="card">
+    <div class="sh" style="margin-bottom:14px"><div class="sh-left"><div class="title">Top 29 Days by ROI</div><div class="sub">Days with highest return on media spend · excludes days with no media cost</div></div><span class="badge green">Best Days</span></div>
+    <div style="overflow-x:auto">
+      <table class="tbl" id="topRoiTable">
+        <thead><tr>
+          <th>#</th><th>Date</th><th>Total Leads</th><th>Acquisitions</th>
+          <th>Media Cost</th><th>Revenue</th><th>ROI</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
     </div>
-    <div class="card card-accent gold">
-      <div class="sh"><div class="sh-left"><div class="title">Revenue per Lead</div><div class="sub">True lead value in dollars</div></div></div>
-      <div style="height:220px"><canvas id="rplSegChart"></canvas></div>
-    </div>
-    <div class="card card-accent purple">
-      <div class="sh"><div class="sh-left"><div class="title">Revenue per Acquisition</div><div class="sub">Avg student value per channel</div></div></div>
-      <div style="height:220px"><canvas id="rpaSegChart"></canvas></div>
-    </div>
-  </div>
-
-  <!-- Contacted Rate -->
-  <div class="card" style="margin-top:16px">
-    <div class="sh"><div class="sh-left"><div class="title">Contacted Rate by Segment</div><div class="sub">High contacted rate = better lead intent or scheduling alignment.</div></div></div>
-    <div style="height:240px"><canvas id="contactRateSegChart"></canvas></div>
   </div>
 
 </section>
 
-<!-- ═══════════════════════ TAB 3 — APRIL CRISIS ═══════════════════════ -->
-<section class="pnl" id="tab-3">
+<!-- ═══════════════════════ TAB 6 — APRIL CRISIS ═══════════════════════ -->
+<section class="pnl" id="tab-6">
 
   <!-- Header -->
   <div class="sh" style="margin-bottom:20px">
@@ -793,12 +1001,14 @@ function fmtPct(v){if(v==null||isNaN(v))return '0%';return (v*100).toFixed(1)+'%
 function fmtN(v,d=1){if(v==null||isNaN(v))return '0';return v.toFixed(d)}
 function fmtPctRaw(v){if(v==null||isNaN(v))return '0%';return v.toFixed(1)+'%'}
 
+// ─── Tab switcher ──────────────────────────────────────────
 function switchTab(i){
   document.querySelectorAll('.tb').forEach((b,j)=>b.classList.toggle('active',i===j));
   document.querySelectorAll('.pnl').forEach((p,j)=>p.classList.toggle('active',i===j));
   requestAnimationFrame(()=>{ Object.values(Chart.instances).forEach(c=>c.resize()); });
 }
 
+// ─── Colour helpers ─────────────────────────────────────────
 const MEDIA_COLORS = {
   'Facebook': '#0a84ff','Google': '#34c759','Email Marketing': '#ffd60a',
   'Affiliates': '#bf5af2','No Media': '#30d158','Community': '#5ac8fa',
@@ -807,9 +1017,10 @@ const MEDIA_COLORS = {
 const CAMP_COLORS = {'Biblical Related':'#ff9f0a','Hebrew Related':'#5ac8fa'};
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// MASTER BUILD FUNCTION — 4-tab version
+// MASTER BUILD FUNCTION — Rebuilds all charts/KPIs/tables from D (data source)
 // ═══════════════════════════════════════════════════════════════════════════════
 function buildDashboard(){
+  // Destroy all existing charts
   FilterEngine.destroyAll();
 
   const SEG_LABELS = D.segmentData.map(s=>`${s.media.split(' ')[0]} ${s.campaign.split(' ')[0]}`);
@@ -818,96 +1029,19 @@ function buildDashboard(){
     return `rgba(${mc[s.media]||'255,255,255'},0.8)`;
   });
 
-  // ─── Tab 0: Executive Summary KPIs ─────────────────────────
+  // ─── Populate KPIs ──────────────────────────────────────────
   document.getElementById('e-rev').textContent = fmt$(K.totalRevenue);
   document.getElementById('e-adr').textContent = fmt$(K.avgDailyRevenue);
   document.getElementById('e-acq').textContent = K.totalAcquisitions.toLocaleString();
+  document.getElementById('e-ord').textContent = K.totalOrders.toLocaleString();
   document.getElementById('e-leads').textContent = K.totalLeads.toLocaleString();
   document.getElementById('e-rpl').textContent = fmt$(K.avgRevenuePerLead);
 
-  // ROI KPI in top row
-  (function(){
-    const RK = D.roiKpis || {};
-    const tc = RK.totalCost||0, roi = RK.overallROI||0;
-    document.getElementById('e-roipct').textContent = roi.toFixed(2)+'×';
-    const rb = document.getElementById('e-roibar'); if(rb) rb.style.width = Math.min(100,Math.max(5,roi*50))+'%';
-  })();
-
-  // Update header pills
-  const pills = document.querySelectorAll('.hdr-right .pill');
-  if(pills[0]) pills[0].innerHTML = '<span class="dot"></span>' + K.totalDays + ' Days · ' + (FilterEngine.isFiltered()?'Filtered':'Live Data');
-  if(pills[1]) pills[1].textContent = fmt$k(K.totalRevenue) + ' Total Revenue';
-  if(pills[2]) pills[2].textContent = K.totalAcquisitions.toLocaleString() + ' Acquisitions';
-
-  // April alert ROI
-  if(D_FULL.aprSummary){
-    const el = document.getElementById('e-apr-roi');
-    if(el) el.textContent = (D_FULL.aprSummary.aprROI||0).toFixed(2)+'×';
-  }
-
-  // Media Share Chart
-  FilterEngine.storeChart('mediaShareChart', new Chart(document.getElementById('mediaShareChart'),{
-    type:'bar',
-    data:{labels:D.mediaData.map(m=>m.media),datasets:[
-      {label:'Lead Share',data:D.mediaData.map(m=>+(m.leadShare*100).toFixed(1)),backgroundColor:'rgba(10,132,255,0.55)',borderRadius:5,borderSkipped:false},
-      {label:'Revenue Share',data:D.mediaData.map(m=>+(m.revenueShare*100).toFixed(1)),backgroundColor:'rgba(255,214,10,0.7)',borderRadius:5,borderSkipped:false},
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'},max:50}}}
-  }));
-
-  // Campaign comparison
-  const cmpData = D.campData;
-  FilterEngine.storeChart('campCompChart', new Chart(document.getElementById('campCompChart'),{
-    type:'bar',
-    data:{labels:['Conversion Rate','Rev/Lead (÷10)','Contact Rate','Lead Share (%)'],
-      datasets: cmpData.map((c,i)=>({
-        label:c.campaign,
-        data:[+(c.conversionRate).toFixed(2), +(c.revenuePerLead/10).toFixed(2), +(c.contactedRate*100).toFixed(2), +(c.leadShare*100).toFixed(1)],
-        backgroundColor:i===0?'rgba(255,159,10,0.7)':'rgba(90,200,250,0.7)',
-        borderRadius:5,borderSkipped:false,
-      }))
-    },
-    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{color:GC},border:{display:false}},y:{grid:{display:false},border:{display:false}}}}
-  }));
-
-  // Executive trend chart
-  (function(){
-    const ml = D.monthlyData;
-    FilterEngine.storeChart('execTrendChart', new Chart(document.getElementById('execTrendChart'),{
-      type:'line',
-      data:{labels:ml.map(m=>m.month),datasets:[
-        {label:'Avg Revenue/Day',data:ml.map(m=>+m.avgRevenue.toFixed(0)),borderColor:'#ffd60a',backgroundColor:'rgba(255,214,10,0.07)',fill:true,tension:.4,pointRadius:2,yAxisID:'y'},
-        {label:'Avg Acquisitions/Day',data:ml.map(m=>+m.avgAcq.toFixed(2)),borderColor:'#30d158',backgroundColor:'transparent',borderDash:[3,2],tension:.4,pointRadius:2,yAxisID:'y2'},
-        {label:'Avg Orders/Day',data:ml.map(m=>+m.avgOrders.toFixed(2)),borderColor:'#0a84ff',backgroundColor:'transparent',borderDash:[6,3],tension:.4,pointRadius:2,yAxisID:'y2'},
-      ]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false}},scales:{x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},y:{title:{display:true,text:'Revenue ($)',font:{size:10}},grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}},y2:{position:'right',title:{display:true,text:'Acq / Orders',font:{size:10}},grid:{display:false},border:{display:false},min:0,max:40}}}
-    }));
-  })();
-
-  // Scorecards
-  (function(){
-    const maxRPL = Math.max(...D.mediaData.map(m=>m.revenuePerLead||0));
-    const maxCVR = Math.max(...D.mediaData.map(m=>m.conversionRate||0));
-    const container = document.getElementById('mediaScorecardRows');
-    container.innerHTML = '';
-    D.mediaData.forEach(m=>{
-      const rplPct = maxRPL>0?(m.revenuePerLead||0)/maxRPL*100:0;
-      const cvrPct = maxCVR>0?(m.conversionRate||0)/maxCVR*100:0;
-      const col = MEDIA_COLORS[m.media]||'#fff';
-      container.innerHTML += `<div class="score-row"><div class="score-label"><strong style="color:${col}">${m.media}</strong></div><div style="display:flex;flex-direction:column;gap:4px;min-width:200px"><div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">CVR</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${cvrPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmtPct(m.conversionRate)}</span></div><div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">Rev/Lead</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${rplPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmt$(m.revenuePerLead||0)}</span></div></div></div>`;
-    });
-  })();
-  (function(){
-    const container = document.getElementById('campScorecardRows');
-    container.innerHTML = '';
-    D.campData.forEach(c=>{
-      const col = CAMP_COLORS[c.campaign]||'#fff';
-      container.innerHTML += `<div class="score-row"><div class="score-label" style="min-width:130px"><strong style="color:${col}">${c.campaign}</strong></div><div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:12px;color:var(--text-2)">CVR: <strong style="color:${col}">${fmtPctRaw(c.conversionRate)}</strong> · Rev/Lead: <strong style="color:${col}">${fmt$(c.revenuePerLead)}</strong></div><div style="font-size:12px;color:var(--text-2)">Lead Share: <strong>${fmtPct(c.leadShare)}</strong> · Rev Share: <strong>${fmtPct(c.revenueShare)}</strong></div></div></div>`;
-    });
-  })();
-
-  // ─── Tab 1: Staffing & Optimal Zone ────────────────────────
+  document.getElementById('r-rev').textContent = fmt$(K.totalRevenue);
   document.getElementById('r-adr').textContent = fmt$(K.avgDailyRevenue);
+  document.getElementById('r-rpl').textContent = fmt$(K.avgRevenuePerLead);
+  document.getElementById('r-rpa').textContent = fmt$(K.avgRevenuePerAcq);
+
   document.getElementById('o-leads').textContent = K.avgDailyLeads.toFixed(0);
   document.getElementById('o-shifts').textContent = K.avgDailyShift.toFixed(1);
   document.getElementById('o-cont').textContent = fmtPct(K.avgContactedRatio);
@@ -917,26 +1051,189 @@ function buildDashboard(){
   document.getElementById('o-revopt-sub').textContent = revOptPct+'% in revenue zone';
   document.getElementById('o-revopt-bar').style.width = revOptPct+'%';
 
-  // Revenue zone params
+  // Update header pills
+  document.querySelector('.pill .dot').parentElement.childNodes[1].textContent = K.totalDays + ' Days · Live Data';
+  // Safely update header pills
+  const pills = document.querySelectorAll('.hdr-right .pill');
+  if(pills[0]) pills[0].innerHTML = '<span class="dot"></span>' + K.totalDays + ' Days · ' + (FilterEngine.isFiltered()?'Filtered':'Live Data');
+  if(pills[1]) pills[1].textContent = fmt$k(K.totalRevenue) + ' Total Revenue';
+  if(pills[2]) pills[2].textContent = K.totalAcquisitions.toLocaleString() + ' Acquisitions';
+
+  // ═══ TAB 0: EXECUTIVE ═════════════════════════════════════
+
+  // ── Exec ROI KPI cards (dynamic) ───────────────────────────
+  (function(){
+    const RK = D.roiKpis || {};
+    const csd = D.costSegData || [];
+    const tc = RK.totalCost||0, tr = RK.totalRevenue||K.totalRevenue, roi = RK.overallROI||0;
+    document.getElementById('e-mcost').textContent = fmt$k(tc);
+    document.getElementById('e-roipct').textContent = roi.toFixed(2)+'\u00d7';
+    const rb = document.getElementById('e-roibar'); if(rb) rb.style.width = Math.min(100,Math.max(5,roi*50))+'%';
+    document.getElementById('e-roi-badge').textContent = fmt$k(tc)+' Spend \u00b7 '+roi.toFixed(2)+'\u00d7 ROI';
+    document.getElementById('e-roi-sub').textContent = 'Total spend '+fmt$k(tc)+' across Facebook, Google, Affiliates & other paid channels \u00b7 Email Marketing & organic = zero cost \u00b7 Revenue = SOV + Upsales';
+
+    // Find best ROI channel
+    const paidCh = csd.filter(s=>s.roi!==null && s.totalCost>0);
+    const byMedia = {};
+    paidCh.forEach(s=>{ if(!byMedia[s.media]) byMedia[s.media]=[]; byMedia[s.media].push(s.roi); });
+    let bestCh='Web Campaign', bestRoi=0;
+    Object.keys(byMedia).forEach(m=>{ const avg=byMedia[m].reduce((a,b)=>a+b,0)/byMedia[m].length; if(avg>bestRoi){bestRoi=avg;bestCh=m;} });
+    document.getElementById('e-bestch').textContent = bestCh;
+    const roiRange = byMedia[bestCh]||[];
+    document.getElementById('e-bestchsub').textContent = roiRange.length>1 ? Math.min(...roiRange).toFixed(2)+'\u2013'+Math.max(...roiRange).toFixed(2)+'\u00d7 ROI' : bestRoi.toFixed(2)+'\u00d7 ROI';
+
+    // Biblical aggregate
+    const bib = csd.filter(s=>s.category==='Biblical');
+    const heb = csd.filter(s=>s.category==='Hebrew');
+    const sumL = arr=>arr.reduce((a,s)=>a+s.totalLeads,0);
+    const sumA = arr=>arr.reduce((a,s)=>a+s.totalAcq,0);
+    const sumR = arr=>arr.reduce((a,s)=>a+s.totalRevenue,0);
+    const sumC = arr=>arr.reduce((a,s)=>a+s.totalCost,0);
+    const bibL=sumL(bib), bibA=sumA(bib), bibR=sumR(bib), bibC=sumC(bib);
+    const hebL=sumL(heb), hebA=sumA(heb), hebR=sumR(heb), hebC=sumC(heb);
+    const bibCPL=bibC>0?bibC/bibL:0, bibCPA=bibA>0?bibC/bibA:0, bibROI=bibC>0?bibR/bibC:0, bibCVR=bibL>0?bibA/bibL*100:0;
+    const hebCPL=hebC>0?hebC/hebL:0, hebCPA=hebA>0?hebC/hebA:0, hebROI=hebC>0?hebR/hebC:0, hebCVR=hebL>0?hebA/hebL*100:0;
+
+    document.getElementById('e-bib-badge').textContent = (bibL>=1000?Math.round(bibL/1000)+'K':bibL)+' leads';
+    document.getElementById('e-bib-cpl').textContent = fmt$(bibCPL);
+    document.getElementById('e-bib-cpa').textContent = fmt$(bibCPA);
+    document.getElementById('e-bib-roi').textContent = bibROI.toFixed(2)+'\u00d7';
+    document.getElementById('e-bib-cvr').textContent = bibCVR.toFixed(2)+'%';
+    // Facebook ROI for Biblical
+    const bibFb = bib.find(s=>s.media==='Facebook');
+    document.getElementById('e-bib-fbroi').textContent = bibFb&&bibFb.roi!==null ? bibFb.roi.toFixed(2)+'\u00d7' : 'N/A';
+    const bibFbEl = document.getElementById('e-bib-fbroi');
+    bibFbEl.style.color = bibFb&&bibFb.roi<1 ? 'var(--red)' : 'var(--green)';
+
+    document.getElementById('e-heb-badge').textContent = (hebL>=1000?Math.round(hebL/1000)+'K':hebL)+' leads';
+    document.getElementById('e-heb-cpl').textContent = fmt$(hebCPL);
+    document.getElementById('e-heb-cpa').textContent = fmt$(hebCPA);
+    document.getElementById('e-heb-cpa-sub').textContent = bibCPA>0 ? (hebCPA<bibCPA?'$'+Math.round(bibCPA-hebCPA)+' cheaper than Biblical':'$'+Math.round(hebCPA-bibCPA)+' more than Biblical') : 'Cost per acquisition';
+    document.getElementById('e-heb-cvr').textContent = hebCVR.toFixed(2)+'%';
+    document.getElementById('e-heb-cvr-sub').textContent = bibCVR>0 ? (hebCVR/bibCVR).toFixed(1)+'\u00d7 '+(hebCVR>bibCVR?'higher':'lower')+' than Biblical' : '';
+    document.getElementById('e-heb-roi').textContent = hebROI.toFixed(2)+'\u00d7';
+    document.getElementById('e-heb-roi-sub').textContent = (hebROI-bibROI>=0?'+':'')+((hebROI-bibROI).toFixed(2))+'\u00d7 vs Biblical';
+    const hebFb = heb.find(s=>s.media==='Facebook');
+    document.getElementById('e-heb-fbroi').textContent = hebFb&&hebFb.roi!==null ? hebFb.roi.toFixed(2)+'\u00d7' : 'N/A';
+    const hebFbEl = document.getElementById('e-heb-fbroi');
+    hebFbEl.style.color = hebFb&&hebFb.roi<1 ? 'var(--red)' : 'var(--green)';
+  })();
+
+  // Media Share Chart
+  FilterEngine.storeChart('mediaShareChart', new Chart(document.getElementById('mediaShareChart'),{
+    type:'bar',
+    data:{
+      labels:D.mediaData.map(m=>m.media),
+      datasets:[
+        {label:'Lead Share',data:D.mediaData.map(m=>+(m.leadShare*100).toFixed(1)),backgroundColor:'rgba(10,132,255,0.55)',borderRadius:5,borderSkipped:false},
+        {label:'Revenue Share',data:D.mediaData.map(m=>+(m.revenueShare*100).toFixed(1)),backgroundColor:'rgba(255,214,10,0.7)',borderRadius:5,borderSkipped:false},
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>`${i.dataset.label}: ${i.raw.toFixed(1)}%`}}},
+      scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'},max:50}}
+    }
+  }));
+
+  // Campaign comparison chart
+  const cmpData = D.campData;
+  FilterEngine.storeChart('campCompChart', new Chart(document.getElementById('campCompChart'),{
+    type:'bar',
+    data:{
+      labels:['Conversion Rate','Rev/Lead (÷10)','Contact Rate','Lead Share (%)'],
+      datasets: cmpData.map((c,i)=>({
+        label:c.campaign,
+        data:[+(c.conversionRate*100).toFixed(2), +(c.revenuePerLead/10).toFixed(2), +(c.contactedRate*100).toFixed(2), +(c.leadShare*100).toFixed(1)],
+        backgroundColor:i===0?'rgba(255,159,10,0.7)':'rgba(90,200,250,0.7)',
+        borderRadius:5,borderSkipped:false,
+      }))
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1}},
+      scales:{x:{grid:{color:GC},border:{display:false}},y:{grid:{display:false},border:{display:false}}}
+    }
+  }));
+
+  // Executive trend chart
+  (function(){
+    const ml = D.monthlyData;
+    FilterEngine.storeChart('execTrendChart', new Chart(document.getElementById('execTrendChart'),{
+      type:'line',
+      data:{
+        labels:ml.map(m=>m.month),
+        datasets:[
+          {label:'Avg Revenue/Day',data:ml.map(m=>+m.avgRevenue.toFixed(0)),borderColor:'#ffd60a',backgroundColor:'rgba(255,214,10,0.07)',fill:true,tension:.4,pointRadius:2,yAxisID:'y'},
+          {label:'Avg Acquisitions/Day',data:ml.map(m=>+m.avgAcq.toFixed(2)),borderColor:'#30d158',backgroundColor:'transparent',borderDash:[3,2],tension:.4,pointRadius:2,yAxisID:'y2'},
+          {label:'Avg Orders/Day',data:ml.map(m=>+m.avgOrders.toFixed(2)),borderColor:'#0a84ff',backgroundColor:'transparent',borderDash:[6,3],tension:.4,pointRadius:2,yAxisID:'y2'},
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,mode:'index',intersect:false}},
+        scales:{
+          x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},
+          y:{title:{display:true,text:'Revenue ($)',font:{size:10}},grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}},
+          y2:{position:'right',title:{display:true,text:'Acq / Orders',font:{size:10}},grid:{display:false},border:{display:false},min:0,max:40}
+        }
+      }
+    }));
+  })();
+
+  // Media scorecard rows
+  (function(){
+    const maxRPL = Math.max(...D.mediaData.map(m=>m.revenuePerLead||0));
+    const maxCVR = Math.max(...D.mediaData.map(m=>m.conversionRate||0));
+    const container = document.getElementById('mediaScorecardRows');
+    container.innerHTML = '';
+    D.mediaData.forEach(m=>{
+      const rplPct = maxRPL>0?(m.revenuePerLead||0)/maxRPL*100:0;
+      const cvrPct = maxCVR>0?(m.conversionRate||0)/maxCVR*100:0;
+      const col = MEDIA_COLORS[m.media]||'#fff';
+      container.innerHTML += `<div class="score-row">
+        <div class="score-label"><strong style="color:${col}">${m.media}</strong></div>
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:200px">
+          <div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">CVR</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${cvrPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmtPct(m.conversionRate)}</span></div>
+          <div class="score-bar-wrap"><span style="font-size:10px;color:var(--text-3);width:60px">Rev/Lead</span><div class="score-bar-bg"><div class="score-bar-fill" style="width:${rplPct.toFixed(0)}%;background:${col}"></div></div><span class="score-value" style="color:${col};font-size:12px;margin-left:6px">${fmt$(m.revenuePerLead||0)}</span></div>
+        </div>
+      </div>`;
+    });
+  })();
+
+  // Campaign scorecard rows
+  (function(){
+    const container = document.getElementById('campScorecardRows');
+    container.innerHTML = '';
+    D.campData.forEach(c=>{
+      const col = CAMP_COLORS[c.campaign]||'#fff';
+      container.innerHTML += `<div class="score-row">
+        <div class="score-label" style="min-width:130px"><strong style="color:${col}">${c.campaign}</strong></div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:12px;color:var(--text-2)">CVR: <strong style="color:${col}">${fmtPct(c.conversionRate)}</strong> · Rev/Lead: <strong style="color:${col}">${fmt$(c.revenuePerLead)}</strong></div>
+          <div style="font-size:12px;color:var(--text-2)">Lead Share: <strong>${fmtPct(c.leadShare)}</strong> · Rev Share: <strong>${fmtPct(c.revenueShare)}</strong></div>
+          <div style="font-size:11px;color:var(--text-3)">Rev/Acq: ${fmt$(c.revenuePerAcq)} · Contact Rate: ${fmtPct(c.contactedRate)}</div>
+        </div>
+      </div>`;
+    });
+  })();
+
+  // ═══ TAB 1: REVENUE ═══════════════════════════════════════
+
+  // Revenue zone KPIs + n badge
+  document.getElementById('r-opt').textContent = K.revOptDays;
+  document.getElementById('r-opt-sub').textContent = K.totalDays>0 ? (K.revOptDays/K.totalDays*100).toFixed(1)+'% of all days qualify' : '';
   document.getElementById('r-nbadge').textContent = 'n='+K.totalDays;
   document.getElementById('rz-leads').textContent = Math.round(K.revOptLeadsQ1||0)+'\u2013'+Math.round(K.revOptLeadsQ3||0);
   document.getElementById('rz-leads-sub').textContent = 'IQR \u00b7 avg '+Math.round(K.revOptAvgLeads||0);
+  document.getElementById('rz-shifts').textContent = (K.revOptAvgShift>0?((K.revOptQ1||0)/(K.revOptAvgLS||1)*(K.revOptAvgShift||1)).toFixed(1):'?')+'\u2013'+((K.revOptQ3||0)>0?((K.revOptQ3||0)/(K.revOptAvgLS||1)*(K.revOptAvgShift||1)).toFixed(1):'?');
+  // Simpler: use shifts from opt zone days
   document.getElementById('rz-shifts').textContent = (K.revOptAvgShift*0.83).toFixed(1)+'\u2013'+(K.revOptAvgShift*1.2).toFixed(1);
   document.getElementById('rz-shifts-sub').textContent = 'IQR \u00b7 avg '+(K.revOptAvgShift||0).toFixed(1);
   document.getElementById('rz-ls').textContent = (K.revOptQ1||0).toFixed(1)+'\u2013'+(K.revOptQ3||0).toFixed(1);
   document.getElementById('rz-ls-sub').textContent = 'IQR \u00b7 avg '+(K.revOptAvgLS||0).toFixed(1);
   document.getElementById('rz-rev').textContent = fmt$(Math.round(K.revOptAvgRevenue||0));
   document.getElementById('rz-rev-sub').textContent = 'vs '+fmt$(Math.round(K.avgDailyRevenue||0))+' overall ('+(K.avgDailyRevenue>0?((K.revOptAvgRevenue/K.avgDailyRevenue-1)*100>0?'+':'')+((K.revOptAvgRevenue/K.avgDailyRevenue-1)*100).toFixed(0)+'%':'')+')';
-
-  // Narrative dynamic values
-  document.getElementById('rec-ls-range').textContent = (K.revOptQ1||18.9).toFixed(1)+'\u2013'+(K.revOptQ3||26.2).toFixed(1);
-  document.getElementById('nar-az-leads').textContent = Math.round(K.revOptLeadsQ1||235)+'\u2013'+Math.round(K.revOptLeadsQ3||351);
-  document.getElementById('nar-az-shifts').textContent = (K.revOptAvgShift*0.83).toFixed(1)+'\u2013'+(K.revOptAvgShift*1.2).toFixed(1);
-  document.getElementById('nar-az-ls').textContent = (K.revOptQ1||18.9).toFixed(1)+'\u2013'+(K.revOptQ3||26.2).toFixed(1);
-  document.getElementById('nar-az-count').textContent = (K.revOptDays||0)+' of '+K.totalDays+' days';
-  document.getElementById('nar-az-pct').textContent = (K.totalDays>0?(K.revOptDays/K.totalDays*100).toFixed(1):'0');
-  document.getElementById('nar-az-avg-acq').textContent = fmt$(Math.round(K.revOptAvgRevenue||0))+'/day revenue';
-  document.getElementById('nar-az-avg-sov').textContent = fmt$(Math.round(K.avgDailyRevenue||0))+' overall avg';
 
   // Revenue Scatter
   (function(){
@@ -951,158 +1248,86 @@ function buildDashboard(){
         {label:'Other',data:rest.map(d=>({x:+(d.leadsPerShift||0).toFixed(1),y:+(d.totalRevenue||0).toFixed(0),r:Math.max(3,(d.contactedRatio||0)*15),rev:d.totalRevenue,acq:d.totalAcquisitions,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),
           backgroundColor:ctx=>{const p=ctx.raw;return p?sovToCol(p.rev,.3):'rgba(255,214,10,.2)'},borderColor:'rgba(255,255,255,.1)',borderWidth:.5}
       ]},
-      options:{responsive:true,maintainAspectRatio:false,layout:{padding:{top:10,right:16,bottom:10,left:20}},plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>`${i[0].raw.date} · ${i[0].raw.day}`,label:i=>{const d=i.raw;return[`  Revenue: ${fmt$(d.y)}`,`  L/S Ratio: ${d.x}`,`  Acquisitions: ${d.acq}`,`  Leads: ${d.leads}`]}}},annotation:{annotations:{optZone:{type:'box',xMin:K.revOptQ1||21,xMax:K.revOptQ3||30.2,yMin:0,yMax:40000,backgroundColor:'rgba(255,214,10,.04)',borderColor:'rgba(255,214,10,.25)',borderWidth:1,borderDash:[4,3],label:{display:true,content:'◈ REVENUE OPTIMAL',position:'start',color:'rgba(255,214,10,.6)',font:{size:10,weight:'600',family:'Inter'},padding:4}},ceilLine:{type:'line',xMin:35,xMax:35,borderColor:'rgba(255,69,58,.3)',borderWidth:1,borderDash:[3,3]}}}},scales:{x:{title:{display:true,text:'Leads / Rep Shift Ratio',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{top:6}},grid:{color:GC},border:{color:'transparent'},min:0,max:60,ticks:{stepSize:5}},y:{title:{display:true,text:'Daily Revenue ($)',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{bottom:6}},grid:{color:GC},border:{color:'transparent'},min:0,ticks:{callback:v=>fmt$k(v)}}}}
+      options:{
+        responsive:true,maintainAspectRatio:false,layout:{padding:{top:10,right:16,bottom:10,left:20}},
+        plugins:{
+          legend:{display:false},
+          tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{
+            title:i=>`${i[0].raw.date} · ${i[0].raw.day}`,
+            label:i=>{const d=i.raw;return[`  Revenue: ${fmt$(d.y)}`,`  L/S Ratio: ${d.x}`,`  Acquisitions: ${d.acq}`,`  Leads: ${d.leads}`,`  Shifts: ${(d.shift||0).toFixed(1)}`]}
+          }},
+          annotation:{annotations:{
+            optZone:{type:'box',xMin:K.revOptQ1||21,xMax:K.revOptQ3||30.2,yMin:0,yMax:40000,backgroundColor:'rgba(255,214,10,.04)',borderColor:'rgba(255,214,10,.25)',borderWidth:1,borderDash:[4,3],label:{display:true,content:'◈ REVENUE OPTIMAL',position:'start',color:'rgba(255,214,10,.6)',font:{size:10,weight:'600',family:'Inter'},padding:4}},
+            ceilLine:{type:'line',xMin:35,xMax:35,borderColor:'rgba(255,69,58,.3)',borderWidth:1,borderDash:[3,3]}
+          }}
+        },
+        scales:{
+          x:{title:{display:true,text:'Leads / Rep Shift Ratio',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{top:6}},grid:{color:GC},border:{color:'transparent'},min:0,max:60,ticks:{stepSize:5}},
+          y:{title:{display:true,text:'Daily Revenue ($)',color:'rgba(245,245,247,.4)',font:{size:11,weight:'500'},padding:{bottom:6}},grid:{color:GC},border:{color:'transparent'},min:0,ticks:{callback:v=>fmt$k(v)}}
+        }
+      }
     }));
   })();
 
-  // Ratio bins (revenue + acq)
+  // Revenue ratio bins
   (function(){
     const bins = D.ratioBinData;
     FilterEngine.storeChart('revBinsChart', new Chart(document.getElementById('revBinsChart'),{
       type:'bar',data:{labels:bins.map(b=>b.bin),datasets:[{label:'Avg Revenue/Day',data:bins.map(b=>b.avgRevenue),backgroundColor:bins.map(b=>{const v=b.avgRevenue;return v>16000?'rgba(48,209,88,.7)':v>13000?'rgba(255,214,10,.6)':'rgba(255,69,58,.5)'}),borderRadius:5,borderSkipped:false}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}}}}
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>fmt$(i.raw)}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}}}}
     }));
-    FilterEngine.storeChart('ratioBinsAcqChart', new Chart(document.getElementById('ratioBinsAcqChart'),{
-      type:'bar',data:{labels:bins.map(b=>b.bin),datasets:[{label:'Avg Acq',data:bins.map(b=>b.avgAcq),backgroundColor:'rgba(10,132,255,.6)',borderRadius:5,borderSkipped:false}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false}}}}
+    FilterEngine.storeChart('revPerLeadBinsChart', new Chart(document.getElementById('revPerLeadBinsChart'),{
+      type:'bar',data:{labels:bins.map(b=>b.bin),datasets:[{label:'Rev/Lead',data:bins.map(b=>b.avgRevenuePerLead),backgroundColor:'rgba(90,200,250,.6)',borderRadius:5,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{label:i=>fmt$(i.raw)}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
     }));
   })();
 
-  // Acq correlation badges
+  // Revenue per lead by segment
+  FilterEngine.storeChart('revPerLeadSegChart', new Chart(document.getElementById('revPerLeadSegChart'),{
+    type:'bar',
+    data:{
+      labels:SEG_LABELS,
+      datasets:[{label:'Rev/Lead',data:D.segmentData.map(s=>+(s.revenuePerLead||0).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:5,borderSkipped:false}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{
+        title:i=>{const s=D.segmentData[i[0].dataIndex];return `${s.media} · ${s.campaign}`},
+        label:i=>{const s=D.segmentData[i.dataIndex];return[`  Rev/Lead: ${fmt$(s.revenuePerLead||0)}`,`  CVR: ${fmtPct(s.conversionRate||0)}`,`  Leads: ${(s.totalLeads||0).toLocaleString()}`]}
+      }}},
+      scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:10}}}}
+    }
+  }));
+
+  // Top 30 Revenue Days table
   (function(){
-    const el = document.getElementById('acqCorrBadges');
+    const tbody = document.getElementById('topRevBody');
+    tbody.innerHTML = '';
+    D.topRevDays.forEach((d,i)=>{
+      const cls = (d.leadsPerShift||0)>=21 && (d.leadsPerShift||0)<=31?'color:var(--green)':'';
+      tbody.innerHTML += `<tr><td class="num">${i+1}</td><td class="num">${d.date}</td><td>${d.dayName}${d.isWeekend?' 🟡':''}</td><td class="num">${d.totalLeads}</td><td class="num">${(d.totalShift||0).toFixed(1)}</td><td class="num" style="${cls}">${(d.leadsPerShift||0).toFixed(1)}</td><td class="num" style="color:var(--gold)">${fmt$(d.totalRevenue)}</td><td class="num">${d.totalAcquisitions}</td><td class="num">—</td></tr>`;
+    });
+  })();
+
+  // Revenue correlation badges
+  (function(){
+    const el = document.getElementById('revCorrBadges');
     if(el){
       el.innerHTML = '';
-      [['Leads↔Acq',K.corrLeadsAcq],['L/S↔Acq',K.corrLSRatioAcq],['Acq↔Rev',K.corrAcqRev],['Orders↔Rev',K.corrOrdersRev]].forEach(([n,v])=>{
-        const c=(v||0)>0.5?'var(--green)':(v||0)>0?'var(--blue)':'var(--red)';
-        el.innerHTML+=`<div class="corr-b"><span class="cn">${n}</span><span class="cv" style="color:${c}">${(v||0)>0?'+':''}${(v||0).toFixed(4)}</span></div>`;
+      const corrs = [
+        ['Orders↔Rev', K.corrOrdersRev],['Acq↔Rev', K.corrAcqRev],
+        ['L/S↔Rev', K.corrLSRatioRev],['Leads↔Acq', K.corrLeadsAcq]
+      ];
+      corrs.forEach(([name,val])=>{
+        const color = (val||0)>0.5?'var(--green)':(val||0)>0?'var(--blue)':'var(--red)';
+        el.innerHTML += `<div class="corr-b"><span class="cn">${name}</span><span class="cv" style="color:${color}">${(val||0)>0?'+':''}${(val||0).toFixed(4)}</span></div>`;
       });
     }
   })();
 
-  // Monthly trend acq
-  (function(){
-    const ml = D.monthlyData;
-    FilterEngine.storeChart('trendAcqChart', new Chart(document.getElementById('trendAcqChart'),{
-      type:'line',data:{labels:ml.map(m=>m.month),datasets:[
-        {label:'Avg Acq/Day',data:ml.map(m=>m.avgAcq),borderColor:'#30d158',tension:.4,pointRadius:2,yAxisID:'y'},
-        {label:'Avg L/S',data:ml.map(m=>m.avgLeadsPerShift),borderColor:'#ffd60a',borderDash:[3,2],tension:.4,pointRadius:2,yAxisID:'y2'},
-      ]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},y:{grid:{color:GC},border:{display:false}},y2:{position:'right',grid:{display:false},border:{display:false}}}}
-    }));
-  })();
+  // ═══ TAB 2: LEAD QUALITY MATRIX ═══════════════════════════
 
-  // ─── Weekday vs Weekend ────────────────────────────────────
-  document.getElementById('wd-days').textContent = K.weekdayDays;
-  document.getElementById('we-days').textContent = K.weekendDays;
-  const wdPct = K.totalDays>0?(K.weekdayDays/K.totalDays*100):71;
-  const wePct = K.totalDays>0?(K.weekendDays/K.totalDays*100):29;
-  document.getElementById('wd-days-sub').textContent = wdPct.toFixed(1)+'% of dataset \u00b7 Mon\u2013Fri';
-  document.getElementById('we-days-sub').textContent = wePct.toFixed(1)+'% \u00b7 Sat & Sun only';
-  document.getElementById('wd-bar').style.width = wdPct+'%';
-  document.getElementById('we-bar').style.width = wePct+'%';
-  document.getElementById('wd-opt').textContent = K.weekdayOptDays||0;
-  document.getElementById('we-opt').textContent = K.weekendOptDays||0;
-  const totalOpt = (K.weekdayOptDays||0)+(K.weekendOptDays||0);
-  document.getElementById('wd-opt-sub').textContent = totalOpt>0?Math.round((K.weekdayOptDays||0)/totalOpt*100)+'% of all optimal zone days':'No optimal days';
-  document.getElementById('we-opt-sub').textContent = (K.weekendOptDays||0)>0?Math.round((K.weekendOptDays||0)/totalOpt*100)+'% of optimal days':'0% \u2014 none qualify';
-  document.getElementById('wd-opt-bar').style.width = totalOpt>0?Math.round((K.weekdayOptDays||0)/totalOpt*100)+'%':'0%';
-  document.getElementById('we-opt-bar').style.width = totalOpt>0?Math.round((K.weekendOptDays||0)/totalOpt*100)+'%':'0%';
-  document.getElementById('wd-tag').textContent = K.weekdayDays+' days';
-  document.getElementById('we-tag').textContent = K.weekendDays+' days';
-
-  const wdOpt=K.weekdayOptDays||0, weOpt=K.weekendOptDays||0, wdD=K.weekdayDays||596, weD=K.weekendDays||238;
-  const wdHitR=wdD>0?(wdOpt/wdD*100).toFixed(1):'0', weHitR=weD>0?(weOpt/weD*100).toFixed(1):'0';
-  const wePctOpt=totalOpt>0?Math.round(weOpt/totalOpt*100):0;
-  document.getElementById('wd-acq-tag').textContent = (K.weekdayAvgAcq||0).toFixed(1)+' acquisitions/day';
-  document.getElementById('wd-rev-tag').textContent = fmt$k(K.weekdayAvgRevenue||0)+'/day revenue';
-  document.getElementById('we-acq-tag').textContent = (K.weekendAvgAcq||0).toFixed(1)+' acq/day';
-  document.getElementById('we-rev-tag').textContent = fmt$k(K.weekendAvgRevenue||0)+'/day';
-  document.getElementById('wd-premium').textContent = K.weekendAvgRevenue>0?((K.weekdayAvgRevenue/K.weekendAvgRevenue-1)*100).toFixed(1)+'%':'N/A';
-  document.getElementById('we-avg-shifts').textContent = (K.weekendAvgShift||8.7).toFixed(1);
-  document.getElementById('wd-avg-shifts').textContent = (K.weekdayAvgShift||14.2).toFixed(1);
-  document.getElementById('we-ls').textContent = (K.weekendAvgLeadsPerShift||29.3).toFixed(1);
-  document.getElementById('wd-opt-ceil').textContent = (K.revOptQ3||26.2).toFixed(1);
-  document.getElementById('we-opt-nar').textContent = weOpt+' of '+totalOpt+' revenue optimal zone days are weekends ('+wePctOpt+'%)';
-  document.getElementById('we-pct-dataset').textContent = (K.totalDays>0?(weD/K.totalDays*100).toFixed(1):'28.4');
-  document.getElementById('wd-hit-rate-nar').textContent = wdHitR+'%';
-  document.getElementById('we-hit-rate-nar').textContent = weHitR+'%';
-
-  // Weekday/Weekend metric panels
-  function buildWkdMets(id, data, acqCmp, revCmp, shiftCmp, contCmp, ratioCmp, color){
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.innerHTML = '';
-    const mets = [
-      {lbl:'Avg Acq/Day',val:fmtN(data.avgAcq||0,1),diff:acqCmp},
-      {lbl:'Avg Rev/Day',val:fmt$(data.avgRevenue||0),diff:revCmp},
-      {lbl:'Avg Shifts',val:fmtN(data.avgShift||0,1),diff:shiftCmp},
-      {lbl:'Contacted %',val:fmtPct(data.avgContactedRatio||0),diff:contCmp},
-      {lbl:'Avg Leads/Shift',val:fmtN(data.avgLeadsPerShift||0,1),diff:ratioCmp},
-      {lbl:'Days',val:data.days||0,diff:''},
-    ];
-    mets.forEach(m=>{
-      el.innerHTML += `<div class="wkd-met"><div class="wkd-met-lbl">${m.lbl}</div><div class="wkd-met-val" style="color:${color}">${m.val}</div>${m.diff?`<div class="wkd-met-diff ${m.diff.startsWith('+')?'up':'down'}">${m.diff}</div>`:''}</div>`;
-    });
-  }
-  const wdData = {avgAcq:K.weekdayAvgAcq,avgRevenue:K.weekdayAvgRevenue,avgShift:K.weekdayAvgShift,avgContactedRatio:K.weekdayAvgContactedRatio,avgLeadsPerShift:K.weekdayAvgLeadsPerShift,days:K.weekdayDays};
-  const weData = {avgAcq:K.weekendAvgAcq,avgRevenue:K.weekendAvgRevenue,avgShift:K.weekendAvgShift,avgContactedRatio:K.weekendAvgContactedRatio,avgLeadsPerShift:K.weekendAvgLeadsPerShift,days:K.weekendDays};
-  const acqDiff = K.weekdayAvgAcq>0?((K.weekendAvgAcq-K.weekdayAvgAcq)/K.weekdayAvgAcq*100).toFixed(0)+'%':'';
-  const revDiff = K.weekdayAvgRevenue>0?((K.weekendAvgRevenue-K.weekdayAvgRevenue)/K.weekdayAvgRevenue*100).toFixed(0)+'%':'';
-  buildWkdMets('wkdayMets',wdData,'Baseline','Baseline','Baseline','Baseline','Baseline','var(--blue)');
-  buildWkdMets('wkendMets',weData,acqDiff,revDiff,'','','','var(--gold)');
-
-  // DOW Charts
-  function buildDOWChart(id,key,fmt_fn,yLabel){
-    const ord = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-    const vals = ord.map(d=>(D.dowData[d]&&D.dowData[d][key])||0);
-    const colors = ord.map((_,i)=>i<5?'rgba(10,132,255,0.6)':'rgba(255,214,10,0.6)');
-    FilterEngine.storeChart(id, new Chart(document.getElementById(id),{
-      type:'bar',data:{labels:ord.map(d=>d.substring(0,3)),datasets:[{data:vals,backgroundColor:colors,borderRadius:5,borderSkipped:false}]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmt_fn(i.raw)}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},title:yLabel?{display:true,text:yLabel,font:{size:10}}:undefined}}}
-    }));
-  }
-  buildDOWChart('dowAcqChart','avgAcq',v=>v.toFixed(1)+' acq/day','Acquisitions');
-  buildDOWChart('dowRevChart','avgRevenue',v=>fmt$(v),'Revenue');
-  buildDOWChart('dowContChart','avgContactedRatio',v=>(v*100).toFixed(1)+'%','Contacted %');
-
-  // Indexed comparison bar
-  (function(){
-    const base = {acq:K.weekdayAvgAcq||1,rev:K.weekdayAvgRevenue||1,shift:K.weekdayAvgShift||1,cont:K.weekdayAvgContactedRatio||0.001,ls:K.weekdayAvgLeadsPerShift||1};
-    const weIdx = {acq:(K.weekendAvgAcq||0)/base.acq*100,rev:(K.weekendAvgRevenue||0)/base.rev*100,shift:(K.weekendAvgShift||0)/base.shift*100,cont:(K.weekendAvgContactedRatio||0)/base.cont*100,ls:(K.weekendAvgLeadsPerShift||0)/base.ls*100};
-    FilterEngine.storeChart('compareBarChart', new Chart(document.getElementById('compareBarChart'),{
-      type:'bar',data:{labels:['Acquisitions','Revenue','Shifts','Contacted %','L/S Ratio'],datasets:[
-        {label:'Weekday (100)',data:[100,100,100,100,100],backgroundColor:'rgba(10,132,255,.4)',borderRadius:5,borderSkipped:false},
-        {label:'Weekend',data:[weIdx.acq,weIdx.rev,weIdx.shift,weIdx.cont,weIdx.ls].map(v=>+v.toFixed(1)),backgroundColor:'rgba(255,214,10,.6)',borderRadius:5,borderSkipped:false},
-      ]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false}}}}
-    }));
-  })();
-
-  // ─── Tab 2: Lead Quality & ROI ─────────────────────────────
-
-  // ROI KPIs
-  const RK = D.roiKpis || K;
-  document.getElementById('roi-cost').textContent = fmt$k(RK.totalCost||K.totalCost||0);
-  document.getElementById('roi-rev').textContent = fmt$k(RK.totalRevenue||K.totalRevenue||0);
-  document.getElementById('roi-pct').textContent = (RK.overallROI||K.overallROI||0).toFixed(2)+'×';
-  document.getElementById('roi-cpl').textContent = fmt$(RK.overallCPL||K.overallCPL||0);
-  document.getElementById('roi-cpa').textContent = fmt$(RK.overallCPA||K.overallCPA||0);
-
-  // Best ROI channel
-  (function(){
-    const csd = D.costSegData||[];
-    const paidCh = csd.filter(s=>s.roi!==null && s.totalCost>0);
-    const byMedia = {};
-    paidCh.forEach(s=>{ if(!byMedia[s.media]) byMedia[s.media]=[]; byMedia[s.media].push(s.roi); });
-    let bestCh='Web Campaign', bestRoi=0;
-    Object.keys(byMedia).forEach(m=>{ const avg=byMedia[m].reduce((a,b)=>a+b,0)/byMedia[m].length; if(avg>bestRoi){bestRoi=avg;bestCh=m;} });
-    document.getElementById('e-bestch').textContent = bestCh;
-    const roiRange = byMedia[bestCh]||[];
-    document.getElementById('e-bestchsub').textContent = roiRange.length>1 ? Math.min(...roiRange).toFixed(2)+'\u2013'+Math.max(...roiRange).toFixed(2)+'× ROI' : bestRoi.toFixed(2)+'× ROI';
-  })();
-
-  // Lead quality insight KPIs
+  // Core insight KPIs (dynamic)
   (function(){
     const segs = D.segmentData||[];
     if(segs.length===0) return;
@@ -1120,12 +1345,12 @@ function buildDashboard(){
     document.getElementById('lq-worst-rpl').textContent = fmt$(worst.revenuePerLead||0)+' revenue / lead';
     const qgap = (worst.revenuePerLead&&worst.revenuePerLead>0)?(best.revenuePerLead/worst.revenuePerLead):0;
     const cgap = (worstCvr>0)?(bestCvr/worstCvr):0;
-    document.getElementById('lq-qgap').textContent = qgap.toFixed(2)+'×';
-    document.getElementById('lq-cgap').textContent = cgap.toFixed(2)+'×';
+    document.getElementById('lq-qgap').textContent = qgap.toFixed(2)+'\u00d7';
+    document.getElementById('lq-cgap').textContent = cgap.toFixed(2)+'\u00d7';
     document.getElementById('lq-cgap-lbl').textContent = best.media+' '+best.campaign.split(' ')[0]+' vs '+worst.media+' '+worst.campaign.split(' ')[0]+' CVR';
   })();
 
-  // Quality matrix heatmap
+  // Quality matrix heatmap table
   (function(){
     const tbl = document.getElementById('qualityMatrix');
     if(!tbl) return;
@@ -1155,6 +1380,223 @@ function buildDashboard(){
     tbl.innerHTML = html;
   })();
 
+  // CVR / RPL / RPA segment charts
+  FilterEngine.storeChart('cvrSegChart', new Chart(document.getElementById('cvrSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+((s.conversionRate||0)*100).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>(i.raw||0).toFixed(2)+'%'}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+  FilterEngine.storeChart('rplSegChart', new Chart(document.getElementById('rplSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+(s.revenuePerLead||0).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmt$(i.raw||0)}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+  FilterEngine.storeChart('rpaSegChart', new Chart(document.getElementById('rpaSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+(s.revenuePerAcq||0).toFixed(0)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmt$(i.raw||0)}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+
+  // Lead share vs Revenue share
+  FilterEngine.storeChart('leadRevShareChart', new Chart(document.getElementById('leadRevShareChart'),{type:'bar',data:{labels:D.mediaData.map(m=>m.media),datasets:[{label:'Lead Share',data:D.mediaData.map(m=>+(m.leadShare*100).toFixed(1)),backgroundColor:'rgba(10,132,255,0.55)',borderRadius:5,borderSkipped:false},{label:'Revenue Share',data:D.mediaData.map(m=>+(m.revenueShare*100).toFixed(1)),backgroundColor:'rgba(255,214,10,0.7)',borderRadius:5,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:i=>i.dataset.label+': '+i.raw.toFixed(1)+'%'}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}}}}}));
+
+  // Contacted rate by segment
+  FilterEngine.storeChart('contactRateSegChart', new Chart(document.getElementById('contactRateSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+((s.contactedRate||0)*100).toFixed(1)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>i.raw.toFixed(1)+'%'}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+
+  // ═══ TAB 3: OPTIMAL ZONE ═══════════════════════════════════
+
+  // Revenue zone KPIs + n badge (Tab 3)
+  document.getElementById('o-nbadge').textContent = 'n='+K.totalDays;
+  document.getElementById('az-leads').textContent = Math.round(K.revOptLeadsQ1||0)+'\u2013'+Math.round(K.revOptLeadsQ3||0);
+  document.getElementById('az-leads-sub').textContent = 'IQR \u00b7 avg '+Math.round(K.revOptAvgLeads||0);
+  document.getElementById('az-shifts').textContent = (K.revOptAvgShift*0.83).toFixed(1)+'\u2013'+(K.revOptAvgShift*1.2).toFixed(1);
+  document.getElementById('az-shifts-sub').textContent = 'IQR \u00b7 avg '+(K.revOptAvgShift||0).toFixed(1);
+  document.getElementById('az-ls').textContent = (K.revOptQ1||0).toFixed(1)+'\u2013'+(K.revOptQ3||0).toFixed(1);
+  document.getElementById('az-ls-sub').textContent = 'IQR \u00b7 avg '+(K.revOptAvgLS||0).toFixed(1);
+  document.getElementById('az-cont').textContent = fmtPct(K.avgContactedRatio||0);
+  document.getElementById('az-cont-sub').textContent = 'Overall avg contacted rate';
+
+  // Narrative dynamic values
+  document.getElementById('rec-ls-range').textContent = (K.revOptQ1||18.9).toFixed(1)+'\u2013'+(K.revOptQ3||26.2).toFixed(1);
+  document.getElementById('nar-az-leads').textContent = Math.round(K.revOptLeadsQ1||235)+'\u2013'+Math.round(K.revOptLeadsQ3||351);
+  document.getElementById('nar-az-shifts').textContent = (K.revOptAvgShift*0.83).toFixed(1)+'\u2013'+(K.revOptAvgShift*1.2).toFixed(1);
+  document.getElementById('nar-az-ls').textContent = (K.revOptQ1||18.9).toFixed(1)+'\u2013'+(K.revOptQ3||26.2).toFixed(1);
+  document.getElementById('nar-az-count').textContent = (K.revOptDays||0)+' of '+K.totalDays+' days';
+  document.getElementById('nar-az-pct').textContent = (K.totalDays>0?(K.revOptDays/K.totalDays*100).toFixed(1):'0');
+  document.getElementById('nar-az-avg-acq').textContent = fmt$(Math.round(K.revOptAvgRevenue||0))+'/day revenue';
+  document.getElementById('nar-az-avg-sov').textContent = fmt$(Math.round(K.avgDailyRevenue||0))+' overall avg';
+
+  // Optimal Zone Scatter (Revenue-based)
+  (function(){
+    const sd = D.scatterData;
+    const optQ1 = K.revOptQ1||18.9, optQ3 = K.revOptQ3||26.2;
+    const isOpt = d => d.revOptimal || (d.leadsPerShift>=optQ1 && d.leadsPerShift<=optQ3);
+    const opt = sd.filter(isOpt), rest = sd.filter(d=>!isOpt(d));
+    FilterEngine.storeChart('scatterChart', new Chart(document.getElementById('scatterChart'),{
+      type:'bubble',
+      data:{datasets:[
+        {label:'Optimal',data:opt.map(d=>({x:+(d.leadsPerShift||0).toFixed(1),y:d.totalAcquisitions,r:Math.max(4,(d.contactedRatio||0)*18),sov:d.totalSOV||0,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),backgroundColor:ctx=>{const p=ctx.raw;if(!p)return'rgba(10,132,255,.8)';const t=Math.min(1,Math.max(0,(p.sov||0)/25000));return`rgba(${Math.round(10+t*90)},${Math.round(100+t*32)},${Math.round(200+t*55)},0.9)`},borderColor:'#ffd60a',borderWidth:1.5},
+        {label:'Other',data:rest.map(d=>({x:+(d.leadsPerShift||0).toFixed(1),y:d.totalAcquisitions,r:Math.max(3,(d.contactedRatio||0)*12),sov:d.totalSOV||0,date:d.date,day:d.dayName,leads:d.totalLeads,shift:d.totalShift})),backgroundColor:'rgba(255,255,255,.08)',borderColor:'rgba(255,255,255,.1)',borderWidth:.5}
+      ]},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{backgroundColor:'#111122',borderColor:'rgba(255,255,255,.15)',borderWidth:1,callbacks:{title:i=>`${i[0].raw.date} · ${i[0].raw.day}`,label:i=>{const d=i.raw;return[`  Acq: ${d.y}`,`  L/S: ${d.x}`,`  SOV: ${fmt$(d.sov||0)}`,`  Leads: ${d.leads}`]}}},annotation:{annotations:{optBox:{type:'box',xMin:optQ1,xMax:optQ3,yMin:0,yMax:45,backgroundColor:'rgba(10,132,255,.04)',borderColor:'rgba(10,132,255,.25)',borderWidth:1,borderDash:[4,3]}}}},
+        scales:{x:{title:{display:true,text:'Leads/Shift',font:{size:10}},grid:{color:GC},border:{display:false},min:0,max:60},y:{title:{display:true,text:'Acquisitions',font:{size:10}},grid:{color:GC},border:{display:false},min:0}}
+      }
+    }));
+  })();
+
+  // Ratio bins (acq + revenue)
+  (function(){
+    const bins = D.ratioBinData;
+    FilterEngine.storeChart('ratioBinsAcqChart', new Chart(document.getElementById('ratioBinsAcqChart'),{
+      type:'bar',data:{labels:bins.map(b=>b.bin),datasets:[{label:'Avg Acq',data:bins.map(b=>b.avgAcq),backgroundColor:'rgba(10,132,255,.6)',borderRadius:5,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false}}}}
+    }));
+    FilterEngine.storeChart('ratioBinsSOVChart2', new Chart(document.getElementById('ratioBinsSOVChart2'),{
+      type:'bar',data:{labels:bins.map(b=>b.bin),datasets:[{label:'Avg Revenue',data:bins.map(b=>b.avgRevenue),backgroundColor:'rgba(255,214,10,.5)',borderRadius:5,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>fmt$k(v)}}}}
+    }));
+  })();
+
+  // Acq correlation badges
+  (function(){
+    const el = document.getElementById('acqCorrBadges');
+    if(el){
+      el.innerHTML = '';
+      [['Leads↔Acq',K.corrLeadsAcq],['L/S↔Acq',K.corrLSRatioAcq],['Acq↔Rev',K.corrAcqRev]].forEach(([n,v])=>{
+        const c=(v||0)>0.5?'var(--green)':(v||0)>0?'var(--blue)':'var(--red)';
+        el.innerHTML+=`<div class="corr-b"><span class="cn">${n}</span><span class="cv" style="color:${c}">${(v||0)>0?'+':''}${(v||0).toFixed(4)}</span></div>`;
+      });
+    }
+  })();
+
+  // Monthly trend acq
+  (function(){
+    const ml = D.monthlyData;
+    FilterEngine.storeChart('trendAcqChart', new Chart(document.getElementById('trendAcqChart'),{
+      type:'line',data:{labels:ml.map(m=>m.month),datasets:[
+        {label:'Avg Acq/Day',data:ml.map(m=>m.avgAcq),borderColor:'#30d158',tension:.4,pointRadius:2,yAxisID:'y'},
+        {label:'Avg L/S',data:ml.map(m=>m.avgLeadsPerShift),borderColor:'#ffd60a',borderDash:[3,2],tension:.4,pointRadius:2,yAxisID:'y2'},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{maxTicksLimit:14}},y:{grid:{color:GC},border:{display:false}},y2:{position:'right',grid:{display:false},border:{display:false}}}}
+    }));
+  })();
+
+  // Top 30 Acq Days table
+  (function(){
+    const tbody = document.getElementById('topAcqBody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    const sorted = [...D.scatterData].sort((a,b)=>b.totalAcquisitions-a.totalAcquisitions).slice(0,30);
+    sorted.forEach((d,i)=>{
+      const ls = d.leadsPerShift||0;
+      const cls = ls>=21&&ls<=31?'color:var(--green)':ls>35?'color:var(--red)':'';
+      tbody.innerHTML += `<tr><td class="num">${i+1}</td><td class="num">${d.date}</td><td>${d.dayName}</td><td class="num">${d.totalLeads}</td><td class="num">${(d.totalShift||0).toFixed(1)}</td><td class="num" style="${cls}">${ls.toFixed(1)}</td><td class="num" style="color:var(--green)">${d.totalAcquisitions}</td><td class="num">${fmt$(d.totalSOV||0)}</td><td class="num">${fmtPct(d.contactedRatio||0)}</td></tr>`;
+    });
+  })();
+
+  // ═══ TAB 4: WEEKDAY vs WEEKEND ════════════════════════════
+
+  // Tab 4 KPI cards (dynamic)
+  document.getElementById('wd-days').textContent = K.weekdayDays;
+  document.getElementById('we-days').textContent = K.weekendDays;
+  const wdPct = K.totalDays>0?(K.weekdayDays/K.totalDays*100):71;
+  const wePct = K.totalDays>0?(K.weekendDays/K.totalDays*100):29;
+  document.getElementById('wd-days-sub').textContent = wdPct.toFixed(1)+'% of dataset \u00b7 Mon\u2013Fri';
+  document.getElementById('we-days-sub').textContent = wePct.toFixed(1)+'% \u00b7 Sat & Sun only';
+  document.getElementById('wd-bar').style.width = wdPct+'%';
+  document.getElementById('we-bar').style.width = wePct+'%';
+  document.getElementById('wd-opt').textContent = K.weekdayOptDays||0;
+  document.getElementById('we-opt').textContent = K.weekendOptDays||0;
+  const totalOpt = (K.weekdayOptDays||0)+(K.weekendOptDays||0);
+  document.getElementById('wd-opt-sub').textContent = totalOpt>0?Math.round((K.weekdayOptDays||0)/totalOpt*100)+'% of all optimal zone days':'No optimal days';
+  document.getElementById('we-opt-sub').textContent = (K.weekendOptDays||0)>0?Math.round((K.weekendOptDays||0)/totalOpt*100)+'% of optimal days':'0% \u2014 none qualify';
+  document.getElementById('wd-opt-bar').style.width = totalOpt>0?Math.round((K.weekdayOptDays||0)/totalOpt*100)+'%':'0%';
+  document.getElementById('we-opt-bar').style.width = totalOpt>0?Math.round((K.weekendOptDays||0)/totalOpt*100)+'%':'0%';
+  document.getElementById('wd-tag').textContent = K.weekdayDays+' days';
+  document.getElementById('we-tag').textContent = K.weekendDays+' days';
+
+  // Dynamic Tab 4 narrative + hit rate cards
+  const wdOpt=K.weekdayOptDays||0, weOpt=K.weekendOptDays||0, wdD=K.weekdayDays||596, weD=K.weekendDays||238;
+  const wdHitR=wdD>0?(wdOpt/wdD*100).toFixed(1):'0', weHitR=weD>0?(weOpt/weD*100).toFixed(1):'0';
+  const wePctOpt=totalOpt>0?Math.round(weOpt/totalOpt*100):0;
+  document.getElementById('wd-acq-tag').textContent = (K.weekdayAvgAcq||0).toFixed(1)+' acquisitions/day';
+  document.getElementById('wd-rev-tag').textContent = fmt$k(K.weekdayAvgRevenue||0)+'/day revenue';
+  document.getElementById('we-acq-tag').textContent = (K.weekendAvgAcq||0).toFixed(1)+' acq/day';
+  document.getElementById('we-rev-tag').textContent = fmt$k(K.weekendAvgRevenue||0)+'/day';
+  document.getElementById('wd-premium').textContent = K.weekendAvgRevenue>0?((K.weekdayAvgRevenue/K.weekendAvgRevenue-1)*100).toFixed(1)+'%':'N/A';
+  document.getElementById('we-avg-leads').textContent = Math.round(K.weekendAvgLeads||218);
+  document.getElementById('we-avg-shifts').textContent = (K.weekendAvgShift||8.7).toFixed(1);
+  document.getElementById('wd-avg-shifts').textContent = (K.weekdayAvgShift||14.2).toFixed(1);
+  document.getElementById('we-ls').textContent = (K.weekendAvgLeadsPerShift||29.3).toFixed(1);
+  document.getElementById('wd-opt-ceil').textContent = (K.revOptQ3||26.2).toFixed(1);
+  document.getElementById('we-opt-nar').textContent = weOpt+' of '+totalOpt+' revenue optimal zone days are weekends ('+wePctOpt+'%)';
+  document.getElementById('we-pct-dataset').textContent = (K.totalDays>0?(weD/K.totalDays*100).toFixed(1):'28.4');
+  document.getElementById('wd-hit-rate-nar').textContent = wdHitR+'%';
+  document.getElementById('we-hit-rate-nar').textContent = weHitR+'%';
+  document.getElementById('opt-dist-sub').textContent = wePctOpt>0?'Revenue optimal zone: '+Math.round(100-wePctOpt)+'% weekday, '+wePctOpt+'% weekend':'100% of optimal zone days occur on weekdays';
+  document.getElementById('wd-hit-val').textContent = wdHitR+'%';
+  document.getElementById('wd-hit-sub').textContent = wdOpt+'/'+wdD+' weekdays qualify';
+  document.getElementById('wd-hit-bar').style.width = Math.min(parseFloat(wdHitR),100)+'%';
+  document.getElementById('we-hit-val').textContent = weHitR+'%';
+  document.getElementById('we-hit-sub').textContent = weOpt+'/'+weD+' weekends qualify';
+  document.getElementById('we-hit-bar').style.width = Math.min(parseFloat(weHitR),100)+'%';
+
+  // Weekday/Weekend metric panels
+  function buildWkdMets(id, data, acqCmp, revCmp, shiftCmp, contCmp, ratioCmp, color){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.innerHTML = '';
+    const mets = [
+      {lbl:'Avg Acq/Day',val:fmtN(data.avgAcq||0,1),diff:acqCmp},
+      {lbl:'Avg Rev/Day',val:fmt$(data.avgRevenue||0),diff:revCmp},
+      {lbl:'Avg Shifts',val:fmtN(data.avgShift||0,1),diff:shiftCmp},
+      {lbl:'Contacted %',val:fmtPct(data.avgContactedRatio||0),diff:contCmp},
+      {lbl:'Avg Leads/Shift',val:fmtN(data.avgLeadsPerShift||0,1),diff:ratioCmp},
+      {lbl:'Days',val:data.days||0,diff:''},
+    ];
+    mets.forEach(m=>{
+      el.innerHTML += `<div class="wkd-met"><div class="wkd-met-lbl">${m.lbl}</div><div class="wkd-met-val" style="color:${color}">${m.val}</div>${m.diff?`<div class="wkd-met-diff ${m.diff.startsWith('+')?'up':'down'}">${m.diff}</div>`:''}</div>`;
+    });
+  }
+
+  const wdData = {avgAcq:K.weekdayAvgAcq,avgRevenue:K.weekdayAvgRevenue,avgShift:K.weekdayAvgShift,avgContactedRatio:K.weekdayAvgContactedRatio,avgLeadsPerShift:K.weekdayAvgLeadsPerShift,days:K.weekdayDays};
+  const weData = {avgAcq:K.weekendAvgAcq,avgRevenue:K.weekendAvgRevenue,avgShift:K.weekendAvgShift,avgContactedRatio:K.weekendAvgContactedRatio,avgLeadsPerShift:K.weekendAvgLeadsPerShift,days:K.weekendDays};
+  const acqDiff = K.weekdayAvgAcq>0?((K.weekendAvgAcq-K.weekdayAvgAcq)/K.weekdayAvgAcq*100).toFixed(0)+'%':'';
+  const revDiff = K.weekdayAvgRevenue>0?((K.weekendAvgRevenue-K.weekdayAvgRevenue)/K.weekdayAvgRevenue*100).toFixed(0)+'%':'';
+  buildWkdMets('wkdayMets',wdData,'Baseline','Baseline','Baseline','Baseline','Baseline','var(--blue)');
+  buildWkdMets('wkendMets',weData,acqDiff,revDiff,'','','','var(--gold)');
+
+  // DOW Charts
+  function buildDOWChart(id,key,fmt_fn,yLabel){
+    const ord = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    const vals = ord.map(d=>(D.dowData[d]&&D.dowData[d][key])||0);
+    const colors = ord.map((_,i)=>i<5?'rgba(10,132,255,0.6)':'rgba(255,214,10,0.6)');
+    FilterEngine.storeChart(id, new Chart(document.getElementById(id),{
+      type:'bar',data:{labels:ord.map(d=>d.substring(0,3)),datasets:[{data:vals,backgroundColor:colors,borderRadius:5,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmt_fn(i.raw)}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},title:yLabel?{display:true,text:yLabel,font:{size:10}}:undefined}}}
+    }));
+  }
+  buildDOWChart('dowAcqChart','avgAcq',v=>v.toFixed(1)+' acq/day','Acquisitions');
+  buildDOWChart('dowRevChart','avgRevenue',v=>fmt$(v),'Revenue');
+  buildDOWChart('dowContChart','avgContactedRatio',v=>(v*100).toFixed(1)+'%','Contacted %');
+  buildDOWChart('dowRatioChart','avgLeadsPerShift',v=>v.toFixed(1),'L/S Ratio');
+
+  // Indexed comparison bar
+  (function(){
+    const base = {acq:K.weekdayAvgAcq||1,rev:K.weekdayAvgRevenue||1,shift:K.weekdayAvgShift||1,cont:K.weekdayAvgContactedRatio||0.001,ls:K.weekdayAvgLeadsPerShift||1};
+    const weIdx = {acq:(K.weekendAvgAcq||0)/base.acq*100,rev:(K.weekendAvgRevenue||0)/base.rev*100,shift:(K.weekendAvgShift||0)/base.shift*100,cont:(K.weekendAvgContactedRatio||0)/base.cont*100,ls:(K.weekendAvgLeadsPerShift||0)/base.ls*100};
+    FilterEngine.storeChart('compareBarChart', new Chart(document.getElementById('compareBarChart'),{
+      type:'bar',data:{labels:['Acquisitions','Revenue','Shifts','Contacted %','L/S Ratio'],datasets:[
+        {label:'Weekday (100)',data:[100,100,100,100,100],backgroundColor:'rgba(10,132,255,.4)',borderRadius:5,borderSkipped:false},
+        {label:'Weekend',data:[weIdx.acq,weIdx.rev,weIdx.shift,weIdx.cont,weIdx.ls].map(v=>+v.toFixed(1)),backgroundColor:'rgba(255,214,10,.6)',borderRadius:5,borderSkipped:false},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v}}}}
+    }));
+  })();
+
+  // Optimal pie
+  FilterEngine.storeChart('optPieChart', new Chart(document.getElementById('optPieChart'),{type:'doughnut',data:{labels:['Weekday Optimal','Weekend Optimal'],datasets:[{data:[K.weekdayOptDays||0, K.weekendOptDays||0],backgroundColor:['rgba(10,132,255,.7)','rgba(255,214,10,.4)'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}}}}));
+
+  // ═══ TAB 5: ROI & MEDIA COST ═══════════════════════════════
+
+  // ROI KPIs
+  const RK = D.roiKpis || K;
+  document.getElementById('roi-cost').textContent = fmt$k(RK.totalCost||K.totalCost||0);
+  document.getElementById('roi-rev').textContent = fmt$k(RK.totalRevenue||K.totalRevenue||0);
+  document.getElementById('roi-pct').textContent = (RK.overallROI||K.overallROI||0).toFixed(2)+'×';
+  document.getElementById('roi-cpl').textContent = fmt$(RK.overallCPL||K.overallCPL||0);
+  document.getElementById('roi-cpa').textContent = fmt$(RK.overallCPA||K.overallCPA||0);
+
   // ROI by Channel chart
   (function(){
     const csd = D.costSegData||[];
@@ -1179,7 +1621,7 @@ function buildDashboard(){
         {label:'Biblical CPL',data:medias.map(m=>{const s=csd.find(x=>x.media===m&&x.category==='Biblical');return s?s.cpl:0}),backgroundColor:'rgba(10,132,255,.5)',borderRadius:5,borderSkipped:false},
         {label:'Hebrew CPL',data:medias.map(m=>{const s=csd.find(x=>x.media===m&&x.category==='Hebrew');return s?s.cpl:0}),backgroundColor:'rgba(48,209,88,.5)',borderRadius:5,borderSkipped:false},
       ]},
-      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10,font:{size:10}}},tooltip:{callbacks:{label:i=>fmt$(i.raw)}}},scales:{x:{grid:{display:false},border:{display:false}},y:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}}}}
     }));
   })();
 
@@ -1218,22 +1660,28 @@ function buildDashboard(){
     });
   })();
 
-  // CVR / RPL / RPA segment charts
-  FilterEngine.storeChart('cvrSegChart', new Chart(document.getElementById('cvrSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+((s.conversionRate||0)*100).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>(i.raw||0).toFixed(2)+'%'}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
-  FilterEngine.storeChart('rplSegChart', new Chart(document.getElementById('rplSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+(s.revenuePerLead||0).toFixed(2)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmt$(i.raw||0)}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
-  FilterEngine.storeChart('rpaSegChart', new Chart(document.getElementById('rpaSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+(s.revenuePerAcq||0).toFixed(0)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>fmt$(i.raw||0)}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>'$'+v}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+  // Top ROI days table
+  (function(){
+    const tbody = document.querySelector('#topRoiTable tbody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    (D.topRoiDays||[]).forEach((d,i)=>{
+      tbody.innerHTML += `<tr><td class="num">${i+1}</td><td class="num">${d.date}</td><td class="num">${d.totalLeads}</td><td class="num">${d.totalAcq}</td><td class="num">${fmt$(d.totalCost)}</td><td class="num" style="color:var(--gold)">${fmt$(d.totalRevenue)}</td><td class="num" style="color:var(--green)">${d.roi.toFixed(2)}×</td></tr>`;
+    });
+  })();
 
-  // Contacted rate by segment
-  FilterEngine.storeChart('contactRateSegChart', new Chart(document.getElementById('contactRateSegChart'),{type:'bar',data:{labels:SEG_LABELS,datasets:[{data:D.segmentData.map(s=>+((s.contactedRate||0)*100).toFixed(1)),backgroundColor:SEG_COLORS,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:i=>i.raw.toFixed(1)+'%'}}},scales:{x:{grid:{color:GC},border:{display:false},ticks:{callback:v=>v+'%'}},y:{grid:{display:false},border:{display:false},ticks:{font:{size:9}}}}}}));
+  // ═══ TAB 6: APRIL CRISIS (static — not affected by date filter) ══════════
 
-  // ─── Tab 3: April Crisis (static — always uses D_FULL) ────
+  // Only build April crisis charts if the full data is available (not filtered to exclude April)
   if(D_FULL.aprSummary && D_FULL.trend6){
     buildAprilCrisisCharts();
   }
 
+  // Resize all charts
   requestAnimationFrame(()=>{ Object.values(Chart.instances).forEach(c=>c.resize()); });
 }
 
+// ── April Crisis chart builder (always uses full data) ──────────────────────
 function buildAprilCrisisCharts(){
   const FD = D_FULL;
 
@@ -1317,6 +1765,7 @@ function buildAprilCrisisCharts(){
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
 // DATE FILTER WIRING
 // ═══════════════════════════════════════════════════════════════════════════════
 
