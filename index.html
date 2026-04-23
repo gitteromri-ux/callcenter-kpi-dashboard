@@ -387,13 +387,13 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
   <div class="card" style="border-color:rgba(255,69,58,.35);background:rgba(255,69,58,.06);margin-bottom:18px;padding:16px 20px">
     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
       <div>
-        <div style="font-size:14px;font-weight:700;color:var(--red);margin-bottom:4px">⚠ April 2026 Alert — Revenue down 26.6%, Acquisitions down 32%</div>
-        <div style="font-size:12px;color:var(--text-2)">Root causes: Hebrew contacted rate collapsed (57%→31%), Facebook ROI at 0.50×, 5-month structural decline. See <strong style="cursor:pointer;color:var(--red);text-decoration:underline" onclick="switchTab(3)">April Crisis tab</strong> for full diagnosis.</div>
+        <div style="font-size:14px;font-weight:700;color:var(--red);margin-bottom:4px" id="apr-alert-title">⚠ April 2026 Alert — Revenue down 24.5%, Acquisitions down 34%</div>
+        <div style="font-size:12px;color:var(--text-2)" id="apr-alert-causes">Root causes: Hebrew contacted rate collapsed (57%→39%), Facebook ROI at 0.56× on 45% of leads, 4-month structural ROI decline (1.95→<strong style="color:var(--red)">1.28×</strong>). See <strong style="cursor:pointer;color:var(--red);text-decoration:underline" onclick="switchTab(3)">April Crisis tab</strong> for full diagnosis.</div>
       </div>
       <div style="display:flex;gap:10px;flex-shrink:0">
         <div class="kc" style="min-width:100px;padding:8px 12px"><div class="kc-lbl" style="font-size:9px">APR ROI</div><div class="kc-val" style="color:var(--red);font-size:18px" id="e-apr-roi">1.16×</div></div>
-        <div class="kc" style="min-width:100px;padding:8px 12px"><div class="kc-lbl" style="font-size:9px">APR ACQ/DAY</div><div class="kc-val" style="color:var(--red);font-size:18px">10.2</div></div>
-        <div class="kc" style="min-width:100px;padding:8px 12px"><div class="kc-lbl" style="font-size:9px">CONTACTED</div><div class="kc-val" style="color:var(--red);font-size:18px">34.6%</div></div>
+        <div class="kc" style="min-width:100px;padding:8px 12px"><div class="kc-lbl" style="font-size:9px">APR ACQ/DAY</div><div class="kc-val" style="color:var(--red);font-size:18px" id="e-apr-acq">10.2</div></div>
+        <div class="kc" style="min-width:100px;padding:8px 12px"><div class="kc-lbl" style="font-size:9px">CONTACTED</div><div class="kc-val" style="color:var(--red);font-size:18px" id="e-apr-contacted">34.6%</div></div>
       </div>
     </div>
   </div>
@@ -403,7 +403,7 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
   <div class="rec-grid">
     <div class="rec card-accent gold"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🔀</div><div class="rec-title">Shift Budget from Facebook to High-ROI Channels</div><div class="rec-body">Facebook ROI is 0.76–0.86× (losing money). Web Campaign delivers <strong style="color:var(--green)">4.21–6.07× ROI</strong>, Affiliates <strong style="color:var(--green)">3.03–6.30×</strong>, Google Hebrew <strong style="color:var(--green)">1.37×</strong>. Reallocating 20% of Facebook's $5.2M spend adds significant profitable revenue immediately.</div></div>
     <div class="rec card-accent green"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">⚡</div><div class="rec-title">Operate in the Revenue-Optimal L/S Window</div><div class="rec-body">L/S ratio of <strong style="color:var(--gold)" id="rec-ls-range">18.9–26.2</strong> produces <strong style="color:var(--green)">+15% above-average daily revenue</strong>. Days above 35 see revenue collapse. Hebrew leads convert at <strong style="color:var(--green)">9.0%</strong> vs Biblical's 3.9% — prioritize Hebrew allocation within this band.</div></div>
-    <div class="rec card-accent blue"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🚨</div><div class="rec-title">Pause Facebook Hebrew Spend Immediately</div><div class="rec-body">Facebook Hebrew ROI collapsed to <strong style="color:var(--red)">0.50× in April</strong> (was 0.76× all-time). Contacted rate crashed from 42%→31%. Every dollar spent returns $0.50. Redirect to Google Hebrew, Web Campaign, and Affiliates.</div></div>
+    <div class="rec card-accent blue"><div class="rec-priority pri-hi">HIGH</div><div class="rec-icon">🚨</div><div class="rec-title">Pause Facebook Hebrew Spend Immediately</div><div class="rec-body">Facebook Hebrew ROI collapsed to <strong style="color:var(--red)">0.33× in April</strong> (was 0.76× all-time). Contacted rate dropped from 42%→33%. Every dollar spent returns $0.33. Redirect to Google Hebrew, Web Campaign, and Affiliates.</div></div>
     <div class="rec card-accent purple"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📅</div><div class="rec-title">Increase Weekend Staffing to 11–12 Shifts</div><div class="rec-body">Weekend L/S ratio is 32.1 — above the ceiling. Adding 3–4 shifts brings it into the optimal range, unlocking <strong style="color:var(--gold)">+$2.1k/day</strong> in weekend revenue (+30%). <strong style="color:var(--green)">0% of weekend days</strong> currently hit the optimal zone.</div></div>
     <div class="rec card-accent teal"><div class="rec-priority pri-med">MED</div><div class="rec-icon">📧</div><div class="rec-title">Audit Email Biblical Lead Quality</div><div class="rec-body">Email Marketing drives 21% of Biblical leads but only 3.8% conversion — half the rate of No Media. A/B test copy and audience targeting. Email Hebrew at 7.3% CVR and $73/lead remains undervalued.</div></div>
     <div class="rec card-accent orange"><div class="rec-priority pri-lo">LOW</div><div class="rec-icon">📈</div><div class="rec-title">Leverage Thursday–Tuesday Staffing Peak</div><div class="rec-body">Thursday leads acquisitions (avg 16.9/day), Tuesday shows highest revenue efficiency. Avoid over-scheduling Friday afternoon as contacted ratio declines. Plan shift peaks for Tue–Thu.</div></div>
@@ -658,39 +658,39 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
   <div class="kpi-grid g6" style="margin-bottom:20px">
     <div class="kc alert">
       <div class="kc-lbl">Avg Daily Acquisitions</div>
-      <div class="kc-val" style="color:var(--red)">10.2</div>
-      <div class="kc-sub">vs 15.0 historical</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −32.0%</div>
+      <div class="kc-val" style="color:var(--red)" id="apc-acq">10.2</div>
+      <div class="kc-sub" id="apc-acq-sub">vs 15.0 historical</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px" id="apc-acq-delta">▼ −32.0%</div>
     </div>
     <div class="kc alert">
       <div class="kc-lbl">Avg Daily Revenue</div>
-      <div class="kc-val" style="color:var(--red)">$11.1k</div>
-      <div class="kc-sub">vs $15.1k historical</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −26.6%</div>
+      <div class="kc-val" style="color:var(--red)" id="apc-rev">$11.1k</div>
+      <div class="kc-sub" id="apc-rev-sub">vs $15.1k historical</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px" id="apc-rev-delta">▼ −26.6%</div>
     </div>
     <div class="kc alert">
       <div class="kc-lbl">Contacted Rate</div>
-      <div class="kc-val" style="color:var(--red)">34.6%</div>
-      <div class="kc-sub">vs 44.6% historical</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −10.0pp</div>
+      <div class="kc-val" style="color:var(--red)" id="apc-con">34.6%</div>
+      <div class="kc-sub" id="apc-con-sub">vs 44.6% historical</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px" id="apc-con-delta">▼ −10.0pp</div>
     </div>
     <div class="kc alert">
       <div class="kc-lbl">Conversion Rate</div>
-      <div class="kc-val" style="color:var(--orange)">3.67%</div>
-      <div class="kc-sub">vs 5.2% all-time avg</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −1.5pp</div>
+      <div class="kc-val" style="color:var(--orange)" id="apc-cvr">3.67%</div>
+      <div class="kc-sub" id="apc-cvr-sub">vs 5.2% all-time avg</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px" id="apc-cvr-delta">▼ −1.5pp</div>
     </div>
     <div class="kc alert">
       <div class="kc-lbl">Monthly ROI</div>
-      <div class="kc-val" style="color:var(--red)">1.16×</div>
-      <div class="kc-sub">vs 1.67× all-time avg</div>
-      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px">▼ −0.51×</div>
+      <div class="kc-val" style="color:var(--red)" id="apc-roi">1.16×</div>
+      <div class="kc-sub" id="apc-roi-sub">vs 1.67× all-time avg</div>
+      <div style="font-size:11px;font-weight:700;color:var(--red);margin-top:4px" id="apc-roi-delta">▼ −0.51×</div>
     </div>
     <div class="kc">
       <div class="kc-lbl">Lead Volume</div>
-      <div class="kc-val" style="color:var(--teal)">277/day</div>
-      <div class="kc-sub">vs 288 historical</div>
-      <div style="font-size:11px;font-weight:700;color:var(--teal);margin-top:4px">► −3.8% — Not the issue</div>
+      <div class="kc-val" style="color:var(--teal)" id="apc-leads">277/day</div>
+      <div class="kc-sub" id="apc-leads-sub">vs 288 historical</div>
+      <div style="font-size:11px;font-weight:700;color:var(--teal);margin-top:4px" id="apc-leads-delta">► −3.8% — Not the issue</div>
     </div>
   </div>
 
@@ -699,15 +699,15 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
 
   <div class="rc-block">
     <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:4px">#1 — Hebrew Contacted Rate in Freefall — Most Critical</div>
-    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Hebrew contacted rate crashed from <strong style="color:var(--green)">57.1%</strong> (Jan’26) to <strong style="color:var(--red)">31.2%</strong> (Apr’26) — a <strong style="color:var(--red)">-25.9pp collapse</strong> in 4 months. This single metric explains most of the acquisition drop. Hebrew leads historically convert at 9.04%; in April, only 5.77%. When leads can’t be reached, nothing else in the funnel matters. Cause: lead intent quality and/or contact information accuracy has structurally deteriorated in Hebrew campaigns.</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Hebrew contacted rate dropped from <strong style="color:var(--green)">57.1%</strong> (Jan’26) to <strong style="color:var(--red)">38.7%</strong> (Apr’26) — a <strong style="color:var(--red)">−18.5pp decline</strong> in 4 months. This single metric explains most of the acquisition drop. Hebrew leads historically convert at 9.04%; in April, only 5.12%. When leads can’t be reached, nothing else in the funnel matters. Cause: lead intent quality and/or contact information accuracy has structurally deteriorated in Hebrew campaigns.</div>
   </div>
   <div class="rc-block" style="border-color:var(--orange)">
     <div style="font-size:13px;font-weight:700;color:var(--orange);margin-bottom:4px">#2 — Facebook ROI at 0.50× — Actively Burning Cash</div>
-    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Facebook generated 1,744 leads in April (48.4% of all leads) at a cost of <strong style="color:var(--red)">$97,970</strong>, returning only $49,140 in revenue — a <strong style="color:var(--red)">0.50× ROI</strong>. Every Facebook dollar spent is returning only $0.50. Google, by contrast, is the only profitable paid channel at <strong style="color:var(--green)">1.15× ROI</strong> ($24,374 cost → $28,138 revenue). The contacted rate on Facebook leads is 32.1% vs 41.9% historical, meaning Facebook lead quality has collapsed alongside cost increases.</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Facebook generated 2,639 leads in April (44.5% of all leads) at a cost of <strong style="color:var(--red)">$151,361</strong>, returning only $84,497 in revenue — a <strong style="color:var(--red)">0.56× ROI</strong>. Every Facebook dollar spent is returning $0.56. Google, by contrast, is the only profitable paid channel at <strong style="color:var(--green)">1.20× ROI</strong> ($40,858 cost → $48,836 revenue). The contacted rate on Facebook leads is 32.9% vs 41.9% historical, meaning Facebook lead quality has collapsed alongside cost increases.</div>
   </div>
   <div class="rc-block" style="border-color:var(--gold);margin-bottom:20px">
-    <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:4px">#3 — 5-Month ROI Deterioration — Structural, Not Random</div>
-    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">ROI has declined every month for 5 consecutive months: <strong style="color:var(--green)">1.95× → 1.73× → 1.53× → 1.23×</strong>. This is not a one-off April anomaly — it’s an accelerating structural deterioration. The contacted rate began declining in March (35.5%) and has worsened in April (33.8%). The underlying causes — declining lead quality, rising Facebook costs, and lower conversion — were already visible in March and went unaddressed.</div>
+    <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:4px">#3 — 4-Month ROI Deterioration — Structural, Not Random</div>
+    <div style="font-size:12px;color:var(--text-dim);line-height:1.6">ROI has declined every month for 4 consecutive months: <strong style="color:var(--green)">1.95× → 1.73× → 1.52× → 1.28×</strong>. This is not a one-off April anomaly — it’s an accelerating structural deterioration. The contacted rate collapsed in March (35.5%) and has stayed broken in April (36.8%). The underlying causes — declining lead quality, rising Facebook costs, and lower conversion — were already visible in March and went unaddressed.</div>
   </div>
 
   <!-- Two charts row -->
@@ -767,10 +767,10 @@ span.flatpickr-day.prevMonthDay,span.flatpickr-day.nextMonthDay{color:var(--text
   <div class="narrative card-accent orange">
     <h3>Immediate Actions to Arrest the Decline</h3>
     <p>
-      <strong style="color:var(--red)">1. Pause or cut Facebook Hebrew spend immediately</strong> — Facebook Hebrew ROI is 0.76× all-time and 0.50× in April. The contacted rate has collapsed from 42% to 31%. Continuing to pay Facebook prices for unreachable leads is compounding losses. Redirect budget to Google Hebrew (1.37× ROI), Web Campaign (6.07× ROI), and Affiliates (3.03× ROI).<br><br>
-      <strong style="color:var(--orange)">2. Audit Facebook lead quality</strong> — The contacted rate drop across Facebook (41.9% → 32.1%) signals corrupted lead quality: wrong phone numbers, uninterested audiences, or bot traffic. Pull individual lead-level contact attempt data for April Facebook leads and compare to January levels. Look for changes in campaign targeting, landing page, or lead form that went live around March.<br><br>
-      <strong style="color:var(--gold)">3. Realign staffing to No Media &amp; Email priority</strong> — No Media ($132/lead, 50.9% contacted in April) and Email Marketing ($43/lead, zero cost) are keeping this month alive. With Google Hebrew also profitable at ~1.15× April ROI, assign highest-performing reps to No Media, Email Hebrew, and Google queues.<br><br>
-      <strong style="color:var(--teal)">4. Investigate the April 8 collapse</strong> — April 8 saw 370 leads, only 8 acquisitions, and worst daily ROI of the month. Something specific happened that day — a technical failure, CRM issue, or shift attendance problem. Diagnose and prevent recurrence.
+      <strong style="color:var(--red)">1. Pause or cut Facebook Hebrew spend immediately</strong> — Facebook Hebrew ROI is 0.76× all-time and <strong style="color:var(--red)">0.33× in April</strong> ($44K cost → $15K revenue). The contacted rate has collapsed from 42% to 33%. Continuing to pay Facebook prices for unreachable leads is compounding losses. Redirect budget to Google Hebrew (1.37× ROI), Web Campaign (6.07× ROI), and Affiliates (3.03× ROI).<br><br>
+      <strong style="color:var(--orange)">2. Audit Facebook lead quality</strong> — The contacted rate drop across Facebook (41.9% → 32.9%) signals corrupted lead quality: wrong phone numbers, uninterested audiences, or bot traffic. Pull individual lead-level contact attempt data for April Facebook leads and compare to January levels. Look for changes in campaign targeting, landing page, or lead form that went live around March.<br><br>
+      <strong style="color:var(--gold)">3. Realign staffing to No Media &amp; Email priority</strong> — No Media ($107/lead revenue, 54.1% contacted in April) and Email Marketing ($28/lead revenue, zero cost) are keeping this month alive. With Google also profitable at ~1.20× April ROI, assign highest-performing reps to No Media, Email, and Google queues.<br><br>
+      <strong style="color:var(--teal)">4. Investigate recurring collapse days</strong> — April 22 hit the month’s worst single-day ROI (0.49×, 280 leads, only 3 acquisitions, $3.2K revenue). April 10 and April 12 also fell below 0.55×. These bottom-ROI days share a pattern of high lead volume meeting sharp conversion breakdowns — diagnose rep coverage, CRM responsiveness, and campaign quality on these dates and prevent recurrence.
     </p>
   </div>
 
@@ -839,10 +839,20 @@ function buildDashboard(){
   if(pills[1]) pills[1].textContent = fmt$k(K.totalRevenue) + ' Total Revenue';
   if(pills[2]) pills[2].textContent = K.totalAcquisitions.toLocaleString() + ' Acquisitions';
 
-  // April alert ROI
+  // April alert — dynamic KPIs + title
   if(D_FULL.aprSummary){
-    const el = document.getElementById('e-apr-roi');
-    if(el) el.textContent = (D_FULL.aprSummary.aprROI||0).toFixed(2)+'×';
+    const S = D_FULL.aprSummary;
+    const elROI = document.getElementById('e-apr-roi');
+    if(elROI) elROI.textContent = (S.aprROI||0).toFixed(2)+'×';
+    const elAcq = document.getElementById('e-apr-acq');
+    if(elAcq) elAcq.textContent = (S.aprAvgAcq||0).toFixed(1);
+    const elCon = document.getElementById('e-apr-contacted');
+    if(elCon) elCon.textContent = ((S.aprAvgContactedRatio||0)*100).toFixed(1)+'%';
+    // Dynamic title: Revenue down X%, Acquisitions down Y%
+    const revDrop = S.histAvgRevenue ? (1 - S.aprAvgRevenue/S.histAvgRevenue)*100 : 0;
+    const acqDrop = S.histAvgAcq ? (1 - S.aprAvgAcq/S.histAvgAcq)*100 : 0;
+    const elTitle = document.getElementById('apr-alert-title');
+    if(elTitle) elTitle.textContent = '⚠ April 2026 Alert — Revenue down '+revDrop.toFixed(1)+'%, Acquisitions down '+acqDrop.toFixed(0)+'%';
   }
 
   // Media Share Chart
@@ -1249,6 +1259,51 @@ function buildAprilCrisisCharts(){
     if(subEl) subEl.textContent = nDays+' days elapsed (Apr 1\u2013'+parseInt(lastDay)+') \u00b7 '+wkd+' weekdays + '+sat+' Saturdays + '+sun+' Sundays \u00b7 All comparisons vs all-time historical avg';
     const ttlEl = document.getElementById('apr-table-title');
     if(ttlEl) ttlEl.textContent = 'Day-by-Day Performance (Apr 1\u2013'+parseInt(lastDay)+')';
+  }
+
+  // ─── Dynamic April Crisis KPI cards (wire from aprSummary) ───
+  if(FD.aprSummary){
+    const A = FD.aprSummary;
+    const setText = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+    const arrow = (d) => d < 0 ? '\u25bc' : (d > 0 ? '\u25b2' : '\u25ba');
+    const pctDelta = (a,h) => h ? ((a-h)/h*100) : 0;
+
+    // Acquisitions
+    setText('apc-acq', fmtN(A.aprAvgAcq,1));
+    setText('apc-acq-sub', 'vs '+fmtN(A.histAvgAcq,1)+' historical');
+    const dAcq = pctDelta(A.aprAvgAcq, A.histAvgAcq);
+    setText('apc-acq-delta', arrow(dAcq)+' '+(dAcq>=0?'+':'')+dAcq.toFixed(1)+'%');
+
+    // Revenue
+    setText('apc-rev', fmt$k(A.aprAvgRevenue));
+    setText('apc-rev-sub', 'vs '+fmt$k(A.histAvgRevenue)+' historical');
+    const dRev = pctDelta(A.aprAvgRevenue, A.histAvgRevenue);
+    setText('apc-rev-delta', arrow(dRev)+' '+(dRev>=0?'+':'')+dRev.toFixed(1)+'%');
+
+    // Contacted
+    setText('apc-con', (A.aprAvgContactedRatio*100).toFixed(1)+'%');
+    setText('apc-con-sub', 'vs '+(A.histAvgContactedRatio*100).toFixed(1)+'% historical');
+    const dCon = (A.aprAvgContactedRatio - A.histAvgContactedRatio)*100;
+    setText('apc-con-delta', arrow(dCon)+' '+(dCon>=0?'+':'')+dCon.toFixed(1)+'pp');
+
+    // CVR
+    setText('apc-cvr', A.aprCVR.toFixed(2)+'%');
+    setText('apc-cvr-sub', 'vs '+A.histCVR.toFixed(2)+'% all-time avg');
+    const dCVR = A.aprCVR - A.histCVR;
+    setText('apc-cvr-delta', arrow(dCVR)+' '+(dCVR>=0?'+':'')+dCVR.toFixed(2)+'pp');
+
+    // ROI
+    setText('apc-roi', A.aprROI.toFixed(2)+'\u00d7');
+    setText('apc-roi-sub', 'vs '+A.histROI.toFixed(2)+'\u00d7 all-time avg');
+    const dROI = A.aprROI - A.histROI;
+    setText('apc-roi-delta', arrow(dROI)+' '+(dROI>=0?'+':'')+dROI.toFixed(2)+'\u00d7');
+
+    // Leads per day
+    setText('apc-leads', Math.round(A.aprAvgLeads)+'/day');
+    setText('apc-leads-sub', 'vs '+Math.round(A.histAvgLeads)+' historical');
+    const dLeads = pctDelta(A.aprAvgLeads, A.histAvgLeads);
+    const leadsNote = Math.abs(dLeads) < 10 ? ' \u2014 Not the issue' : '';
+    setText('apc-leads-delta', arrow(dLeads)+' '+(dLeads>=0?'+':'')+dLeads.toFixed(1)+'%'+leadsNote);
   }
 
   // Contacted trend
